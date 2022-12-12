@@ -6,6 +6,7 @@
 typedef enum {
     OP_PUSH,
     OP_ADD,
+    OP_MINUS,
     OP_PRINT,
 
     /* Used to denote unknown operation */

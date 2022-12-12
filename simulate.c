@@ -31,12 +31,18 @@ static word pop(void)
 
 static void simulate_op(Operation *op)
 {
+    word a, b;
     switch (op->op) {
     case OP_PUSH:
 	push(op->operand.intr);
 	break;
     case OP_ADD:
 	push(pop() + pop());
+	break;
+    case OP_MINUS:
+	a = pop();
+	b = pop();
+	push(b - a);
 	break;
     case OP_PRINT:
 	printf("%ld\n", pop());

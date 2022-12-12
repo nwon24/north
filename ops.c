@@ -13,7 +13,8 @@ struct {
     OpWord op;
 } op_table[] = {
     { "", OP_PUSH},
-    { "+", OP_ADD}, 
+    { "+", OP_ADD},
+    { "-", OP_MINUS},
     { ".", OP_PRINT},
     { "", OP_UNKNOWN},
 };
