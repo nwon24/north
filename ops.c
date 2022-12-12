@@ -21,6 +21,8 @@ struct {
     { "and", OP_BAND},
     { "or", OP_BOR},
     { "xor", OP_BXOR},
+    { "lshift", OP_LSHIFT},
+    { "rshift", OP_RSHIFT},
     { "negate", OP_NEGATE},
     { ".", OP_PRINT},
     { "abs", OP_ABS},

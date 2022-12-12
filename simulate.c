@@ -67,6 +67,16 @@ static void simulate_op(Operation *op)
     case OP_BXOR:
 	push(pop() ^ pop());
 	break;
+    case OP_LSHIFT:
+	a = pop();
+	b = pop();
+	push(b << a);
+	break;
+    case OP_RSHIFT:
+	a = pop();
+	b = pop();
+	push(b >> a);
+	break;
     case OP_NEGATE:
 	push(-pop());
 	break;

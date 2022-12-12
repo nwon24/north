@@ -13,6 +13,8 @@ typedef enum {
     OP_BAND,
     OP_BOR,
     OP_BXOR,
+    OP_LSHIFT,
+    OP_RSHIFT,
     OP_NEGATE,
     OP_PRINT,
     OP_ABS,
