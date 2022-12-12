@@ -86,6 +86,10 @@ void init(void)
 
     fd = open(input_file_name, O_RDONLY);
     fstat(fd, &st);
+    if (st.st_size == 0) {
+	/* Empty file, exit quietly */
+	exit(EXIT_SUCCESS);
+    }
     input_file = mmap(NULL, st.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
     if (input_file == MAP_FAILED) {
 	fatal("init: mmap failed\n");
