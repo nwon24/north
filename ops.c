@@ -35,6 +35,14 @@ struct {
     { "swap", OP_SWAP},
     { "nip", OP_NIP},
     { "tuck", OP_TUCK},
+    
+    { "=", OP_EQUAL},
+    { "<>", OP_NEQUAL},
+    { ">", OP_GT},
+    { ">=", OP_GE},
+    { "<", OP_LT},
+    { "<=", OP_LE},
+    
     { "", OP_UNKNOWN},
 };
 

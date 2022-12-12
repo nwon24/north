@@ -27,6 +27,13 @@ typedef enum {
     OP_SWAP,
     OP_NIP,
     OP_TUCK,
+
+    OP_EQUAL,
+    OP_NEQUAL,
+    OP_GT, /* > */
+    OP_GE, /* >= */
+    OP_LT, /* < */
+    OP_LE, /* <= */
     /* Used to denote unknown operation */
     OP_UNKNOWN,
     /* UNUSED: used to count the number of operations */

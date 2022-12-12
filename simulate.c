@@ -137,6 +137,33 @@ static void simulate_op(Operation *op)
 	push(b);
 	push(a);
 	break;
+    case OP_EQUAL:
+	push(pop() == pop());
+	break;
+    case OP_NEQUAL:
+	push(pop() != pop());
+	break;
+    case OP_GT:
+	a = pop();
+	b = pop();
+	push(-(b > a));
+	break;
+    case OP_GE:
+	a = pop();
+	b = pop();
+	push(-(b >= a));
+	break;
+    case OP_LT:
+	a = pop();
+	b = pop();
+	push(-(b < a));
+	break;
+    case OP_LE:
+	a = pop();
+	b = pop();
+	push(-(b <= a));
+	break;
+
     case OP_UNKNOWN:
     case OP_COUNT:
 	unreachable("simulate_op");
@@ -147,6 +174,11 @@ void simulate(void)
 {
     Operation *op;
 
+    /*
+     * TODO: Simulate conditional statements by having
+     * 'simulate_op' return the next operation instead
+     * of linearly going through the list.
+     */
     for (op = operations; op != NULL; op = op->next) {
 	simulate_op(op);
     }
