@@ -26,7 +26,11 @@ struct {
     { "abs", OP_ABS},
     { "min", OP_MIN},
     { "max", OP_MAX},
-    
+    { "drop", OP_DROP},
+    { "dup", OP_DUP},
+    { "rot", OP_ROT},
+    { "over", OP_OVER},
+    { "swap", OP_SWAP},
     { "", OP_UNKNOWN},
 };
 

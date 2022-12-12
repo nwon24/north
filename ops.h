@@ -18,7 +18,11 @@ typedef enum {
     OP_ABS,
     OP_MIN,
     OP_MAX,
-
+    OP_DROP,
+    OP_DUP,
+    OP_ROT,
+    OP_OVER,
+    OP_SWAP,
     /* Used to denote unknown operation */
     OP_UNKNOWN,
     /* UNUSED: used to count the number of operations */

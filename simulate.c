@@ -32,7 +32,7 @@ static word pop(void)
 
 static void simulate_op(Operation *op)
 {
-    word a, b;
+    word a, b, c;
     switch (op->op) {
     case OP_PUSH:
 	push(op->operand.intr);
@@ -85,6 +85,35 @@ static void simulate_op(Operation *op)
 	a = pop();
 	b = pop();
 	push(a < b ? a : b);
+	break;
+    case OP_DROP:
+	pop();
+	break;
+    case OP_DUP:
+	a = pop();
+	push(a);
+	push(a);
+	break;
+    case OP_ROT:
+	a = pop();
+	b = pop();
+	c = pop();
+	push(b);
+	push(a);
+	push(c);
+	break;
+    case OP_OVER:
+	a = pop();
+	b = pop();
+	push(b);
+	push(a);
+	push(b);
+	break;
+    case OP_SWAP:
+	a = pop();
+	b = pop();
+	push(a);
+	push(b);
 	break;
     case OP_UNKNOWN:
     case OP_COUNT:
