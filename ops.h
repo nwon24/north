@@ -9,6 +9,11 @@ typedef enum {
     OP_MINUS,
     OP_MULTIPLY,
     OP_DIVIDE,
+    OP_MOD,
+    OP_BAND,
+    OP_BOR,
+    OP_BXOR,
+    OP_NEGATE,
     OP_PRINT,
 
     /* Used to denote unknown operation */

@@ -52,6 +52,23 @@ static void simulate_op(Operation *op)
 	b = pop();
 	push(b / a);
 	break;
+    case OP_MOD:
+	a = pop();
+	b = pop();
+	push(b % a);
+	break;
+    case OP_BAND:
+	push(pop() & pop());
+	break;
+    case OP_BOR:
+	push(pop() | pop());
+	break;
+    case OP_BXOR:
+	push(pop() ^ pop());
+	break;
+    case OP_NEGATE:
+	push(-pop());
+	break;
     case OP_PRINT:
 	printf("%ld\n", pop());
 	break;

@@ -17,6 +17,11 @@ struct {
     { "-", OP_MINUS},
     { "*", OP_MULTIPLY},
     { "/", OP_DIVIDE},
+    { "mod", OP_MOD},
+    { "and", OP_BAND},
+    { "or", OP_BOR},
+    { "xor", OP_BXOR},
+    { "negate", OP_NEGATE},
     { ".", OP_PRINT},
     { "", OP_UNKNOWN},
 };
@@ -68,7 +73,7 @@ static Operation *token_to_op(Token *tok)
 		not_implemented("Floating point constants");
 	    }
 	    if (!isdigit(*p)) {
-		tokerror(tok, "Invalid numerical constant %s\n", tok->text);
+		tokerror(tok, "Invalid numerical constant '%s'\n", tok->text);
 	    }
 	    p++;
 	}
@@ -76,7 +81,7 @@ static Operation *token_to_op(Token *tok)
 	new_op->op = OP_PUSH;
 	return new_op;
     }
-    tokerror(tok, "Unrecognised wprd %s\n", tok->text);
+    tokerror(tok, "Unrecognised wprd '%s'\n", tok->text);
     return NULL;
 }
 
@@ -96,7 +101,7 @@ void tokens_to_ops(void)
 	    opptr = opptr->next;
 	}
     }
-    /*    for (opptr = operations; opptr != NULL; opptr = opptr->next) {
+    /* for (opptr = operations; opptr != NULL; opptr = opptr->next) {
 	printf("Op %d\n", opptr->op);
 	} */
 }
