@@ -15,6 +15,8 @@ struct {
     { "", OP_PUSH},
     { "+", OP_ADD},
     { "-", OP_MINUS},
+    { "*", OP_MULTIPLY},
+    { "/", OP_DIVIDE},
     { ".", OP_PRINT},
     { "", OP_UNKNOWN},
 };

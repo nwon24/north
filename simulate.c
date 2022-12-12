@@ -44,6 +44,14 @@ static void simulate_op(Operation *op)
 	b = pop();
 	push(b - a);
 	break;
+    case OP_MULTIPLY:
+	push(pop() * pop());
+	break;
+    case OP_DIVIDE:
+	a = pop();
+	b = pop();
+	push(b / a);
+	break;
     case OP_PRINT:
 	printf("%ld\n", pop());
 	break;
