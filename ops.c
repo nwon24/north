@@ -23,6 +23,10 @@ struct {
     { "xor", OP_BXOR},
     { "negate", OP_NEGATE},
     { ".", OP_PRINT},
+    { "abs", OP_ABS},
+    { "min", OP_MIN},
+    { "max", OP_MAX},
+    
     { "", OP_UNKNOWN},
 };
 

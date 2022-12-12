@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <stdint.h>
 #include "simulate.h"
 #include "main.h"
@@ -71,6 +72,19 @@ static void simulate_op(Operation *op)
 	break;
     case OP_PRINT:
 	printf("%ld\n", pop());
+	break;
+    case OP_ABS:
+	push(labs(pop()));
+	break;
+    case OP_MAX:
+	a = pop();
+	b = pop();
+	push(a > b ? a : b);
+	break;
+    case OP_MIN:
+	a = pop();
+	b = pop();
+	push(a < b ? a : b);
 	break;
     case OP_UNKNOWN:
     case OP_COUNT:

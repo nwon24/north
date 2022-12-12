@@ -15,6 +15,9 @@ typedef enum {
     OP_BXOR,
     OP_NEGATE,
     OP_PRINT,
+    OP_ABS,
+    OP_MIN,
+    OP_MAX,
 
     /* Used to denote unknown operation */
     OP_UNKNOWN,
