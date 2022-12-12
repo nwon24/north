@@ -31,6 +31,8 @@ struct {
     { "rot", OP_ROT},
     { "over", OP_OVER},
     { "swap", OP_SWAP},
+    { "nip", OP_NIP},
+    { "tuck", OP_TUCK},
     { "", OP_UNKNOWN},
 };
 

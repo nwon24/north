@@ -115,6 +115,18 @@ static void simulate_op(Operation *op)
 	push(a);
 	push(b);
 	break;
+    case OP_NIP:
+	a = pop();
+	b = pop();
+	push(a);
+	break;
+    case OP_TUCK:
+	a = pop();
+	b = pop();
+	push(a);
+	push(b);
+	push(a);
+	break;
     case OP_UNKNOWN:
     case OP_COUNT:
 	unreachable("simulate_op");
