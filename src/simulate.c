@@ -183,7 +183,12 @@ static Operation *simulate_op(Operation *op)
     case OP_LOOP_PLUS:
 	a = pop();
 	tmp_op = op->operand.doloop_op.do_op;
-	if ((tmp_op->operand.doloop_op.current += a) >= tmp_op->operand.doloop_op.end) {
+	tmp_op->operand.doloop_op.current += a;
+	if (tmp_op->operand.doloop_op.end < tmp_op->operand.doloop_op.start
+	    && tmp_op->operand.doloop_op.current <= tmp_op->operand.doloop_op.end) {
+	    return op->next;
+	} else if (tmp_op->operand.doloop_op.end > tmp_op->operand.doloop_op.start
+		   && tmp_op->operand.doloop_op.current >= tmp_op->operand.doloop_op.end) {
 	    return op->next;
 	} else {
 	    return tmp_op->next;
