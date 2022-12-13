@@ -13,11 +13,20 @@
 #include "simulate.h"
 #include "branches.h"
 
-#define OPTSTRING ":h"
+#define OPTSTRING ":hsc"
+
+enum {
+    SIMULATE,
+    COMPILE,
+};
+
+static int action = -1;
 
 char *input_file;     
 off_t input_file_size;
 char *input_file_name;
+
+void compile(void);
 
 static void parse_cmdline(int argc, char *argv[]);
 static void init(void);
@@ -49,6 +58,8 @@ void usage(int code)
     tell_user(stderr, "USAGE: north [OPTIONS] [INPUT FILE]\n");
     tell_user(stderr, "\tOptions:\n");
     tell_user(stderr, "\t\t-h\tPrint this help and exit\n");
+    tell_user(stderr, "\t\t-s\tinterpret the input file\n");
+    tell_user(stderr, "\t\t-c\tCompile the input file\n");
     exit(code);
 }
 
@@ -64,6 +75,12 @@ void parse_cmdline(int argc, char *argv[])
 	switch (c) {
 	case 'h':
 	    usage(EXIT_SUCCESS);
+	    break;
+	case 's':
+	    action = SIMULATE;
+	    break;
+	case 'c':
+	    action = COMPILE;
 	    break;
 	case ':':
 	    tell_user(stderr, "Missing argument to '-%c'\n", optopt);
@@ -111,6 +128,13 @@ int main(int argc, char *argv[])
     lex();
     tokens_to_ops();
     cross_reference_branches();
-    simulate();
+    if (action == SIMULATE) {
+	simulate();
+    } else if (action == COMPILE) {
+	compile();
+    } else {
+	tell_user(stderr, "No action specified\n");
+	usage(EXIT_FAILURE);
+    }
     return EXIT_SUCCESS;
 }
