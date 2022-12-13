@@ -183,28 +183,42 @@ static Operation *simulate_op(Operation *op)
 static Operation *simulate_conditional(Operation *op)
 {
     word a;
-    Operation *else_or_endif;
+    Operation *opptr;
     
     switch (op->op) {
     case OP_IF:
 	a = pop();
-	if (op->operand.else_or_endif == NULL) {
-	    tokerror(op->tok, "'if' operand not terminated with 'else' or 'endif'");
+	if (op->operand.if_op.endif_op == NULL) {
+	    tokerror(op->tok, "'if' operand not terminated with 'endif'");
 	}
-	else_or_endif = op->operand.else_or_endif;
 	if (a == 0) {
-	    else_or_endif->operand.else_or_endif = else_or_endif;
-	    else_or_endif->operand.else_or_endif = else_or_endif->next;
-	    return else_or_endif;
+	    /* Go to 'else' or endif */
+	    Operation *jump_to;
+
+	    jump_to = op->operand.if_op.else_op != NULL ? op->operand.if_op.else_op : op->operand.if_op.endif_op;
+	    opptr = op;
+	    while (opptr != NULL && opptr != jump_to)
+		opptr = opptr->next;
+	    if (opptr == NULL) {
+		tokerror(op->tok, "'if' operand not terminated with 'endif'");
+	    }
+	    return opptr->next;
 	} else {
+	    /* Do stuff in the if block and then go to endif */
+	    Operation *jump_to;
+	    opptr = op;
+	    jump_to = op->operand.if_op.endif_op;
+	    while (opptr != NULL && opptr != jump_to && opptr->op != OP_ELSE)
+		opptr = opptr->next;
+	    if (opptr == NULL) {
+		tokerror(op->tok, "'if' operand not terminated with 'endif'");
+	    }
+	    opptr->next = jump_to->next;
 	    return op->next;
 	}
 	break;
     case OP_ELSE:
-	if (op->operand.else_or_endif == NULL) {
-	    tokerror(op->tok, "'else' operand not terminated with 'else' or 'endif'");
-	}
-	return op->operand.else_or_endif;
+	return op->next;
     case OP_ENDIF:
 	return op->next;
     default:

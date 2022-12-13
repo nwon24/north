@@ -16,22 +16,23 @@ void cross_reference_branches(void)
 	    if (nested_op_ptr >= MAX_NESTED_BRANCHES) {
 		tokerror(opptr->tok, "Too many nested branches\n");
 	    }
-	    opptr->operand.else_or_endif = NULL;
+	    opptr->operand.if_op.else_op = NULL;
+	    opptr->operand.if_op.endif_op = NULL;
 	    conditional_ops[nested_op_ptr++] = opptr;
 	    break;
 	case  OP_ELSE:
 	    if (nested_op_ptr == 0) {
 		tokerror(opptr->tok, "'else' operation with no preceding 'if'\n");
 	    }
-	    opptr->operand.else_or_endif = NULL;
-	    conditional_ops[--nested_op_ptr]->operand.else_or_endif = opptr;
-	    conditional_ops[nested_op_ptr++] = opptr;
+	    opptr->operand.if_op.else_op = NULL;
+	    opptr->operand.if_op.endif_op = NULL;
+	    conditional_ops[nested_op_ptr-1]->operand.if_op.else_op = opptr;
 	    break;
 	case OP_ENDIF:
 	    if (nested_op_ptr == 0) {
 		tokerror(opptr->tok, "'endif' operation with no preceding 'if'\n");
 	    }
-	    conditional_ops[--nested_op_ptr]->operand.else_or_endif = opptr;
+	    conditional_ops[--nested_op_ptr]->operand.if_op.endif_op = opptr;
 	    break;
 	default:
 	    break;

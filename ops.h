@@ -4,6 +4,7 @@
 #include <sys/types.h>
 
 #include "lex.h"
+#include "branches.h"
 
 typedef enum {
     OP_PUSH,
@@ -52,7 +53,10 @@ typedef struct operation {
     union {
 	ssize_t intr;
 	float flt;
-	struct operation *else_or_endif; /* If operation is 'if' */
+	struct {
+	    struct operation *else_op;
+	    struct operation *endif_op;
+	} if_op; /* If operation is 'if' */
     } operand;
     struct operation *next;
 } Operation;
