@@ -1,0 +1,14 @@
+CC = gcc
+CFLAGS = -std=c11 -Wall -Wextra -O2 -ggdb -MMD -MP -I../..
+
+LIB = x86_64-linux.a
+
+OBJ = compile.o
+
+all: $(LIB)
+
+.c.o:
+	$(CC) -c $< -o $@ $(CFLAGS)
+
+$(LIB): $(OBJ)
+	ar rcs $@ $^
