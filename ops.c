@@ -47,6 +47,10 @@ struct {
     { "else", OP_ELSE},
     { "endif", OP_ENDIF},
 
+    { "do", OP_DO},
+    { "loop", OP_LOOP},
+    { "i", OP_I},
+    
     { "", OP_UNKNOWN},
 };
 

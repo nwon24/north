@@ -35,7 +35,7 @@ static word pop(void)
 static Operation *simulate_op(Operation *op)
 {
     word a, b, c;
-    Operation *next_op;
+    Operation *next_op, *tmp_op;
 
     next_op = op->next;
     switch (op->op) {
@@ -172,6 +172,25 @@ static Operation *simulate_op(Operation *op)
     case OP_ELSE:
     case OP_ENDIF:
 	next_op = simulate_conditional(op);
+	break;
+    case OP_DO:
+	a = pop();
+	b = pop();
+	op->operand.doloop_op.start = a;
+	op->operand.doloop_op.end = b;
+	op->operand.doloop_op.current = a;
+	return op->next;
+    case OP_LOOP:
+	tmp_op = op->operand.doloop_op.do_op;
+	if (++tmp_op->operand.doloop_op.current == tmp_op->operand.doloop_op.end) {
+	    return op->next;
+	} else {
+	    return tmp_op->next;
+	}
+	break;
+    case OP_I:
+	tmp_op = op->operand.doloop_op.do_op;
+	push(tmp_op->operand.doloop_op.current);
 	break;
     case OP_UNKNOWN:
     case OP_COUNT:

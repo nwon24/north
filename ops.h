@@ -41,6 +41,10 @@ typedef enum {
     OP_IF,
     OP_ELSE,
     OP_ENDIF,
+
+    OP_DO,
+    OP_LOOP,
+    OP_I,
     /* Used to denote unknown operation */
     OP_UNKNOWN,
     /* UNUSED: used to count the number of operations */
@@ -57,6 +61,12 @@ typedef struct operation {
 	    struct operation *else_op;
 	    struct operation *endif_op;
 	} if_op; /* If operation is 'if' */
+	struct {
+	    struct operation *do_op;
+	    int start;
+	    int end;
+	    int current;
+	} doloop_op;
     } operand;
     struct operation *next;
 } Operation;
