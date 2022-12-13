@@ -30,9 +30,12 @@ static word pop(void)
     return stack[--sp];
 }
 
-static void simulate_op(Operation *op)
+static Operation *simulate_op(Operation *op)
 {
     word a, b, c;
+    Operation *next_op;
+
+    next_op = op->next;
     switch (op->op) {
     case OP_PUSH:
 	push(op->operand.intr);
@@ -168,18 +171,12 @@ static void simulate_op(Operation *op)
     case OP_COUNT:
 	unreachable("simulate_op");
     }
+    return next_op;
 }
 
 void simulate(void)
 {
     Operation *op;
 
-    /*
-     * TODO: Simulate conditional statements by having
-     * 'simulate_op' return the next operation instead
-     * of linearly going through the list.
-     */
-    for (op = operations; op != NULL; op = op->next) {
-	simulate_op(op);
-    }
+    for (op = operations; op != NULL; op = simulate_op(op));
 }
