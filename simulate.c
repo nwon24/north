@@ -180,6 +180,15 @@ static Operation *simulate_op(Operation *op)
 	op->operand.doloop_op.end = b;
 	op->operand.doloop_op.current = a;
 	return op->next;
+    case OP_LOOP_PLUS:
+	a = pop();
+	tmp_op = op->operand.doloop_op.do_op;
+	if ((tmp_op->operand.doloop_op.current += a) >= tmp_op->operand.doloop_op.end) {
+	    return op->next;
+	} else {
+	    return tmp_op->next;
+	}
+	break;
     case OP_LOOP:
 	tmp_op = op->operand.doloop_op.do_op;
 	if (++tmp_op->operand.doloop_op.current == tmp_op->operand.doloop_op.end) {

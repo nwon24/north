@@ -44,6 +44,7 @@ typedef enum {
 
     OP_DO,
     OP_LOOP,
+    OP_LOOP_PLUS,
     OP_I,
     /* Used to denote unknown operation */
     OP_UNKNOWN,

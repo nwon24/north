@@ -49,6 +49,7 @@ struct {
 
     { "do", OP_DO},
     { "loop", OP_LOOP},
+    { "+loop", OP_LOOP_PLUS},
     { "i", OP_I},
     
     { "", OP_UNKNOWN},

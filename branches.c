@@ -44,6 +44,7 @@ void cross_reference_branches(void)
 	    }
 	    do_ops[do_op_ptr++] = opptr;
 	    break;
+	case OP_LOOP_PLUS:
 	case OP_LOOP:
 	    if (do_op_ptr == 0) {
 		tokerror(opptr->tok, "'loop' operation with no preceding 'do'\n");
