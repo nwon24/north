@@ -42,7 +42,11 @@ struct {
     { ">=", OP_GE},
     { "<", OP_LT},
     { "<=", OP_LE},
-    
+
+    { "if", OP_IF},
+    { "else", OP_ELSE},
+    { "endif", OP_ENDIF},
+
     { "", OP_UNKNOWN},
 };
 
@@ -79,6 +83,7 @@ static Operation *token_to_op(Token *tok)
     
     new_op = newoperation();
     new_op->next = NULL;
+    new_op->tok = tok;
     if ((op = find_op_in_table(tok->text)) != OP_UNKNOWN) {
 	new_op->op = op;
 	return new_op;

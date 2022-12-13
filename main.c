@@ -11,6 +11,7 @@
 #include "lex.h"
 #include "ops.h"
 #include "simulate.h"
+#include "branches.h"
 
 #define OPTSTRING ":h"
 
@@ -109,6 +110,7 @@ int main(int argc, char *argv[])
     init();
     lex();
     tokens_to_ops();
+    cross_reference_branches();
     simulate();
     return EXIT_SUCCESS;
 }

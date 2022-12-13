@@ -3,6 +3,8 @@
 
 #include <sys/types.h>
 
+#include "lex.h"
+
 typedef enum {
     OP_PUSH,
     OP_ADD,
@@ -34,6 +36,10 @@ typedef enum {
     OP_GE, /* >= */
     OP_LT, /* < */
     OP_LE, /* <= */
+
+    OP_IF,
+    OP_ELSE,
+    OP_ENDIF,
     /* Used to denote unknown operation */
     OP_UNKNOWN,
     /* UNUSED: used to count the number of operations */
@@ -42,9 +48,11 @@ typedef enum {
 
 typedef struct operation {
     OpWord op;
+    Token *tok;
     union {
 	ssize_t intr;
 	float flt;
+	struct operation *else_or_endif; /* If operation is 'if' */
     } operand;
     struct operation *next;
 } Operation;

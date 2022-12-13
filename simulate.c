@@ -14,6 +14,8 @@ int sp = 0;
 static void push(word c);
 static word pop(void);
 
+static Operation *simulate_conditional(Operation *op);
+
 static void push(word c)
 {
     if (sp == STACK_CAPACITY) {
@@ -166,13 +168,52 @@ static Operation *simulate_op(Operation *op)
 	b = pop();
 	push(-(b <= a));
 	break;
-
+    case OP_IF:
+    case OP_ELSE:
+    case OP_ENDIF:
+	next_op = simulate_conditional(op);
+	break;
     case OP_UNKNOWN:
     case OP_COUNT:
 	unreachable("simulate_op");
     }
     return next_op;
 }
+
+static Operation *simulate_conditional(Operation *op)
+{
+    word a;
+    Operation *else_or_endif;
+    
+    switch (op->op) {
+    case OP_IF:
+	a = pop();
+	if (op->operand.else_or_endif == NULL) {
+	    tokerror(op->tok, "'if' operand not terminated with 'else' or 'endif'");
+	}
+	else_or_endif = op->operand.else_or_endif;
+	if (a == 0) {
+	    else_or_endif->operand.else_or_endif = else_or_endif;
+	    else_or_endif->operand.else_or_endif = else_or_endif->next;
+	    return else_or_endif;
+	} else {
+	    return op->next;
+	}
+	break;
+    case OP_ELSE:
+	if (op->operand.else_or_endif == NULL) {
+	    tokerror(op->tok, "'else' operand not terminated with 'else' or 'endif'");
+	}
+	return op->operand.else_or_endif;
+    case OP_ENDIF:
+	return op->next;
+    default:
+	unreachable("simulate_conditional");
+    }
+    unreachable("simulate_conditional");
+    return NULL;
+}
+
 
 void simulate(void)
 {
