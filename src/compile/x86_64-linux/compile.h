@@ -13,8 +13,7 @@
 "\t	negq %%rdi\n" \
 "\t\n" \
 "1:\t	movq %%rcx, %%r9		# Save starting offset\n" \
-"1:\t	cmpq $0, %%rdi		# %%rdi <= 0?\n" \
-"\t	jle 1f			# Yes, exit loop\n" \
+"1:\n" \
 "\t	movq %%rdi, %%rax         # %%rdi / 10\n" \
 "\t	xorq %%rdx, %%rdx\n" \
 "\t	movq $10, %%rbx\n" \
@@ -26,7 +25,8 @@
 "\t	movb %%bl, (%%rsi)        # Move character to buffer\n" \
 "\t	movq %%rax, %%rdi         # %%rdi = %%rdi / 10\n" \
 "\t	incq %%rcx               # Increment counter\n" \
-"\t	jmp 1b                  # Loop\n" \
+"\t	cmpq $0, %%rdi		# %%rdi <= 0?\n" \
+"\t	jg 1b			# No, continue loop\n" \
 "1:\t      movq $printbuf, %%rdi\n" \
 "\t	addq %%rcx, %%rdi\n" \
 "\t	movb $'\n', (%%rdi)        # Add newline\n" \
