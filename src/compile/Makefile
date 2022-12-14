@@ -1,6 +1,9 @@
 ARCH = x86_64-linux
 
 LIB = $(ARCH)/${ARCH}.a
+
+.PHONY: all $(LIB)
+
 all: $(LIB)
 
 $(LIB):

@@ -8,6 +8,8 @@ OBJ = main.o lex.o ops.o simulate.o branches.o
 DEP = ${OBJ:.o=.d}
 LIB = compile/$(ARCH)/$(ARCH).a
 
+.PHONY: $(LIB)
+
 all: $(NAME)
 .c.o:
 	$(CC) -c $< -o $@ $(CFLAGS)
