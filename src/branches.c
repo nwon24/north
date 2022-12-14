@@ -4,6 +4,7 @@
 
 void cross_reference_branches(void)
 {
+    int block_addr = 0;
     Operation *opptr;
     Operation *conditional_ops[MAX_NESTED_BRANCHES];
     Operation *do_ops[MAX_NESTED_BRANCHES];
@@ -13,6 +14,7 @@ void cross_reference_branches(void)
     opptr = operations;
     cond_op_ptr = 0;
     do_op_ptr = 0;
+    block_addr = 0;
     while (opptr != NULL) {
 	switch (opptr->op) {
 	case  OP_IF:
@@ -21,6 +23,7 @@ void cross_reference_branches(void)
 	    }
 	    opptr->operand.if_op.else_op = NULL;
 	    opptr->operand.if_op.endif_op = NULL;
+	    opptr->operand.if_op.ifop_op = NULL;
 	    conditional_ops[cond_op_ptr++] = opptr;
 	    break;
 	case  OP_ELSE:
@@ -30,12 +33,15 @@ void cross_reference_branches(void)
 	    opptr->operand.if_op.else_op = NULL;
 	    opptr->operand.if_op.endif_op = NULL;
 	    conditional_ops[cond_op_ptr-1]->operand.if_op.else_op = opptr;
+	    opptr->operand.if_op.ifop_op = conditional_ops[cond_op_ptr - 1];
+            opptr->block_addr = block_addr++;
 	    break;
 	case OP_ENDIF:
 	    if (cond_op_ptr == 0) {
 		tokerror(opptr->tok, "'endif' operation with no preceding 'if'\n");
 	    }
 	    conditional_ops[--cond_op_ptr]->operand.if_op.endif_op = opptr;
+            opptr->block_addr = block_addr++;
 	    break;
 
 	case OP_DO:
@@ -43,6 +49,7 @@ void cross_reference_branches(void)
 		tokerror(opptr->tok, "Too many nested DO branches\n");
 	    }
 	    do_ops[do_op_ptr++] = opptr;
+            opptr->block_addr = block_addr++;
 	    break;
 	case OP_LOOP_PLUS:
 	case OP_LOOP:

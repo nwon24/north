@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #include "main.h"
+#include "lex.h"
 #include "ops.h"
 #include "compile.h"
 
@@ -77,6 +78,8 @@ static void emit_exit(void)
 
 static void compile_op(Operation *opptr)
 {
+    Operation *tmp_op;
+    int endif_addr;
     fprintf(asm_file, "/* OP: %d, LOC: %s:%d:%d: */\n",
 	    opptr->op,
 	    opptr->tok->pos.file,
@@ -223,59 +226,87 @@ static void compile_op(Operation *opptr)
     case OP_EQUAL:
 	fprintf(asm_file, "\tpopq %%rax\n"
 		"\tpopq %%rbx\n"
+		"\tmovq $-1, %%r10\n"
 		"\txorq %%rdx, %%rdx\n"
 		"\tcmpq %%rax, %%rbx\n"
-		"\tcmove $-1, %%rdx\n"
+		"\tcmove %%r10, %%rdx\n"
 		"\tpushq %%rdx\n");
 	break;
     case OP_NEQUAL:
 	fprintf(asm_file, "\tpopq %%rax\n"
 		"\tpopq %%rbx\n"
+		"\tmovq $-1, %%r10\n"
 		"\txorq %%rdx, %%rdx\n"
 		"\tcmpq %%rax, %%rbx\n"
-		"\tcmovne $-1, %%rdx\n"
+		"\tcmovne %%r10, %%rdx\n"
 		"\tpushq %%rdx\n");
 	break;
     case OP_GT:
 	fprintf(asm_file, "\tpopq %%rax\n"
 		"\tpopq %%rbx\n"
+		"\tmovq $-1, %%r10\n"
 		"\txorq %%rdx, %%rdx\n"
 		"\tcmpq %%rax, %%rbx\n"
-		"\tcmovg $-1, %%rdx\n"
+		"\tcmovg %%r10, %%rdx\n"
 		"\tpushq %%rdx\n");
 	break;
     case OP_GE:
 	fprintf(asm_file, "\tpopq %%rax\n"
 		"\tpopq %%rbx\n"
+		"\tmovq $-1, %%r10\n"
 		"\txorq %%rdx, %%rdx\n"
 		"\tcmpq %%rax, %%rbx\n"
-		"\tcmovge $-1, %%rdx\n"
+		"\tcmovge %%r10, %%rdx\n"
 		"\tpushq %%rdx\n");
 	break;
     case OP_LT:
 	fprintf(asm_file, "\tpopq %%rax\n"
 		"\tpopq %%rbx\n"
+		"\tmovq $-1, %%r10\n"
 		"\txorq %%rdx, %%rdx\n"
 		"\tcmpq %%rax, %%rbx\n"
-		"\tcmovl $-1, %%rdx\n"
+		"\tcmovl %%r10, %%rdx\n"
 		"\tpushq %%rdx\n");
 	break;
     case OP_LE:
 	fprintf(asm_file, "\tpopq %%rax\n"
 		"\tpopq %%rbx\n"
+		"\tmovq $-1, %%r10\n"
 		"\txorq %%rdx, %%rdx\n"
 		"\tcmpq %%rax, %%rbx\n"
-		"\tcmovle $-1, %%rdx\n"
+		"\tcmovle %%r10, %%rdx\n"
 		"\tpushq %%rdx\n");
 	break;
     case OP_IF:
+	tmp_op = NULL;
+        if (opptr->operand.if_op.else_op != NULL) {
+            tmp_op = opptr->operand.if_op.else_op;
+        } else if (opptr->operand.if_op.endif_op == NULL) {
+            tokerror(opptr->tok, "'if' not terminated by 'else' or 'endif'\n");	
+	} else {
+	    tmp_op = opptr->operand.if_op.endif_op;
+        }
+        fprintf(asm_file, "\tpopq %%rax\n"
+                "\ttestq %%rax,%%rax\n"
+                "\tjz addr_%d\n", tmp_op->block_addr);
+	break;
     case OP_ELSE:
+	if (opptr->operand.if_op.ifop_op == NULL) {
+	    tokerror(opptr->tok, "compile_op: 'else' with no preceding 'if'\n");
+	}
+	tmp_op = opptr->operand.if_op.ifop_op;
+	endif_addr = tmp_op->operand.if_op.endif_op->block_addr;
+	fprintf(asm_file, "\tjmp addr_%d\n"
+			  "addr_%d:\n", endif_addr, opptr->block_addr);
+	break;
     case OP_ENDIF:
+	fprintf(asm_file, "addr_%d:\n", opptr->block_addr);
+	break;
     case OP_DO:
     case OP_LOOP:
     case OP_LOOP_PLUS:
     case OP_I:
-	not_implemented("compile_op: conditionals and loops\n");
+	not_implemented("compile_op: loops\n");
     default:
 	break;
     }

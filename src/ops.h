@@ -59,6 +59,7 @@ typedef struct operation {
 	ssize_t intr;
 	float flt;
 	struct {
+            struct operation *ifop_op;
 	    struct operation *else_op;
 	    struct operation *endif_op;
 	} if_op; /* If operation is 'if' */
@@ -69,6 +70,7 @@ typedef struct operation {
 	    int current;
 	} doloop_op;
     } operand;
+    int block_addr; /* Used for generating assembly labels */
     struct operation *next;
 } Operation;
 
