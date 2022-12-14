@@ -22,4 +22,3 @@ extern char *input_file_name;
 extern bool verbose;
 
 #endif /* MAIN_H_ */
-
