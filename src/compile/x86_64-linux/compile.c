@@ -288,9 +288,13 @@ static void assemble_and_link(void)
 
     sprintf(as_command, "as %s -o %s", asm_file_name, obj_file_name);
     sprintf(ld_command, "ld %s -o %s", obj_file_name, exe_file_name);
-    printf("[ASSEMBLER] %s\n", as_command);
-    printf("[LINKER] %s\n", ld_command);
+    if (verbose == true) {
+        printf("[ASSEMBLER] %s\n", as_command);
+    }
     system(as_command);
+    if (verbose == true) {
+        printf("[LINKER] %s\n", ld_command);
+    }
     system(ld_command);
 }
 

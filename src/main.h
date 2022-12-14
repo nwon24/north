@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <stdbool.h>
 
 #define HERE_STR "%s:%d:%d: "
 
@@ -17,6 +18,8 @@ void error(const char *msg);
 extern char *input_file;
 extern off_t input_file_size;
 extern char *input_file_name;
+
+extern bool verbose;
 
 #endif /* MAIN_H_ */
 

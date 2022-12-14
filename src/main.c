@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdarg.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <getopt.h>
@@ -13,7 +14,7 @@
 #include "simulate.h"
 #include "branches.h"
 
-#define OPTSTRING ":hsc"
+#define OPTSTRING ":hscv"
 
 enum {
     SIMULATE,
@@ -25,6 +26,8 @@ static int action = -1;
 char *input_file;     
 off_t input_file_size;
 char *input_file_name;
+
+bool verbose = false;
 
 void compile(void);
 
@@ -60,6 +63,7 @@ void usage(int code)
     tell_user(stderr, "\t\t-h\tPrint this help and exit\n");
     tell_user(stderr, "\t\t-s\tinterpret the input file\n");
     tell_user(stderr, "\t\t-c\tCompile the input file\n");
+    tell_user(stderr, "\t\t-v\tBe verbose\n");
     exit(code);
 }
 
@@ -82,6 +86,9 @@ void parse_cmdline(int argc, char *argv[])
 	case 'c':
 	    action = COMPILE;
 	    break;
+        case 'v':
+            verbose = true;
+            break;
 	case ':':
 	    tell_user(stderr, "Missing argument to '-%c'\n", optopt);
 	    exit(EXIT_FAILURE);
