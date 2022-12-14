@@ -1,7 +1,7 @@
 	.section .text
 	.global _start
 _start:
-	movq $-1, %rdi
+	movq $0, %rdi
 	call print
 
 	movq $60, %rax
@@ -20,8 +20,7 @@ print:
 	negq %rdi
 
 1:	movq %rcx, %r9		# Save starting offset
-1:	cmpq $0, %rdi		# %rdi <= 0?
-	jle 1f			# Yes, exit loop
+1:	
 	movq %rdi, %rax         # %rdi / 10
 	xorq %rdx, %rdx
 	movq $10, %rbx
@@ -33,7 +32,8 @@ print:
 	movb %bl, (%rsi)        # Move character to buffer
 	movq %rax, %rdi         # %rdi = %rdi / 10
 	incq %rcx               # Increment counter
-	jmp 1b                  # Loop
+	cmpq $0, %rdi		# %rdi <= 0?
+	jg 1b			# No, continue loop
 1:      movq $buf, %rdi
 	addq %rcx, %rdi
 	movb $'\n', (%rdi)        # Add newline
