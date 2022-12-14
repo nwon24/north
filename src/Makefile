@@ -22,3 +22,4 @@ $(LIB):
 
 clean:
 	rm -f $(OBJ) $(NAME)
+	(cd compile; make clean)

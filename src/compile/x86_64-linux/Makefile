@@ -12,3 +12,6 @@ all: $(LIB)
 
 $(LIB): $(OBJ)
 	ar rcs $@ $^
+
+clean:
+	rm -f $(OBJ) $(LIB)
