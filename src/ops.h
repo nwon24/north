@@ -25,6 +25,7 @@ typedef enum {
     OP_MAX,
     OP_DROP,
     OP_DUP,
+    OP_2DUP,
     OP_ROT,
     OP_OVER,
     OP_SWAP,

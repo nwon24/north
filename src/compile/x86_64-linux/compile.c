@@ -82,7 +82,6 @@ static void compile_op(Operation *opptr)
     Operation *tmp_op;
     int endif_addr;
 
-    assert(OP_COUNT == 37);
     fprintf(asm_file, "/* OP: %d, LOC: %s:%d:%d: */\n",
 	    opptr->op,
 	    opptr->tok->pos.file,
@@ -191,6 +190,14 @@ static void compile_op(Operation *opptr)
     case OP_DUP:
 	fprintf(asm_file, "\tpopq %%rax\n"
 		"\tpushq %%rax\n"
+		"\tpushq %%rax\n");
+	break;
+    case OP_2DUP:
+	fprintf(asm_file, "\tpopq %%rax\n"
+		"\tpopq %%rbx\n"
+		"\tpushq %%rbx\n"
+		"\tpushq %%rax\n"
+		"\tpushq %%rbx\n"
 		"\tpushq %%rax\n");
 	break;
     case OP_ROT:

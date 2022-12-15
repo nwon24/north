@@ -38,7 +38,6 @@ static Operation *simulate_op(Operation *op)
     word a, b, c;
     Operation *next_op, *tmp_op;
 
-    assert(OP_COUNT == 37);
     next_op = op->next;
     switch (op->op) {
     case OP_PUSH:
@@ -109,6 +108,14 @@ static Operation *simulate_op(Operation *op)
     case OP_DUP:
 	a = pop();
 	push(a);
+	push(a);
+	break;
+    case OP_2DUP:
+	a = pop();
+	b = pop();
+	push(b);
+	push(a);
+	push(b);
 	push(a);
 	break;
     case OP_ROT:
