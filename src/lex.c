@@ -1,22 +1,29 @@
+#include <assert.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/mman.h>
 
 #include "main.h"
 #include "lex.h"
 
-#define END_OF_FILE(p) ((p) >= input_file + input_file_size)
+#define END_OF_FILE(p) ((p) >= lex_file + lex_file_size)
 
 #define COMMENT_CHAR '\\'
 
 /* Linked list of tokens */
 Token *tokens = NULL;
 
-int file_row = 1;
-int file_col = 1;
-off_t file_offset = 0;
+static int file_row = 1;
+static int file_col = 1;
+static off_t file_offset = 0;
+static char *lex_file;
+static const char *lex_file_name;
+static off_t lex_file_size;
 
 static Token *gettoken(void);
 static Token *newtoken(void);
@@ -37,7 +44,7 @@ static Token *gettoken(void)
     char *p, *s;
     Token *new_token;
 
-    p = input_file + file_offset;
+    p = lex_file + file_offset;
     if (END_OF_FILE(p)) {
 	return NULL;
     }
@@ -58,7 +65,7 @@ static Token *gettoken(void)
 	}
 	goto again;
     }
-    new_token->pos.file = input_file_name;
+    new_token->pos.file = lex_file_name;
     new_token->pos.row = file_row;
     new_token->pos.col = file_col;
     while (!END_OF_FILE(p) && s - new_token->text < MAX_TOKEN_LENGTH && !isspace(*p)) {
@@ -66,7 +73,7 @@ static Token *gettoken(void)
 	*s++ = *p;
 	p++;
     }
-    file_offset = p - input_file;
+    file_offset = p - lex_file;
     *s = '\0';
     new_token->length = s - new_token->text;
     new_token->next = NULL;
@@ -84,23 +91,53 @@ static Token *newtoken(void)
     return new_token;
 }
 
-void lex(void)
+static void lex_init_file(const char *file_path)
 {
-    Token *tok, *ptr;
+    int fd;
+    struct stat st;
 
+    fd = open(input_file_name, O_RDONLY);
+    fstat(fd, &st);
+    if (st.st_size == 0) {
+	/* Empty file, exit quietly */
+	exit(EXIT_SUCCESS);
+    }
+    lex_file = mmap(NULL, st.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
+    if (lex_file == MAP_FAILED) {
+	fatal("lex_init_file: mmap failed\n");
+    }
+    lex_file_size = st.st_size;
+    lex_file_name = file_path;
+    close(fd);
+    file_row = 1;
+    file_col = 1;
+    file_offset = 0;
+}
+
+static void lex_fini_file(void)
+{
+    if (munmap(lex_file, lex_file_size) < 0)
+	fatal("lex_fini_file: munmap failed\n");
+}
+
+Token *lex(const char *file_path)
+{
+    Token *tok, *ptr, *head;
+
+    lex_init_file(file_path);
     ptr = NULL;
+    head = NULL;
     while ((tok = gettoken()) != NULL) {
-	if (tokens == NULL) {
-	    tokens = tok;
-	    ptr = tokens;
+	if (head == NULL) {
+	    head = tok;
+	    ptr = head;
 	} else {
 	    ptr->next = tok;
 	    ptr = ptr->next;
 	}
     }
-    /*    for (ptr = tokens; ptr != NULL; ptr = ptr->next) {
-	printf("%s:%d:%d: %s\n", ptr->pos.file, ptr->pos.row, ptr->pos.col, ptr->text);
-	} */
+    lex_fini_file();
+    return head;
 }
 
 void tokerror(Token *tok, const char *msg, ...)

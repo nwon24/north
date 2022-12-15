@@ -3,14 +3,11 @@
 
 #define MAX_TOKEN_LENGTH 14
 
-extern int file_row;
-extern int file_col;
-
 typedef struct token {
     char text[MAX_TOKEN_LENGTH];
     int length;
     struct {
-	char *file;
+	const char *file;
 	int row;
 	int col;
     } pos;
@@ -19,7 +16,7 @@ typedef struct token {
 
 extern Token *tokens;
 
-void lex(void);
+Token *lex(const char *file);
 void tokerror(Token *tok, const char *msg, ...);
 
 #endif /* LEX_H */

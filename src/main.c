@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdbool.h>
@@ -104,27 +105,12 @@ void parse_cmdline(int argc, char *argv[])
 
 void init(void)
 {
-    int fd;
-    struct stat st;
-
     atexit(fini);
-
-    fd = open(input_file_name, O_RDONLY);
-    fstat(fd, &st);
-    if (st.st_size == 0) {
-	/* Empty file, exit quietly */
-	exit(EXIT_SUCCESS);
-    }
-    input_file = mmap(NULL, st.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
-    if (input_file == MAP_FAILED) {
-	fatal("init: mmap failed\n");
-    }
-    input_file_size = st.st_size;
-    close(fd);
 }
 
 void fini(void)
 {
+    /* Nothing at the moment. */
 
 }
 
@@ -132,7 +118,8 @@ int main(int argc, char *argv[])
 {
     parse_cmdline(argc, argv);
     init();
-    lex();
+    tokens = lex(input_file_name);
+    assert(tokens != NULL);
     tokens_to_ops();
     cross_reference_branches();
     if (action == SIMULATE) {
