@@ -221,6 +221,16 @@ static void compile_op(Operation *opptr)
 		"\tpushq %%rax\n"
 		"\tpushq %%rbx\n");
 	break;
+    case OP_2SWAP:
+	fprintf(asm_file, "\tpopq %%rax\n"
+		"\tpopq %%rbx\n"
+		"\tpopq %%rcx\n"
+		"\tpopq %%rdx\n"
+		"\tpushq %%rbx\n"
+		"\tpushq %%rax\n"
+		"\tpushq %%rdx\n"
+		"\tpushq %%rax\n");
+	break;
     case OP_NIP:
 	fprintf(asm_file, "\tpopq %%rax\n"
 		"\tpopq %%rbx\n"

@@ -35,7 +35,7 @@ static word pop(void)
 
 static Operation *simulate_op(Operation *op)
 {
-    word a, b, c;
+    word a, b, c, d;
     Operation *next_op, *tmp_op;
 
     next_op = op->next;
@@ -138,6 +138,16 @@ static Operation *simulate_op(Operation *op)
 	b = pop();
 	push(a);
 	push(b);
+	break;
+    case OP_2SWAP:
+	a = pop();
+	b = pop();
+	c = pop();
+	d = pop();
+	push(b);
+	push(a);
+	push(d);
+	push(c);
 	break;
     case OP_NIP:
 	a = pop();

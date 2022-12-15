@@ -29,6 +29,7 @@ typedef enum {
     OP_ROT,
     OP_OVER,
     OP_SWAP,
+    OP_2SWAP,
     OP_NIP,
     OP_TUCK,
 
