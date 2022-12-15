@@ -105,6 +105,10 @@ static Operation *simulate_op(Operation *op)
     case OP_DROP:
 	pop();
 	break;
+    case OP_2DROP:
+	pop();
+	pop();
+	break;
     case OP_DUP:
 	a = pop();
 	push(a);

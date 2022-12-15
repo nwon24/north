@@ -30,6 +30,7 @@ struct {
     { "min", OP_MIN},
     { "max", OP_MAX},
     { "drop", OP_DROP},
+    { "2drop", OP_2DROP},
     { "dup", OP_DUP},
     { "2dup", OP_2DUP},
     { "rot", OP_ROT},

@@ -187,6 +187,10 @@ static void compile_op(Operation *opptr)
     case OP_DROP:
 	fprintf(asm_file, "\tpopq %%rax\n");
 	break;
+    case OP_2DROP:
+	fprintf(asm_file, "\tpopq %%rax\n");
+	fprintf(asm_file, "\tpopq %%rax\n");
+	break;
     case OP_DUP:
 	fprintf(asm_file, "\tpopq %%rax\n"
 		"\tpushq %%rax\n"
