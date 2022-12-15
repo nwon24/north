@@ -71,9 +71,9 @@ static void emit_header(void)
 
 static void emit_exit(void)
 {
-    fprintf(asm_file, "movq $60, %%rax\n"
-	    "movq $0, %%rdi\n"
-	    "syscall\n");
+    fprintf(asm_file, "\tmovq $60, %%rax\n"
+	    "\tmovq $0, %%rdi\n"
+	    "\tsyscall\n");
 }
 
 static void compile_op(Operation *opptr)
@@ -303,10 +303,40 @@ static void compile_op(Operation *opptr)
 	fprintf(asm_file, "addr_%d:\n", opptr->block_addr);
 	break;
     case OP_DO:
+	fprintf(asm_file, "\tpopq %%r11\n"
+		"\tpopq %%r12\n"
+		"addr_%d:\n"
+		"\tpushq %%r12\n"
+		"\tpushq %%r11\n", opptr->block_addr);
+	break;
     case OP_LOOP:
+	fprintf(asm_file, "\tpopq %%r11\n"
+		"\tpopq %%r12\n"
+		"\tincq %%r11\n"
+		"\tcmpq %%r11, %%r12\n"
+		"\tjne addr_%d\n", opptr->operand.doloop_op.do_op->block_addr);
+	break;
     case OP_LOOP_PLUS:
+	fprintf(asm_file, "\tpopq %%r13\n"
+		"\tpopq %%r11\n"
+		"\tpopq %%r12\n"
+		"\taddq %%r13, %%r11\n"
+		"\tcmpq $0, %%r13\n"
+		"\tjl 1f\n"
+		"\tcmpq %%r11, %%r12\n"
+		"\tjg addr_%d\n"
+		"\tjmp 2f\n"
+		"1:\n"
+		"\tcmpq %%r11, %%r12\n"
+		"\tjl addr_%d\n"
+		"2:\n", opptr->operand.doloop_op.do_op->block_addr,
+		opptr->operand.doloop_op.do_op->block_addr);
+	break;
     case OP_I:
-	not_implemented("compile_op: loops\n");
+	fprintf(asm_file, "\tpopq %%r11\n"
+		"pushq %%r11\n"
+		"pushq %%r11\n");
+	break;
     default:
 	break;
     }
@@ -317,7 +347,7 @@ static void assemble_and_link(void)
     char as_command[256];
     char ld_command[256];
 
-    sprintf(as_command, "as %s -o %s", asm_file_name, obj_file_name);
+    sprintf(as_command, "as %s -g -o %s", asm_file_name, obj_file_name);
     sprintf(ld_command, "ld %s -o %s", obj_file_name, exe_file_name);
     if (verbose == true) {
         printf("[ASSEMBLER] %s\n", as_command);
