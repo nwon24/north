@@ -117,23 +117,22 @@ static Operation *token_to_op(Token *tok)
     return NULL;
 }
 
-void tokens_to_ops(void)
+Operation *tokens_to_ops(Token *toks)
 {
     Token *tokptr;
-    Operation *opptr, *new_op;
+    Operation *opptr, *new_op, *head;
 
     opptr = NULL;
-    for (tokptr = tokens; tokptr != NULL; tokptr = tokptr->next) {
+    head = NULL;
+    for (tokptr = toks; tokptr != NULL; tokptr = tokptr->next) {
 	new_op = token_to_op(tokptr);
-	if (operations == NULL) {
-	    operations = new_op;
-	    opptr = operations;
+	if (head == NULL) {
+	    head = new_op;
+	    opptr = head;
 	} else {
 	    opptr->next = new_op;
 	    opptr = opptr->next;
 	}
     }
-    /* for (opptr = operations; opptr != NULL; opptr = opptr->next) {
-	printf("Op %d\n", opptr->op);
-	} */
+    return head;
 }

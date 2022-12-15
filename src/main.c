@@ -120,7 +120,7 @@ int main(int argc, char *argv[])
     init();
     tokens = lex(input_file_name);
     assert(tokens != NULL);
-    tokens_to_ops();
+    operations = tokens_to_ops(tokens);
     cross_reference_branches();
     if (action == SIMULATE) {
 	simulate();

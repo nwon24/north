@@ -76,7 +76,7 @@ typedef struct operation {
 
 extern Operation *operations;
 
-void tokens_to_ops(void);
+Operation *tokens_to_ops(Token *toks);
     
 #endif /* OPS_H_ */
 
