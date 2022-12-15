@@ -64,6 +64,12 @@ static Operation *simulate_op(Operation *op)
 	b = pop();
 	push(b % a);
 	break;
+    case OP_DIVMOD:
+	a = pop();
+	b = pop();
+	push(b % a);
+	push(b / a);
+	break;
     case OP_BAND:
 	push(pop() & pop());
 	break;

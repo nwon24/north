@@ -124,6 +124,14 @@ static void compile_op(Operation *opptr)
 		"\tidiv %%rbx\n"
 		"\tpushq %%rdx\n");
 	break;
+    case OP_DIVMOD:
+	fprintf(asm_file, "\txorq %%rdx, %%rdx\n"
+		"\tpopq %%rbx\n"
+		"\tpopq %%rax\n"
+		"\tidiv %%rbx\n"
+		"\tpushq %%rdx\n"
+		"\tpushq %%rax\n");
+	break;
     case OP_BAND:
 	fprintf(asm_file, "\tpopq %%rax\n"
 		"\tpopq %%rbx\n"

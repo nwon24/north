@@ -13,6 +13,7 @@ typedef enum {
     OP_MULTIPLY,
     OP_DIVIDE,
     OP_MOD,
+    OP_DIVMOD,
     OP_BAND,
     OP_BOR,
     OP_BXOR,

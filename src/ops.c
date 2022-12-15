@@ -19,6 +19,7 @@ struct {
     { "*", OP_MULTIPLY},
     { "/", OP_DIVIDE},
     { "mod", OP_MOD},
+    { "/mod", OP_DIVMOD},
     { "and", OP_BAND},
     { "or", OP_BOR},
     { "xor", OP_BXOR},
