@@ -13,7 +13,6 @@ void cross_reference_branches(Operation *ops)
     int cond_op_ptr;
     int do_op_ptr;
 
-    assert(OP_COUNT == 37);
     opptr = ops;
     cond_op_ptr = 0;
     do_op_ptr = 0;
