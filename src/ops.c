@@ -41,10 +41,13 @@ struct {
     { "tuck", OP_TUCK},
     
     { "=", OP_EQUAL},
+    { "0=", OP_0EQUAL},
     { "<>", OP_NEQUAL},
     { ">", OP_GT},
+    { "0>", OP_0GT},
     { ">=", OP_GE},
     { "<", OP_LT},
+    { "0<", OP_0LT},
     { "<=", OP_LE},
 
     { "if", OP_IF},

@@ -166,7 +166,10 @@ static Operation *simulate_op(Operation *op)
 	push(a);
 	break;
     case OP_EQUAL:
-	push(pop() == pop());
+	push(-(pop() == pop()));
+	break;
+    case OP_0EQUAL:
+	push(-(pop() == 0));
 	break;
     case OP_NEQUAL:
 	push(pop() != pop());
@@ -175,6 +178,9 @@ static Operation *simulate_op(Operation *op)
 	a = pop();
 	b = pop();
 	push(-(b > a));
+	break;
+    case OP_0GT:
+	push(-(pop() > 0));
 	break;
     case OP_GE:
 	a = pop();
@@ -185,6 +191,9 @@ static Operation *simulate_op(Operation *op)
 	a = pop();
 	b = pop();
 	push(-(b < a));
+	break;
+    case OP_0LT:
+	push(-(pop() < 0));
 	break;
     case OP_LE:
 	a = pop();

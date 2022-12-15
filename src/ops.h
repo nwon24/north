@@ -35,10 +35,13 @@ typedef enum {
     OP_TUCK,
 
     OP_EQUAL,
+    OP_0EQUAL, /* 0= */
     OP_NEQUAL,
     OP_GT, /* > */
+    OP_0GT, /* 0> */
     OP_GE, /* >= */
     OP_LT, /* < */
+    OP_0LT, /* 0< */
     OP_LE, /* <= */
 
     OP_IF,

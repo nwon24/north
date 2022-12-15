@@ -256,6 +256,14 @@ static void compile_op(Operation *opptr)
 		"\tcmove %%r10, %%rdx\n"
 		"\tpushq %%rdx\n");
 	break;
+    case OP_0EQUAL:
+	fprintf(asm_file, "\tpopq %%rax\n"
+		"\tmovq $-1, %%r10\n"
+		"\txorq %%rdx, %%rdx\n"
+		"\tcmpq $0, %%rax\n"
+		"\tcmove %%r10, %%rdx\n"
+		"\tpushq %%rdx\n");
+	break;
     case OP_NEQUAL:
 	fprintf(asm_file, "\tpopq %%rax\n"
 		"\tpopq %%rbx\n"
@@ -274,6 +282,14 @@ static void compile_op(Operation *opptr)
 		"\tcmovg %%r10, %%rdx\n"
 		"\tpushq %%rdx\n");
 	break;
+    case OP_0GT:
+	fprintf(asm_file, "\tpopq %%rax\n"
+		"\tmovq $-1, %%r10\n"
+		"\txorq %%rdx, %%rdx\n"
+		"\tcmpq $0, %%rax\n"
+		"\tcmovg %%r10, %%rdx\n"
+		"\tpushq %%rdx\n");
+	break;
     case OP_GE:
 	fprintf(asm_file, "\tpopq %%rax\n"
 		"\tpopq %%rbx\n"
@@ -289,6 +305,14 @@ static void compile_op(Operation *opptr)
 		"\tmovq $-1, %%r10\n"
 		"\txorq %%rdx, %%rdx\n"
 		"\tcmpq %%rax, %%rbx\n"
+		"\tcmovl %%r10, %%rdx\n"
+		"\tpushq %%rdx\n");
+	break;
+    case OP_0LT:
+	fprintf(asm_file, "\tpopq %%rax\n"
+		"\tmovq $-1, %%r10\n"
+		"\txorq %%rdx, %%rdx\n"
+		"\tcmpq $0, %%rax\n"
 		"\tcmovl %%r10, %%rdx\n"
 		"\tpushq %%rdx\n");
 	break;
