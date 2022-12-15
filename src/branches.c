@@ -4,7 +4,7 @@
 #include "branches.h"
 #include "ops.h"
 
-void cross_reference_branches(void)
+void cross_reference_branches(Operation *ops)
 {
     int block_addr = 0;
     Operation *opptr;
@@ -14,7 +14,7 @@ void cross_reference_branches(void)
     int do_op_ptr;
 
     assert(OP_COUNT == 37);
-    opptr = operations;
+    opptr = ops;
     cond_op_ptr = 0;
     do_op_ptr = 0;
     block_addr = 0;

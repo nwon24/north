@@ -5,6 +5,8 @@
 
 #include "ops.h"
 
-void cross_reference_branches(void);
+struct operation;
+
+void cross_reference_branches(struct operation *ops);
 
 #endif /* BRANCHES_H_*/

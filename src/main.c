@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
     tokens = lex(input_file_name);
     assert(tokens != NULL);
     operations = tokens_to_ops(tokens);
-    cross_reference_branches();
+    cross_reference_branches(operations);
     if (action == SIMULATE) {
 	simulate();
     } else if (action == COMPILE) {
