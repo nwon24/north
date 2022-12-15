@@ -4,8 +4,11 @@ CFLAGS = -std=c11 -Wall -Wextra -O2 -ggdb -MMD -MP -I../..
 LIB = x86_64-linux.a
 
 OBJ = compile.o
+DEP = ${OBJ:.o=.d}
 
 all: $(LIB)
+
+-include $(DEP)
 
 .c.o:
 	$(CC) -c $< -o $@ $(CFLAGS)
