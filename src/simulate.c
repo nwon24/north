@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include "simulate.h"
@@ -37,6 +38,7 @@ static Operation *simulate_op(Operation *op)
     word a, b, c;
     Operation *next_op, *tmp_op;
 
+    assert(OP_COUNT == 37);
     next_op = op->next;
     switch (op->op) {
     case OP_PUSH:

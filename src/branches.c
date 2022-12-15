@@ -1,3 +1,5 @@
+#include <assert.h>
+
 #include "main.h"
 #include "branches.h"
 #include "ops.h"
@@ -11,6 +13,7 @@ void cross_reference_branches(void)
     int cond_op_ptr;
     int do_op_ptr;
 
+    assert(OP_COUNT == 37);
     opptr = operations;
     cond_op_ptr = 0;
     do_op_ptr = 0;

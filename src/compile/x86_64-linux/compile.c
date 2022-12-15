@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -80,6 +81,8 @@ static void compile_op(Operation *opptr)
 {
     Operation *tmp_op;
     int endif_addr;
+
+    assert(OP_COUNT == 37);
     fprintf(asm_file, "/* OP: %d, LOC: %s:%d:%d: */\n",
 	    opptr->op,
 	    opptr->tok->pos.file,

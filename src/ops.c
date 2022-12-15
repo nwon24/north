@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -61,6 +62,7 @@ static Operation *token_to_op(Token *tok);
 
 static OpWord find_op_in_table(char *opname)
 {
+    assert(OP_COUNT == 37);
     for (int i = 0; i < OP_COUNT; i++) {
         if (strcmp(opname, op_table[i].opname) == 0) {
 	    return op_table[i].op;
