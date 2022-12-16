@@ -370,6 +370,16 @@ static void compile_op(Operation *opptr)
     case OP_ENDIF:
 	fprintf(asm_file, "addr_%d:\n", opptr->block_addr);
 	break;
+	/*
+	 * VERY IMPORTANT: For OP_DO, OP_LOOP, and OP_LOOP_PLUS,
+	 * registers %r14 holds the lower bound and %r15 holds
+	 * the upper bound - these registers are chosen because
+	 * they are guaranteed to be saved between function calls
+	 * and system calls, so as long as none of our own code
+	 * touches those registers we're good. This allows the OP_DO
+	 * operation to consume the upper and lower bounds, matching
+	 * the behaviour of the simulation mode.
+	 */
     case OP_DO:
 	fprintf(asm_file, "\tpopq %%r14\n"
 		"\tpopq %%r15\n"
