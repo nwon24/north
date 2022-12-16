@@ -227,6 +227,18 @@ static void compile_op(Operation *opptr)
 		"\tpushq %%rax\n"
 		"\tpushq %%rbx\n");
 	break;
+    case OP_2OVER:
+	fprintf(asm_file, "\tpopq %%rax\n"
+		"\tpopq %%rbx\n"
+		"\tpopq %%rcx\n"
+		"\tpopq %%rdx\n"
+		"\tpushq %%rdx\n"
+		"\tpushq %%rcx\n"
+		"\tpushq %%rbx\n"
+		"\tpushq %%rax\n"
+		"\tpushq %%rdx\n"
+		"\tpushq %%rcx\n");
+	break;
     case OP_SWAP:
 	fprintf(asm_file, "\tpopq %%rax\n"
 		"\tpopq %%rbx\n"

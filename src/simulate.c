@@ -143,6 +143,18 @@ static Operation *simulate_op(Operation *op)
 	push(a);
 	push(b);
 	break;
+    case OP_2OVER:
+	a = pop();
+	b = pop();
+	c = pop();
+	d = pop();
+	push(d);
+	push(c);
+	push(b);
+	push(a);
+	push(d);
+	push(c);
+	break;
     case OP_SWAP:
 	a = pop();
 	b = pop();

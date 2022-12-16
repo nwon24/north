@@ -36,6 +36,7 @@ struct {
     { "2dup", OP_2DUP},
     { "rot", OP_ROT},
     { "over", OP_OVER},
+    { "2over", OP_2OVER},
     { "swap", OP_SWAP},
     { "2swap", OP_2SWAP},
     { "nip", OP_NIP},
