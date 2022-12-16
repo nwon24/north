@@ -371,39 +371,31 @@ static void compile_op(Operation *opptr)
 	fprintf(asm_file, "addr_%d:\n", opptr->block_addr);
 	break;
     case OP_DO:
-	fprintf(asm_file, "\tpopq %%r11\n"
-		"\tpopq %%r12\n"
-		"addr_%d:\n"
-		"\tpushq %%r12\n"
-		"\tpushq %%r11\n", opptr->block_addr);
+	fprintf(asm_file, "\tpopq %%r14\n"
+		"\tpopq %%r15\n"
+		"addr_%d:\n", opptr->block_addr);
 	break;
     case OP_LOOP:
-	fprintf(asm_file, "\tpopq %%r11\n"
-		"\tpopq %%r12\n"
-		"\tincq %%r11\n"
-		"\tcmpq %%r11, %%r12\n"
+	fprintf(asm_file, "\tincq %%r14\n"
+		"\tcmpq %%r14, %%r15\n"
 		"\tjne addr_%d\n", opptr->operand.doloop_op.do_op->block_addr);
 	break;
     case OP_LOOP_PLUS:
 	fprintf(asm_file, "\tpopq %%r13\n"
-		"\tpopq %%r11\n"
-		"\tpopq %%r12\n"
-		"\taddq %%r13, %%r11\n"
+		"\taddq %%r13, %%r14\n"
 		"\tcmpq $0, %%r13\n"
 		"\tjl 1f\n"
-		"\tcmpq %%r11, %%r12\n"
+		"\tcmpq %%r14, %%r15\n"
 		"\tjg addr_%d\n"
 		"\tjmp 2f\n"
 		"1:\n"
-		"\tcmpq %%r11, %%r12\n"
+		"\tcmpq %%r14, %%r15\n"
 		"\tjl addr_%d\n"
 		"2:\n", opptr->operand.doloop_op.do_op->block_addr,
 		opptr->operand.doloop_op.do_op->block_addr);
 	break;
     case OP_I:
-	fprintf(asm_file, "\tpopq %%r11\n"
-		"pushq %%r11\n"
-		"pushq %%r11\n");
+	fprintf(asm_file, "\tpushq %%r14\n");
 	break;
     default:
 	break;
