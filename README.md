@@ -13,6 +13,11 @@ this North is not intended to be a new implementation of Forth; rather, it
 is meant to be a *Forth-like* language. As the language develops, it
 might (and probably will) deviate from Forth.
 
+Note that there are already slight differences between this language and
+Forth. For one, North code must be written in a file and then compiled
+or simulated; there is no interactive mode. Furthermore, loops and conditionals
+can be written outside of colon definitions.
+
 # How to build
 
 On a *nix system, simply running `make` in the root of the project
