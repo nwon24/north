@@ -1,0 +1,9 @@
+\\ 0 0
+0 begin dup 10 < while
+  0 begin dup 2 < while
+    dup .
+    1 + 
+  repeat drop
+  dup .
+  2 +
+repeat drop
