@@ -61,6 +61,11 @@ struct {
     { "+loop", OP_LOOP_PLUS},
     { "i", OP_I},
     
+    { "while", OP_WHILE},
+    { "begin", OP_BEGIN},
+    { "repeat", OP_REPEAT},
+    { "until", OP_UNTIL},
+
     { "", OP_UNKNOWN},
 };
 

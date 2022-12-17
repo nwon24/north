@@ -10,12 +10,18 @@ void cross_reference_branches(Operation *ops)
     Operation *opptr;
     Operation *conditional_ops[MAX_NESTED_BRANCHES];
     Operation *do_ops[MAX_NESTED_BRANCHES];
+    Operation *while_ops[MAX_NESTED_BRANCHES];
+    Operation *begin_ops[MAX_NESTED_BRANCHES];
     int cond_op_ptr;
     int do_op_ptr;
+    int while_op_ptr;
+    int begin_op_ptr;
 
     opptr = ops;
     cond_op_ptr = 0;
     do_op_ptr = 0;
+    while_op_ptr = 0;
+    begin_op_ptr = 0;
     block_addr = 0;
     while (opptr != NULL) {
 	switch (opptr->op) {
@@ -48,7 +54,7 @@ void cross_reference_branches(Operation *ops)
 
 	case OP_DO:
 	    if (do_op_ptr >= MAX_NESTED_BRANCHES) {
-		tokerror(opptr->tok, "Too many nested DO branches\n");
+		tokerror(opptr->tok, "Too many nested do branches\n");
 	    }
 	    do_ops[do_op_ptr++] = opptr;
             opptr->block_addr = block_addr++;
@@ -65,6 +71,47 @@ void cross_reference_branches(Operation *ops)
 		tokerror(opptr->tok, "'i' word with no preceding 'do'\n");
 	    }
 	    opptr->operand.doloop_op.do_op = do_ops[do_op_ptr - 1];
+	    break;
+	case OP_BEGIN:
+	    if (begin_op_ptr == MAX_NESTED_BRANCHES) {
+		tokerror(opptr->tok, "Too many nested 'begin' branches'\n");
+	    }
+	    begin_ops[begin_op_ptr++] = opptr;
+	    opptr->block_addr = block_addr++;
+	    opptr->operand.indef_op.while_op = NULL;
+	    opptr->operand.indef_op.repeat_op = NULL;
+	    opptr->operand.indef_op.until_op = NULL;
+	    break;
+	case OP_WHILE:
+	    if (while_op_ptr == MAX_NESTED_BRANCHES) {
+		tokerror(opptr->tok, "Too many nested 'while' branches'\n");
+	    } else if (begin_op_ptr == 0) {
+		tokerror(opptr->tok, "'while' word without preceding 'begin'\n");
+	    }
+	    while_ops[while_op_ptr++] = opptr;
+	    opptr->operand.indef_op.begin_op = begin_ops[begin_op_ptr - 1];
+	    begin_ops[begin_op_ptr - 1]->operand.indef_op.while_op = opptr;
+	    break;
+	case OP_REPEAT:
+	    if (while_op_ptr == 0) {
+		tokerror(opptr->tok, "'repeat' word without preceding 'while'\n");
+	    } else if (begin_op_ptr == 0) {
+		tokerror(opptr->tok, "'repeat' word without preceding 'begin'\n");
+	    }
+	    while_ops[while_op_ptr - 1]->operand.indef_op.repeat_op = opptr;
+	    opptr->operand.indef_op.while_op = while_ops[--while_op_ptr];
+	    opptr->operand.indef_op.begin_op = begin_ops[--begin_op_ptr];
+	    opptr->block_addr = block_addr++;
+	    break;
+	case OP_UNTIL:
+	    if (begin_op_ptr == 0) {
+		tokerror(opptr->tok, "'until' word without preceding 'begin'\n");
+	    } else if (begin_ops[begin_op_ptr - 1]->operand.indef_op.while_op != NULL) {
+		tokerror(opptr->tok, "'until' word used with 'while' word\n");
+	    }
+	    begin_ops[begin_op_ptr - 1]->operand.indef_op.until_op = opptr;
+	    opptr->operand.indef_op.begin_op = begin_ops[--begin_op_ptr];
+	    opptr->block_addr = block_addr++;
 	    break;
 	default:
 	    break;

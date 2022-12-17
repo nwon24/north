@@ -54,6 +54,12 @@ typedef enum {
     OP_LOOP,
     OP_LOOP_PLUS,
     OP_I,
+
+    OP_WHILE,
+    OP_BEGIN,
+    OP_REPEAT,
+    OP_UNTIL,
+
     /* Used to denote unknown operation */
     OP_UNKNOWN,
     /* UNUSED: used to count the number of operations */
@@ -77,6 +83,12 @@ typedef struct operation {
 	    int end;
 	    int current;
 	} doloop_op;
+	struct {
+	    struct operation *begin_op;
+	    struct operation *while_op;
+	    struct operation *repeat_op;
+	    struct operation *until_op;
+	} indef_op;
     } operand;
     int block_addr; /* Used for generating assembly labels */
     struct operation *next;
