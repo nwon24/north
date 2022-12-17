@@ -256,6 +256,24 @@ static Operation *simulate_op(Operation *op)
 	tmp_op = op->operand.doloop_op.do_op;
 	push(tmp_op->operand.doloop_op.current);
 	break;
+    case OP_BEGIN:
+	break;
+    case OP_WHILE:
+	a = pop();
+	if (a == 0) {
+	    assert(op->operand.indef_op.repeat_op != NULL);
+	    return op->operand.indef_op.repeat_op->next;
+	} else {
+	    return op->next;
+	}
+	break;
+    case OP_REPEAT:
+	assert(op->operand.indef_op.begin_op != NULL);
+	return op->operand.indef_op.begin_op;
+    case OP_UNTIL:
+	assert(op->operand.indef_op.begin_op != NULL);
+	assert(op->operand.indef_op.while_op != NULL);
+	return op->operand.indef_op.begin_op;
     case OP_UNKNOWN:
     case OP_COUNT:
 	unreachable("simulate_op");
@@ -263,6 +281,10 @@ static Operation *simulate_op(Operation *op)
     return next_op;
 }
 
+/*
+ * I'm pretty sure this is unecessarily complicated,
+ * but this was written before I knew anything.
+ */
 static Operation *simulate_conditional(Operation *op)
 {
     word a;

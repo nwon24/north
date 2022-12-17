@@ -404,6 +404,24 @@ static void compile_op(Operation *opptr)
 		"2:\n", opptr->operand.doloop_op.do_op->block_addr,
 		opptr->operand.doloop_op.do_op->block_addr);
 	break;
+    case OP_BEGIN:
+	fprintf(asm_file, "addr_%d:\n", opptr->block_addr);
+	break;
+    case OP_WHILE:
+	fprintf(asm_file, "\tpopq %%rax\n"
+		"\ttestq %%rax, %%rax\n"
+		"\tjz addr_%d\n",
+		opptr->operand.indef_op.repeat_op->block_addr);
+	break;
+    case OP_REPEAT:
+	fprintf(asm_file, "\tjmp addr_%d\n"
+		"addr_%d:\n",
+		opptr->operand.indef_op.begin_op->block_addr,
+		opptr->block_addr);
+	break;
+    case OP_UNTIL:
+	not_implemented("compile_op: until loop");
+	break;
     case OP_I:
 	fprintf(asm_file, "\tpushq %%r14\n");
 	break;
