@@ -420,7 +420,10 @@ static void compile_op(Operation *opptr)
 		opptr->block_addr);
 	break;
     case OP_UNTIL:
-	not_implemented("compile_op: until loop");
+	fprintf(asm_file, "popq %%rax\n"
+		"\ttestq %%rax, %%rax\n"
+		"jnz addr_%d\n",
+		opptr->operand.indef_op.begin_op->block_addr);
 	break;
     case OP_I:
 	fprintf(asm_file, "\tpushq %%r14\n");

@@ -272,8 +272,13 @@ static Operation *simulate_op(Operation *op)
 	return op->operand.indef_op.begin_op;
     case OP_UNTIL:
 	assert(op->operand.indef_op.begin_op != NULL);
-	assert(op->operand.indef_op.while_op != NULL);
-	return op->operand.indef_op.begin_op;
+	assert(op->operand.indef_op.while_op == NULL);
+	a = pop();
+	if (a == 0) {
+	    return op->next;
+	} else {
+	    return op->operand.indef_op.begin_op;
+	}
     case OP_UNKNOWN:
     case OP_COUNT:
 	unreachable("simulate_op");
