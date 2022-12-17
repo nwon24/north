@@ -1,0 +1,4 @@
+0 begin
+  dup .
+  1 +
+  dup 10 < until
