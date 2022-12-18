@@ -47,6 +47,10 @@ static Operation *simulate_op(Operation *op)
     case OP_PUSH:
 	push(op->operand.intr);
 	break;
+    case OP_PUSH_STR:
+	push(op->operand.str.len);
+	push((word)op->operand.str.text);
+	break;
     case OP_ADD:
 	push(pop() + pop());
 	break;

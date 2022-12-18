@@ -8,6 +8,7 @@
 
 typedef enum {
     OP_PUSH,
+    OP_PUSH_STR,
     OP_ADD,
     OP_MINUS,
     OP_MULTIPLY,
@@ -74,6 +75,12 @@ typedef enum {
     OP_COUNT
 } OpWord;
 
+typedef struct string {
+    char *text;
+    size_t len;
+    int num;
+} String;
+
 typedef struct operation {
     OpWord op;
     Token *tok;
@@ -97,6 +104,7 @@ typedef struct operation {
 	    struct operation *repeat_op;
 	    struct operation *until_op;
 	} indef_op;
+	String str;
     } operand;
     int block_addr; /* Used for generating assembly labels */
     struct operation *next;

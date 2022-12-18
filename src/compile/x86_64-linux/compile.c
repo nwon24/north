@@ -8,14 +8,56 @@
 #include "ops.h"
 #include "compile.h"
 
+#define BSIZE 24
+
 static char *asm_file_name;
 static char *obj_file_name;
 static char *exe_file_name;
 static FILE *asm_file;
 
+static String **string_pool = NULL;
+static int string_pool_size = 0;
+
 static void compile_op(Operation *opptr);
 static void get_file_names(void);
 static void emit_header(void);
+static void add_to_string_pool(String *str);
+static void realloc_string_pool(void);
+static void emit_strings(void);
+
+static void realloc_string_pool(void)
+{
+    int bsize = BSIZE;
+    
+    if (string_pool == NULL) {
+	string_pool = malloc(bsize * sizeof(String));
+	if (string_pool == NULL) {
+	    fatal("realloc_string_pool: malloc returned NULL!");
+	}
+    } else {
+	string_pool = realloc(string_pool, (string_pool_size + bsize) * sizeof(String));
+	if (string_pool == NULL) {
+	    fatal("realloc_string_pool: realloc returned NULL!");
+	}
+    }
+}
+
+static void add_to_string_pool(String *str)
+{
+    if (string_pool_size % BSIZE == 0) {
+	realloc_string_pool();
+    }
+    string_pool[string_pool_size++] = str;
+}
+
+static void emit_strings(void)
+{
+    fprintf(asm_file, ".section .data\n");
+    for (int i = 0; i < string_pool_size; i++) {
+	fprintf(asm_file, "str_%d:\n"
+		"\t.ascii \"%s\"\n", string_pool[i]->num, string_pool[i]->text);
+    }
+}
 
 static void get_file_names(void)
 {
@@ -90,6 +132,11 @@ static void compile_op(Operation *opptr)
     switch (opptr->op) {
     case OP_PUSH:
 	fprintf(asm_file, "\tpushq $%ld\n", opptr->operand.intr);
+	break;
+    case OP_PUSH_STR:
+	fprintf(asm_file, "\tpushq $%zu\n"
+		"\tpushq $str_%d\n", opptr->operand.str.len, opptr->operand.str.num);
+	add_to_string_pool(&opptr->operand.str);
 	break;
     case OP_ADD:
 	fprintf(asm_file, "\tpopq %%rax\n"
@@ -526,6 +573,7 @@ void compile(void)
 	compile_op(opptr);
     }
     emit_exit();
+    emit_strings();
     emit_tail();
     fclose(asm_file);
     assemble_and_link();

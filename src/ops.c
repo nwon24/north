@@ -14,6 +14,7 @@ struct {
     OpWord op;
 } op_table[] = {
     { "", OP_PUSH},
+    { "", OP_PUSH_STR},
     { "+", OP_ADD},
     { "-", OP_MINUS},
     { "*", OP_MULTIPLY},
@@ -107,7 +108,9 @@ static Operation *token_to_op(Token *tok)
     Operation *new_op;
     OpWord op;
     char *p;
-    
+    int str_num;
+
+    str_num = 0;
     new_op = newoperation();
     new_op->next = NULL;
     new_op->tok = tok;
@@ -116,7 +119,24 @@ static Operation *token_to_op(Token *tok)
 	return new_op;
     }
     p = tok->text;
-    if (*p == '+' || *p == '-' || isdigit(*p)) {
+    if (*p == '\"') {
+	/* Parse string */
+	char *s, *t;
+
+	for (s = p + 1; *s != '\"'; s++);
+	if ((new_op->operand.str.text = malloc(s - p + 1)) == NULL) {
+	    fatal("token_to_op: parsing string and malloc returned NULL!\n");
+	}
+	for (s = p + 1, t = new_op->operand.str.text; *s != '\"'; s++, t++) {
+		*t = *s;
+	}
+	new_op->operand.str.text[s - p] = '\0';
+	new_op->operand.str.len = s - (p + 1) - 1;
+	new_op->operand.str.num = str_num++;
+	new_op->op = OP_PUSH_STR;
+	return new_op;
+    } else if (*p == '+' || *p == '-' || isdigit(*p)) {
+	/* Parse number */
 	if (*p == '+' || *p == '-') {
 	    p++;
 	}
