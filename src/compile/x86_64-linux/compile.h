@@ -1,7 +1,8 @@
 #ifndef COMPILE_H_
 #define COMPILE_H_
 
-#define PRINT_ASM "print:\n" \
+#define PRINT_ASM ".section .text\n" \
+"print:\n" \
 "\tpushq %%rbx		\n" \
 "\tpushq %%rbp\n" \
 "\txorq %%rcx, %%rcx		# %%rcx counter\n" \
