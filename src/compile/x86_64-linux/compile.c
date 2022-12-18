@@ -420,9 +420,9 @@ static void compile_op(Operation *opptr)
 		opptr->block_addr);
 	break;
     case OP_UNTIL:
-	fprintf(asm_file, "popq %%rax\n"
+	fprintf(asm_file, "\tpopq %%rax\n"
 		"\ttestq %%rax, %%rax\n"
-		"jnz addr_%d\n",
+		"\tjnz addr_%d\n",
 		opptr->operand.indef_op.begin_op->block_addr);
 	break;
     case OP_I:
