@@ -20,8 +20,8 @@ def record(test_file):
             f.write(sim_result.stdout.decode("utf8"))
         else:
             print("[ERROR]: Compilation and simulation results do not agree for test %s" % test_file)
-            print(sim_result.stdout)
-            print(com_result.stdout)
+            print("Simulation:\n%s" % sim_result.stdout.decode("utf8"))
+            print("Compilation:\n%s" % com_result.stdout.decode("utf8"))
 
 def test(test_file, results_file):
     expected = None
