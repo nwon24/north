@@ -13,7 +13,9 @@
 
 #define END_OF_FILE(p) ((p) >= lex_file + lex_file_size)
 
-#define COMMENT_CHAR '\\'
+#define LINE_COMMENT_CHAR '\\'
+#define INLINE_COMMENT_CHAR_START '('
+#define INLINE_COMMENT_CHAR_END ')'
 
 /* Linked list of tokens */
 Token *tokens = NULL;
@@ -58,11 +60,30 @@ static Token *gettoken(void)
     if (END_OF_FILE(p)) {
 	return NULL;
     }
-    if (*p == COMMENT_CHAR) {
+    if (*p == LINE_COMMENT_CHAR) {
 	while (!END_OF_FILE(p) && *p != '\n') {
 	    update_file_position(*p);
 	    p++;
 	}
+	goto again;
+    } else if (*p == INLINE_COMMENT_CHAR_START) {
+	const char *incom_file;
+	int incom_row;
+	int incom_col;
+
+	incom_file = lex_file_name;
+	incom_row = file_row;
+	incom_col = file_col;
+	while (!END_OF_FILE(p) && *p != INLINE_COMMENT_CHAR_END) {
+	    update_file_position(*p);
+	    p++;
+	}
+	if (END_OF_FILE(p)) {
+	    tell_user(stderr, "%s:%d:%d: Unterminated inline comment\n",
+		      incom_file, incom_row, incom_col);
+	    exit(EXIT_FAILURE);
+	}
+	p++;
 	goto again;
     }
     new_token->pos.file = lex_file_name;
