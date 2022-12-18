@@ -1,6 +1,10 @@
+#define _DEFAULT_SOURCE
 #include <assert.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <unistd.h>
+#include <sys/syscall.h>
+
 #include "simulate.h"
 #include "main.h"
 #include "ops.h"
@@ -35,7 +39,7 @@ static word pop(void)
 
 static Operation *simulate_op(Operation *op)
 {
-    word a, b, c, d;
+    word a, b, c, d, e, f, g;
     Operation *next_op, *tmp_op;
 
     next_op = op->next;
@@ -279,6 +283,63 @@ static Operation *simulate_op(Operation *op)
 	} else {
 	    return op->operand.indef_op.begin_op;
 	}
+    case OP_SYS0:
+	a = pop();
+	push(syscall(a));
+	break;
+    case OP_SYS1:
+	a = pop();
+	b = pop();
+	/*
+	 * We need to make special allowance for the exit
+	 * system call during simulation because the C library
+	 * needs to do some cleanup.
+	 */
+	if (a == SYS_exit) {
+	    exit(b);
+	}
+	push(syscall(a, b));
+	break;
+    case OP_SYS2:
+	a = pop();
+	b = pop();
+	c = pop();
+	push(syscall(a, b, c));
+	break;
+    case OP_SYS3:
+	a = pop();
+	b = pop();
+	c = pop();
+	d = pop();
+	push(syscall(a, b, c, d));
+	break;
+    case OP_SYS4:
+	a = pop();
+	b = pop();
+	c = pop();
+	d = pop();
+	e = pop();
+	push(syscall(a, b, c, d, e));
+	break;
+    case OP_SYS5:
+	a = pop();
+	b = pop();
+	c = pop();
+	d = pop();
+	e = pop();
+	f = pop();
+	push(syscall(a, b, c, d, e, f));
+	break;
+    case OP_SYS6:
+	a = pop();
+	b = pop();
+	c = pop();
+	d = pop();
+	e = pop();
+	f = pop();
+	g = pop();
+	push(syscall(a, b, c, d, e, f, g));
+	break;
     case OP_UNKNOWN:
     case OP_COUNT:
 	unreachable("simulate_op");

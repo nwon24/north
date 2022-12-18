@@ -425,6 +425,62 @@ static void compile_op(Operation *opptr)
 		"\tjnz addr_%d\n",
 		opptr->operand.indef_op.begin_op->block_addr);
 	break;
+    case OP_SYS0:
+	fprintf(asm_file, "\tpopq %%rax\n"
+		"\tsyscall\n"
+		"\tpushq %%rax\n");
+	break;
+    case OP_SYS1:
+	fprintf(asm_file, "\tpopq %%rax\n"
+		"\tpopq %%rdi\n"
+		"\tsyscall\n"
+		"\tpush %%rax\n");
+	break;
+    case OP_SYS2:
+	fprintf(asm_file, "\tpopq %%rax\n"
+		"\tpopq %%rdi\n"
+		"\tpopq %%rsi\n"
+		"\tsyscall\n"
+		"\tpushq %%rax\n");
+	break;
+    case OP_SYS3:
+	fprintf(asm_file, "\tpopq %%rax\n"
+		"\tpopq %%rdi\n"
+		"\tpopq %%rsi\n"
+		"\tpopq %%rdx\n"
+		"\tsyscall\n"
+		"\tpushq %%rax\n");
+	break;
+    case OP_SYS4:
+	fprintf(asm_file, "\tpopq %%rax\n"
+		"\tpopq %%rdi\n"
+		"\tpopq %%rsi\n"
+		"\tpopq %%rdx\n"
+		"\tpopq %%r10\n"
+		"\tsyscall\n"
+		"\tpushq %%rax\n");
+	break;
+    case OP_SYS5:
+	fprintf(asm_file, "\tpopq %%rax\n"
+		"\tpopq %%rdi\n"
+		"\tpopq %%rsi\n"
+		"\tpopq %%rdx\n"
+		"\tpopq %%r10\n"
+		"\tpopq %%r8\n"
+		"\tsyscall\n"
+		"\tpushq %%rax\n");
+	break;
+    case OP_SYS6:
+	fprintf(asm_file, "\tpopq %%rax\n"
+		"\tpopq %%rdi\n"
+		"\tpopq %%rsi\n"
+		"\tpopq %%rdx\n"
+		"\tpopq %%r10\n"
+		"\tpopq %%r8\n"
+		"\tpopq %%r9\n"
+		"\tsyscall\n"
+		"\tpushq %%rax\n");
+	break;
     case OP_I:
 	fprintf(asm_file, "\tpushq %%r14\n");
 	break;

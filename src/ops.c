@@ -66,6 +66,14 @@ struct {
     { "repeat", OP_REPEAT},
     { "until", OP_UNTIL},
 
+    { "syscall0", OP_SYS0},
+    { "syscall1", OP_SYS1},
+    { "syscall2", OP_SYS2},
+    { "syscall3", OP_SYS3},
+    { "syscall4", OP_SYS4},
+    { "syscall5", OP_SYS5},
+    { "syscall6", OP_SYS6},
+
     { "", OP_UNKNOWN},
 };
 

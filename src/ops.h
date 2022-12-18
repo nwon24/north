@@ -60,6 +60,14 @@ typedef enum {
     OP_REPEAT,
     OP_UNTIL,
 
+    OP_SYS0,
+    OP_SYS1,
+    OP_SYS2,
+    OP_SYS3,
+    OP_SYS4,
+    OP_SYS5,
+    OP_SYS6,
+    
     /* Used to denote unknown operation */
     OP_UNKNOWN,
     /* UNUSED: used to count the number of operations */
