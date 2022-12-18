@@ -1,0 +1,8 @@
+\ Should only print 0 to 9
+0 begin dup 20 < while
+  dup .
+  1 +
+  dup 10 = if
+    0 60 syscall1
+  endif
+repeat
