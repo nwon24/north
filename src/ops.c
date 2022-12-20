@@ -114,26 +114,19 @@ static Operation *token_to_op(Token *tok)
     new_op = newoperation();
     new_op->next = NULL;
     new_op->tok = tok;
-    if ((op = find_op_in_table(tok->text)) != OP_UNKNOWN) {
-	new_op->op = op;
-	return new_op;
-    }
     p = tok->text;
-    if (*p == '\"') {
-	/* Parse string */
-	char *s, *t;
-
-	for (s = p + 1; *s != '\"'; s++);
-	if ((new_op->operand.str.text = malloc(s - p + 1)) == NULL) {
+    if (tok->type == TOKEN_STR) {
+	if ((new_op->operand.str.text = malloc(tok->length + 1)) == NULL) {
 	    fatal("token_to_op: parsing string and malloc returned NULL!\n");
 	}
-	for (s = p + 1, t = new_op->operand.str.text; *s != '\"'; s++, t++) {
-		*t = *s;
-	}
-	new_op->operand.str.text[s - p] = '\0';
-	new_op->operand.str.len = s - (p + 1) - 1;
+	memcpy(new_op->operand.str.text, tok->str, tok->length);
+	new_op->operand.str.text[tok->length] = '\0';
+	new_op->operand.str.len = tok->length;
 	new_op->operand.str.num = str_num++;
 	new_op->op = OP_PUSH_STR;
+	return new_op;
+    } else if ((op = find_op_in_table(tok->text)) != OP_UNKNOWN) {
+	new_op->op = op;
 	return new_op;
     } else if (*p == '+' || *p == '-' || isdigit(*p)) {
 	/* Parse number */

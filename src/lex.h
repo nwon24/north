@@ -2,15 +2,23 @@
 #define LEX_H_
 
 #define MAX_TOKEN_LENGTH 14
+#define MAX_STR_TOKEN_LENGTH 4095
 
+typedef enum token_type {
+    TOKEN_WORD,
+    TOKEN_STR,
+} TokenType;
+    
 typedef struct token {
-    char text[MAX_TOKEN_LENGTH];
+    char text[MAX_TOKEN_LENGTH + 1]; /* Add 1 for '\0' character */
+    char str[MAX_STR_TOKEN_LENGTH + 1];
     int length;
     struct {
 	const char *file;
 	int row;
 	int col;
     } pos;
+    TokenType type;
     struct token *next;
 } Token;
 
