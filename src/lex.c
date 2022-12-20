@@ -122,7 +122,10 @@ static void parse_string(Token **tok, char **p)
     (*p)++;
     str_col = file_row;
     str_row = file_row;
-    while (*p - s < MAX_STR_TOKEN_LENGTH && **p != '\n' && **p != '\"') {
+    while (*p - s < MAX_STR_TOKEN_LENGTH && **p != '\n') {
+	if (**p == '\"' && *(*p - 1) != '\\') {
+	    break;
+	}
 	update_file_position(**p);
 	*t++ = **p;
 	(*p)++;
