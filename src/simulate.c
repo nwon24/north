@@ -192,6 +192,12 @@ static Operation *simulate_op(Operation *op)
 	push(b);
 	push(a);
 	break;
+    case OP_ONEPLUS:
+	push(pop() + 1);
+	break;
+    case OP_ONEMINUS:
+	push(pop() - 1);
+	break;
     case OP_EQUAL:
 	push(-(pop() == pop()));
 	break;

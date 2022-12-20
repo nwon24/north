@@ -42,6 +42,8 @@ struct {
     { "2swap", OP_2SWAP},
     { "nip", OP_NIP},
     { "tuck", OP_TUCK},
+    { "1+", OP_ONEPLUS},
+    { "1-", OP_ONEMINUS},
     
     { "=", OP_EQUAL},
     { "0=", OP_0EQUAL},

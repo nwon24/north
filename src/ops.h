@@ -36,6 +36,8 @@ typedef enum {
     OP_2SWAP,
     OP_NIP,
     OP_TUCK,
+    OP_ONEPLUS,
+    OP_ONEMINUS,
 
     OP_EQUAL,
     OP_0EQUAL, /* 0= */

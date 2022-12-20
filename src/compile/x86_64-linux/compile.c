@@ -315,6 +315,16 @@ static void compile_op(Operation *opptr)
 		"\tpushq %%rbx\n"
 		"\tpushq %%rax\n");
 	break;
+    case OP_ONEPLUS:
+	fprintf(asm_file, "\tpopq %%rax\n"
+		"\tincq %%rax\n"
+		"\tpushq %%rax\n");
+	break;
+    case OP_ONEMINUS:
+	fprintf(asm_file, "\tpopq %%rax\n"
+		"\tdecq %%rax\n"
+		"\tpushq %%rax\n");
+	break;
     case OP_EQUAL:
 	fprintf(asm_file, "\tpopq %%rax\n"
 		"\tpopq %%rbx\n"
