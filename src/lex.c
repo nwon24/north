@@ -113,12 +113,15 @@ static void parse_string(Token **tok, char **p)
 {
     Token *new_token;
     char *s, *t;
+    int str_row, str_col;
 
     new_token = *tok;
     s = *p;
     assert(**p == '\"');
     t = new_token->str;
     (*p)++;
+    str_col = file_row;
+    str_row = file_row;
     while (*p - s < MAX_STR_TOKEN_LENGTH && **p != '\n' && **p != '\"') {
 	update_file_position(**p);
 	*t++ = **p;
@@ -126,7 +129,7 @@ static void parse_string(Token **tok, char **p)
     }
     if (**p == '\n') {
 	tell_user(stderr, "%s:%d:%d: Unterminated string literal\n",
-		  lex_file_name, file_row, file_col);
+		  lex_file_name, str_row, str_col);
 	exit(EXIT_FAILURE);
     }
     assert(**p == '\"');
