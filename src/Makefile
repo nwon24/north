@@ -4,7 +4,7 @@ NAME = north
 CC = gcc
 CFLAGS = -std=c11 -Wall -Wextra -O2 -ggdb -MMD -MP
 
-OBJ = main.o lex.o ops.o simulate.o branches.o
+OBJ = main.o lex.o ops.o simulate.o branches.o strings.o
 DEP = ${OBJ:.o=.d}
 LIB = compile/$(ARCH)/$(ARCH).a
 
