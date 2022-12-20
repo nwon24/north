@@ -6,6 +6,8 @@ If you have never heard of Forth, Forth is a low-level stack-based
 language. For more information visit [its Wikipedia page](https://en.wikipedia.org/wiki/Forth_(programming_language)) or the [Forth website](https://forth.com). For a tutorial on how to write code
 in the language see the [Gforth manual](https://gforth.org/manual/).
 
+For documentation on Forth visit the [doc](./doc) subdirectory.
+
 # How will this be different to Forth?
 
 For now all the basic operations of North are the same as Forth. However,
