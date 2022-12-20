@@ -8,6 +8,7 @@
 #include "simulate.h"
 #include "main.h"
 #include "ops.h"
+#include "strings.h"
 
 #define STACK_CAPACITY 4096
 
@@ -48,8 +49,8 @@ static Operation *simulate_op(Operation *op)
 	push(op->operand.intr);
 	break;
     case OP_PUSH_STR:
-	push(op->operand.str.len);
-	push((word)op->operand.str.text);
+	push(op->operand.str.len - escape_chars(op));
+	push((word)unescape_chars(op));
 	break;
     case OP_ADD:
 	push(pop() + pop());

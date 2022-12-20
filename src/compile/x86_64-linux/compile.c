@@ -7,6 +7,7 @@
 #include "lex.h"
 #include "ops.h"
 #include "compile.h"
+#include "strings.h"
 
 #define BSIZE 24
 
@@ -135,7 +136,7 @@ static void compile_op(Operation *opptr)
 	break;
     case OP_PUSH_STR:
 	fprintf(asm_file, "\tpushq $%zu\n"
-		"\tpushq $str_%d\n", opptr->operand.str.len, opptr->operand.str.num);
+		"\tpushq $str_%d\n", opptr->operand.str.len - escape_chars(opptr), opptr->operand.str.num);
 	add_to_string_pool(&opptr->operand.str);
 	break;
     case OP_ADD:
