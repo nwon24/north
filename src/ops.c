@@ -148,7 +148,7 @@ static Operation *token_to_op(Token *tok)
 	new_op->op = OP_PUSH;
 	return new_op;
     }
-    tokerror(tok, "Unrecognised wprd '%s'\n", tok->text);
+    tokerror(tok, "Unrecognised word '%s'\n", tok->text);
     return NULL;
 }
 
