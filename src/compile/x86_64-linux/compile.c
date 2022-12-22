@@ -53,7 +53,7 @@ static void add_to_string_pool(String *str)
 
 static void emit_strings(void)
 {
-    fprintf(asm_file, ".section .data\n");
+    fprintf(asm_file, ".section .rodata\n");
     for (int i = 0; i < string_pool_size; i++) {
 	fprintf(asm_file, "str_%d:\n"
 		"\t.ascii \"%s\"\n", string_pool[i]->num, string_pool[i]->text);
