@@ -16,6 +16,7 @@
 #include "branches.h"
 #include "directives.h"
 #include "hash.h"
+#include "variables.h"
 
 #define OPTSTRING ":hscv"
 
