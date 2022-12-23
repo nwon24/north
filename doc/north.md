@@ -181,7 +181,7 @@ Comparison operators compare the top two elements of the stack, replacing
 them with either a flag being 'true' or a flag meaning 'false'. The false
 flag is `0`. Contrary
 to languages like C, the 'true' flag is `-1`. However, the conditional
-operators (such as `if`) take another other than `0` as 'true'.
+operators (such as `if`) take any value other than `0` as 'true'.
 
 Since comparing with `0` is common, some comparison operators compare
 the top value on the stack with `0` without `0` having to be pushed onto
@@ -342,3 +342,64 @@ All system calls return an error value; this value is pushed
 onto the stack. If this value needs to be ignored, remember
 to `drop` it. Forgetting this will lead to mysterious bugs.
 
+## Variables and memory
+
+Space in memory can be reserved for storing values with
+the `.var` directive. The space reserved is a contiguous
+block of memory of the specified size (basically arrays
+but with none of the handy indexing of many languages).
+
+The structure of the `.var` directive is as follows.
+```
+.var <identifier> <type> <size>
+```
+The identifier must be no more than 31 characters long
+and must begin with an alphabetic character. The type field
+is one of eight different options:
+
+| Type  | Description             |
+|-------|-------------------------|
+| `i8`  | Signed 8-bit integer    |
+| `i16` | Signed 16-bit integer   |
+| `i32` | Signed 32-bit integer   |
+| `i64` | Signed 64-bit integer   |
+| `u8`  | Unsigned 8-bit integer  |
+| `u16` | Unsigned 16-bit integer |
+| `u32` | Unsigned 32-bit integer |
+| `u64` | Unsigned 64-bit integer |
+
+**Note: for now, the signedness doesn't matter, since our arithmetic
+words don't differentiate between signed and unsigned integers. It
+has just been added in case future developments require the user
+to know if an array contains signed or unsigned integers.**
+
+The `size` field must be a decimal integer. It is the number
+of cells that will be allocated, where each cell is the size
+of the type just specified. So if a size of `8` and a type of
+`u32` were specified, the array would take up `32` bytes in
+memory.
+
+Once a variable has been declared, it can be referred to by
+its identifier; doing so pushes the address of the first cell
+onto the stack. Offsets in the array can be obtained by adding
+onto the base address pushed onto the stack. Note that there aren't
+any fancy pointer arithmetics, so to get the number second in
+an array of 64-bit integers, `8` has to be added to the base pointer.
+
+Reading and writing from these memory locations is done using the `!` (store)
+and `@` (load) family of words. These words are suffixed by either `8`, `16`, `32`,
+or `64`, to indicate whether an 8-bit, 16-bit, 32-bit, or 64-bit integer
+should be stored or loaded. With both operations, the top value
+of the stack is the target memory address; in the case of the `!` operation,
+the number directly below the address is the value to be stored.
+
+Here is an example. The following code stores the first ten multiples
+of three in an array in memory.
+```
+.var foo u64 10
+
+0 begin dup 10 < while
+  dup dup 8 * foo + over 3 * swap !64
+  1+
+repeat
+```
