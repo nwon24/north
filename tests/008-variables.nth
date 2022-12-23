@@ -1,0 +1,11 @@
+.var foo u64 10
+
+0 begin dup 10 < while
+  dup dup 3 lshift foo + !64
+  1 +
+repeat
+
+0 begin dup 10 < while
+  dup dup 3 lshift  foo + @64 1 lshift .
+  1 +
+repeat
