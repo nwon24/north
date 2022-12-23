@@ -48,6 +48,9 @@ static Operation *simulate_op(Operation *op)
     case OP_PUSH:
 	push(op->operand.intr);
 	break;
+    case OP_PUSH_ADDR:
+	push((word)op->operand.variable->addr);
+	break;
     case OP_PUSH_STR:
 	push(op->operand.str.len - escape_chars(op));
 	push((word)unescape_chars(op));

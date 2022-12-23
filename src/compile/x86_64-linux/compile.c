@@ -60,6 +60,15 @@ static void emit_strings(void)
     }
 }
 
+static void emit_variables(void)
+{
+    fprintf(asm_file, ".section .bss\n");
+    for (int i = 0; i < nr_variables; i++) {
+	fprintf(asm_file, "%s:\n"
+		"\t.skip %lu\n", variables[i].identifier, variables[i].bytesize);
+    }
+}
+
 static void get_file_names(void)
 {
     char *p, *s, *o, *e;
@@ -133,6 +142,9 @@ static void compile_op(Operation *opptr)
     switch (opptr->op) {
     case OP_PUSH:
 	fprintf(asm_file, "\tpushq $%ld\n", opptr->operand.intr);
+	break;
+    case OP_PUSH_ADDR:
+	fprintf(asm_file, "\tpushq $%s\n", opptr->operand.variable->identifier);
 	break;
     case OP_PUSH_STR:
 	fprintf(asm_file, "\tpushq $%zu\n"
@@ -585,6 +597,7 @@ void compile(void)
     }
     emit_exit();
     emit_strings();
+    emit_variables();
     emit_tail();
     fclose(asm_file);
     assemble_and_link();
