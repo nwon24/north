@@ -6,6 +6,8 @@
 #include "lex.h"
 #include "ops.h"
 #include "main.h"
+#include "hash.h"
+#include "variables.h"
 
 Operation *operations = NULL;
 
@@ -15,6 +17,7 @@ struct {
 } op_table[] = {
     { "", OP_PUSH},
     { "", OP_PUSH_STR},
+    { "", OP_PUSH_ADDR},
     { "+", OP_ADD},
     { "-", OP_MINUS},
     { "*", OP_MULTIPLY},
@@ -111,6 +114,7 @@ static Operation *token_to_op(Token *tok)
     OpWord op;
     char *p;
     int str_num;
+    HashEntry *entry;
 
     str_num = 0;
     new_op = newoperation();
@@ -146,6 +150,10 @@ static Operation *token_to_op(Token *tok)
 	}
 	new_op->operand.intr = atoi(tok->text);
 	new_op->op = OP_PUSH;
+	return new_op;
+    } else if ((entry = variable_reference(tok)) != NULL) {
+	new_op->op = OP_PUSH_ADDR;
+	new_op->operand.variable = entry->ptr;
 	return new_op;
     }
     tokerror(tok, "Unrecognised word '%s'\n", tok->text);
