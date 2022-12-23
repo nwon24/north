@@ -161,7 +161,7 @@ static void parse_character(Token **tok, char **p)
     char_row = file_row;
     char_col = file_col;
     ++(*p);
-    while (**p != '\'' && *p - s < MAX_CHAR_TOKEN_LENGTH + 1) {
+    while (**p != '\'' && *p - s <= MAX_CHAR_TOKEN_LENGTH + 1) {
 	update_file_position(**p);
 	*t++ = **p;
 	if (**p == '\\') {
@@ -175,12 +175,12 @@ static void parse_character(Token **tok, char **p)
 	}
 	(*p)++;
     }
-    assert(**p == '\'');
-    if (*p - s >= MAX_CHAR_TOKEN_LENGTH + 1) {
+    if (*p - s > MAX_CHAR_TOKEN_LENGTH + 1) {
 	tell_user(stderr, "%s:%d:%d: Invalid character constant - too long\n",
 		  lex_file_name, char_row, char_col);
 	exit(EXIT_FAILURE);
     }
+    assert(**p == '\'');
     (*p)++;
     update_file_position(**p);
     *t = '\0';
