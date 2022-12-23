@@ -354,6 +354,42 @@ static Operation *simulate_op(Operation *op)
 	g = pop();
 	push(syscall(a, b, c, d, e, f, g));
 	break;
+    case OP_STORE8:
+	a = pop();
+	b = pop();
+	*(uint8_t *)a = (uint8_t)b;
+	break;
+    case OP_STORE16:
+	a = pop();
+	b = pop();
+	*(uint16_t *)a = (uint16_t)b;
+	break;
+    case OP_STORE32:
+	a = pop();
+	b = pop();
+	*(uint32_t *)a = (uint32_t)b;
+	break;
+    case OP_STORE64:
+	a = pop();
+	b = pop();
+	*(uint64_t *)a = (uint64_t)b;
+	break;
+    case OP_LOAD8:
+	a = pop();
+	push((word)(*(uint8_t *)a));
+	break;
+    case OP_LOAD16:
+	a = pop();
+	push((word)(*(uint16_t *)a));
+	break;
+    case OP_LOAD32:
+	a = pop();
+	push((word)(*(uint32_t *)a));
+	break;
+    case OP_LOAD64:
+	a = pop();
+	push((word)(*(uint64_t *)a));
+	break;
     case OP_UNKNOWN:
     case OP_COUNT:
 	unreachable("simulate_op");

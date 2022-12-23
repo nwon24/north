@@ -72,7 +72,15 @@ typedef enum {
     OP_SYS4,
     OP_SYS5,
     OP_SYS6,
-    
+
+    OP_STORE8,
+    OP_STORE16,
+    OP_STORE32,
+    OP_STORE64,
+    OP_LOAD8,
+    OP_LOAD16,
+    OP_LOAD32,
+    OP_LOAD64,
     /* Used to denote unknown operation */
     OP_UNKNOWN,
     /* UNUSED: used to count the number of operations */

@@ -551,6 +551,50 @@ static void compile_op(Operation *opptr)
 		"\tsyscall\n"
 		"\tpushq %%rax\n");
 	break;
+    case OP_STORE8:
+	fprintf(asm_file, "\tpopq %%rax\n"
+		"\tpopq %%rbx\n"
+		"\tmovb %%bl, (%%rax)\n");
+	break;
+    case OP_STORE16:
+	fprintf(asm_file, "\tpopq %%rax\n"
+		"\tpopq %%rbx\n"
+		"\tmovw %%bx, (%%rax)\n");
+	break;
+    case OP_STORE32:
+	fprintf(asm_file, "\tpopq %%rax\n"
+		"\tpopq %%rbx\n"
+		"\tmovl %%ebx, (%%rax)\n");
+	break;
+    case OP_STORE64:
+	fprintf(asm_file, "\tpopq %%rax\n"
+		"\tpopq %%rbx\n"
+		"\tmovq %%rbx, (%%rax)\n");
+	break;
+    case OP_LOAD8:
+	fprintf(asm_file, "\tpopq %%rax\n"
+		"\txorq %%rbx, %%rbx\n"
+		"\tmovb (%%rax), %%bl\n"
+		"\tpushq %%rbx\n");
+	break;
+    case OP_LOAD16:
+	fprintf(asm_file, "\tpopq %%rax\n"
+		"\txorq %%rbx, %%rbx\n"
+		"\tmovw (%%rax), %%bx\n"
+		"\tpushq %%rbx\n");
+	break;
+    case OP_LOAD32:
+	fprintf(asm_file, "\tpopq %%rax\n"
+		"\txorq %%rbx, %%rbx\n"
+		"\tmovl (%%rax), %%ebx\n"
+		"\tpushq %%rbx\n");
+	break;
+    case OP_LOAD64:
+	fprintf(asm_file, "\tpopq %%rax\n"
+		"\txorq %%rbx, %%rbx\n"
+		"\tmovq (%%rax), %%rbx\n"
+		"\tpushq %%rbx\n");
+	break;
     case OP_I:
 	fprintf(asm_file, "\tpushq %%r14\n");
 	break;

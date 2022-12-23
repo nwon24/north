@@ -80,6 +80,15 @@ struct {
     { "syscall5", OP_SYS5},
     { "syscall6", OP_SYS6},
 
+    { "!8", OP_STORE8},
+    { "!16", OP_STORE16},
+    { "!32", OP_STORE32},
+    { "!64", OP_STORE64},
+    { "@8", OP_LOAD8},
+    { "@16", OP_LOAD16},
+    { "@32", OP_LOAD32},
+    { "@64", OP_LOAD64},
+    
     { "", OP_UNKNOWN},
 };
 
