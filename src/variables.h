@@ -31,5 +31,6 @@ extern int nr_variables;
 
 Token *add_variable(Token *start);
 HashEntry *variable_reference(Token *tok);
+void init_variables_hash(void);
 
 #endif /* VARIABLES_H_ */
