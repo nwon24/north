@@ -170,6 +170,9 @@ static Operation *token_to_op(Token *tok)
 	    case 'r':
 		new_op->operand.intr = '\r';
 		break;
+	    default:
+		tokerror(tok, "Unknown character constant\n");
+		break;
 	    }
 	} else {
 	    new_op->operand.intr = tok->text[0];
