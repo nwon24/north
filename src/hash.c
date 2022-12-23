@@ -35,6 +35,7 @@ int add_hash_entry(HashTable *table, HashEntry *entry)
     int hashn;
     HashEntry **tab, *tmp;
 
+    assert(table != NULL);
     hashn = table->hashfn(entry->identifier, table->size);
     tab = table->table;
     assert(hashn >= 0 && hashn < table->size);
@@ -64,4 +65,33 @@ int string_hashfn(char *str, int hash_size)
 	sum += *p;
     }
     return sum % hash_size;
+}
+
+HashEntry *new_hash_entry(char *identifier, void *ptr)
+{
+    HashEntry *new;
+
+    if ((new = malloc(sizeof(*new))) == NULL) {
+	fatal("new_hash_entry: malloc returned NULL\n");
+    }
+    new->identifier = identifier;
+    new->ptr = ptr;
+    return new;
+}
+
+HashEntry *in_hash(HashTable *table, char *identifier)
+{
+    int hashn;
+    HashEntry *entry;
+
+    hashn = table->hashfn(identifier, table->size);
+    assert(hashn >= 0 && hashn < table->size);
+    if ((entry = table->table[hashn]) == NULL)
+	return entry;
+    while (entry != NULL) {
+	if (strcmp(entry->identifier, identifier) == 0)
+	    return entry;
+	entry = entry->next;
+    }
+    return NULL;
 }

@@ -1,6 +1,8 @@
 #ifndef HASH_H_
 #define HASH_H_
 
+#include <stdbool.h>
+
 typedef struct hash_entry {
     void *ptr;
     char *identifier;
@@ -15,6 +17,9 @@ typedef struct hash_table {
 } HashTable;
 
 HashTable *new_hash_table(int (*fn)(char *identifier, int hash_size), int size);
+HashEntry *new_hash_entry(char *identifier, void *ptr);
 int add_hash_entry(HashTable *table, HashEntry *entry);
+HashEntry *in_hash(HashTable *table, char *identifier);
+int string_hashfn(char *str, int hash_size);
 
 #endif /* HASH_H_ */
