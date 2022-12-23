@@ -94,6 +94,15 @@ the stack:  the length of the string and the address of the string
 in read-only memory. The address of the string is uppermost on the
 stack.
 
+## Character constants
+
+Character constants are specified the same way they are in C.
+Specifying a character constant pushes its ASCII value onto the stack.
+For example `'a' .` prints 97 onto the screen.
+
+All the same escape sequences are supported for character constants
+as for strings.
+
 ## Arithmetic operations
 
 Arithmetic operators operator on the elements that are currently
