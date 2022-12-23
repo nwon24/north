@@ -1,7 +1,7 @@
 #ifndef LEX_H_
 #define LEX_H_
 
-#define MAX_TOKEN_LENGTH 14
+#define MAX_TOKEN_LENGTH 31
 #define MAX_STR_TOKEN_LENGTH 4095
 
 typedef enum token_type {
