@@ -5,10 +5,12 @@
 
 #include "lex.h"
 #include "branches.h"
+#include "variables.h"
 
 typedef enum {
     OP_PUSH,
     OP_PUSH_STR,
+    OP_PUSH_ADDR,
     OP_ADD,
     OP_MINUS,
     OP_MULTIPLY,
@@ -107,6 +109,7 @@ typedef struct operation {
 	    struct operation *until_op;
 	} indef_op;
 	String str;
+	Variable *variable;
     } operand;
     int block_addr; /* Used for generating assembly labels */
     struct operation *next;
