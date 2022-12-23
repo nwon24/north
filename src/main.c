@@ -14,6 +14,8 @@
 #include "ops.h"
 #include "simulate.h"
 #include "branches.h"
+#include "directives.h"
+#include "hash.h"
 
 #define OPTSTRING ":hscv"
 
@@ -114,12 +116,19 @@ void fini(void)
 
 }
 
+bool simulating(void)
+{
+    return action == SIMULATE;
+}
+
 int main(int argc, char *argv[])
 {
     parse_cmdline(argc, argv);
     init();
+    init_variables_hash();
     tokens = lex(input_file_name);
     assert(tokens != NULL);
+    tokens = preprocess(tokens);
     operations = tokens_to_ops(tokens);
     cross_reference_branches(operations);
     if (action == SIMULATE) {

@@ -12,6 +12,7 @@ void tell_user(FILE *stream, const char *msg, ...);
 void fatal(const char *msg);
 void not_implemented(const char *msg);
 void error(const char *msg);
+bool simulating(void);
 
 #define unreachable(str) ((fatal("UNREACHABLE: " str)))
 
