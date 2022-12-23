@@ -140,6 +140,41 @@ static Operation *token_to_op(Token *tok)
 	new_op->operand.str.num = str_num++;
 	new_op->op = OP_PUSH_STR;
 	return new_op;
+    } else if (tok->type == TOKEN_CHAR) {
+	new_op->op = OP_PUSH;
+	if (tok->text[0] == '\\') {
+	    switch (tok->text[1]) {
+	    case '\\':
+	    case '\'':
+	    case '\"':
+		new_op->operand.intr = tok->text[1];
+		break;
+	    case 'n':
+		new_op->operand.intr = '\n';
+		break;
+	    case 'a':
+		new_op->operand.intr = '\a';
+		break;
+	    case 'b':
+		new_op->operand.intr = '\b';
+		break;
+	    case 't':
+		new_op->operand.intr = '\t';
+		break;
+	    case 'v':
+		new_op->operand.intr = '\v';
+		break;
+	    case 'f':
+		new_op->operand.intr = '\f';
+		break;
+	    case 'r':
+		new_op->operand.intr = '\r';
+		break;
+	    }
+	} else {
+	    new_op->operand.intr = tok->text[0];
+	}
+	return new_op;
     } else if ((op = find_op_in_table(tok->text)) != OP_UNKNOWN) {
 	new_op->op = op;
 	return new_op;

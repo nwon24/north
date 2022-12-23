@@ -31,6 +31,7 @@ static Token *gettoken(void);
 static Token *newtoken(void);
 static void update_file_position(int c);
 static void parse_string(Token **tok, char **p);
+static void parse_character(Token **tok, char **p);
 
 static void update_file_position(int c)
 {
@@ -95,6 +96,9 @@ static Token *gettoken(void)
 	if (*p == '\"') {
 	    parse_string(&new_token, &p);
 	    goto out;
+	} else if (*p == '\'') {
+	    parse_character(&new_token, &p);
+	    goto out;
 	}
 	update_file_position(*p);
 	*s++ = *p;
@@ -143,6 +147,48 @@ static void parse_string(Token **tok, char **p)
     new_token->next = NULL;
     new_token->type = TOKEN_STR;
 }
+
+static void parse_character(Token **tok, char **p)
+{
+    Token *new_token;
+    char *s, *t;
+    int char_row, char_col;
+
+    new_token = *tok;
+    s = *p;
+    t = new_token->text;
+    assert(*s == '\'');
+    char_row = file_row;
+    char_col = file_col;
+    ++(*p);
+    while (**p != '\'' && *p - s < MAX_CHAR_TOKEN_LENGTH + 1) {
+	update_file_position(**p);
+	*t++ = **p;
+	if (**p == '\\') {
+	    (*p)++;
+	    update_file_position(**p);
+	    *t++ = **p;
+	} else if (**p == '\n') {
+	    tell_user(stderr, "%s:%d:%d: Unterminated character constant\n",
+		       lex_file_name, char_row, char_col);
+	    exit(EXIT_FAILURE);
+	}
+	(*p)++;
+    }
+    assert(**p == '\'');
+    if (*p - s >= MAX_CHAR_TOKEN_LENGTH + 1) {
+	tell_user(stderr, "%s:%d:%d: Invalid character constant - too long\n",
+		  lex_file_name, char_row, char_col);
+	exit(EXIT_FAILURE);
+    }
+    (*p)++;
+    update_file_position(**p);
+    *t = '\0';
+    new_token->type = TOKEN_CHAR;
+    new_token->length = t - new_token->text;
+    new_token->next = NULL;
+}
+
 
 static Token *newtoken(void)
 {

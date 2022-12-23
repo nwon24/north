@@ -2,11 +2,13 @@
 #define LEX_H_
 
 #define MAX_TOKEN_LENGTH 31
+#define MAX_CHAR_TOKEN_LENGTH 2
 #define MAX_STR_TOKEN_LENGTH 4095
 
 typedef enum token_type {
     TOKEN_WORD,
     TOKEN_STR,
+    TOKEN_CHAR,
 } TokenType;
     
 typedef struct token {
