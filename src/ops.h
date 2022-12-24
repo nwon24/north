@@ -103,6 +103,7 @@ typedef struct operation {
             struct operation *ifop_op;
 	    struct operation *else_op;
 	    struct operation *endif_op;
+	    bool if_true; /* For simulation */
 	} if_op; /* If operation is 'if' */
 	struct {
 	    struct operation *do_op;

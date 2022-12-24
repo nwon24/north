@@ -20,8 +20,6 @@ int sp = 0;
 static void push(word c);
 static word pop(void);
 
-static Operation *simulate_conditional(Operation *op);
-
 static void push(word c)
 {
     if (sp == STACK_CAPACITY) {
@@ -237,9 +235,29 @@ static Operation *simulate_op(Operation *op)
 	push(-(b <= a));
 	break;
     case OP_IF:
+	a = pop();
+	if (a == 0 && op->operand.if_op.else_op != NULL) {
+	    op->operand.if_op.if_true = false;
+	    return op->operand.if_op.else_op->next;
+	} else if (a == 0) {
+	    op->operand.if_op.if_true = false;
+	    return op->operand.if_op.endif_op->next;
+	} else {
+	    op->operand.if_op.if_true = true;
+	    return op->next;
+	}
+	break;
     case OP_ELSE:
+	tmp_op = op->operand.if_op.ifop_op;
+	if (tmp_op->operand.if_op.if_true == true) {
+	    return tmp_op->operand.if_op.endif_op;
+	} else {
+	    return op->next;
+	}
+	break;
     case OP_ENDIF:
-	next_op = simulate_conditional(op);
+	return op->next;
+	//	next_op = simulate_conditional(op);
 	break;
     case OP_DO:
 	a = pop();
@@ -396,59 +414,6 @@ static Operation *simulate_op(Operation *op)
     }
     return next_op;
 }
-
-/*
- * I'm pretty sure this is unecessarily complicated,
- * but this was written before I knew anything.
- */
-static Operation *simulate_conditional(Operation *op)
-{
-    word a;
-    Operation *opptr;
-    
-    switch (op->op) {
-    case OP_IF:
-	a = pop();
-	if (op->operand.if_op.endif_op == NULL) {
-	    tokerror(op->tok, "'if' operand not terminated with 'endif'");
-	}
-	if (a == 0) {
-	    /* Go to 'else' or endif */
-	    Operation *jump_to;
-
-	    jump_to = op->operand.if_op.else_op != NULL ? op->operand.if_op.else_op : op->operand.if_op.endif_op;
-	    opptr = op;
-	    while (opptr != NULL && opptr != jump_to)
-		opptr = opptr->next;
-	    if (opptr == NULL) {
-		tokerror(op->tok, "'if' operand not terminated with 'endif'");
-	    }
-	    return opptr->next;
-	} else {
-	    /* Do stuff in the if block and then go to endif */
-	    Operation *jump_to;
-	    opptr = op;
-	    jump_to = op->operand.if_op.endif_op;
-	    while (opptr != NULL && opptr != jump_to && opptr->op != OP_ELSE)
-		opptr = opptr->next;
-	    if (opptr == NULL) {
-		tokerror(op->tok, "'if' operand not terminated with 'endif'");
-	    }
-	    opptr->next = jump_to->next;
-	    return op->next;
-	}
-	break;
-    case OP_ELSE:
-	return op->next;
-    case OP_ENDIF:
-	return op->next;
-    default:
-	unreachable("simulate_conditional");
-    }
-    unreachable("simulate_conditional");
-    return NULL;
-}
-
 
 void simulate(void)
 {
