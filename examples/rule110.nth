@@ -1,0 +1,56 @@
+\ Okay, this is obviously not the most efficient
+\ way to do this, but it does illustrate many features
+\ of the language. It also serves as a test for
+\ stability as this program contains many operations
+\ and uses all the features of the language implemented up
+\ to this point.
+\
+\ To understand what's happening here use a temporary file
+\ or a piece of paper to write out what's happening to the
+\ stack with all the operations, since it really isn't obvious.
+
+.var board i8 100
+.var next_board i8 100
+.var print_board i8 100
+
+1 board 98 + !8
+
+0 begin dup 98 < while
+  \ Translate 0s and 1s into '*' and ' '
+  0 begin dup 100 < while
+    dup print_board +
+    over board + @8
+    0= if
+      ' '
+    else
+      '*'
+    endif
+    swap !8
+   1+
+  repeat drop
+  100 print_board 1 1 syscall3 drop
+  "\n" 1 1 syscall3 drop
+
+  \ Calculate the next generation
+  1 begin dup 99 < while
+     dup dup dup
+     1 - board + @8
+     swap
+     board + @8
+     rot
+     1 + board + @8
+     swap 1 lshift or
+     swap 2 lshift or
+     110 swap rshift 1 and
+     over next_board + !8
+     1+
+  repeat drop
+
+  \ Our own memcpy
+  0 begin dup 100 < while
+    dup next_board + @8
+    over board + !8
+    1 +
+  repeat drop
+  1 + 
+repeat drop
