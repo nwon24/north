@@ -28,5 +28,6 @@ extern Token *tokens;
 
 Token *lex(const char *file);
 void tokerror(Token *tok, const char *msg, ...);
+Token *duptoken(Token *tok);
 
 #endif /* LEX_H */

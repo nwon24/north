@@ -260,3 +260,12 @@ void tokerror(Token *tok, const char *msg, ...)
     va_end(args);
     exit(EXIT_FAILURE);
 }
+
+Token *duptoken(Token *tok)
+{
+    Token *new;
+
+    new = newtoken();
+    *new = *tok;
+    return new;
+}
