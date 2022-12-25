@@ -3,12 +3,15 @@
 #include "main.h"
 #include "directives.h"
 #include "variables.h"
+#include "macros.h"
 
 struct {
     char *dirname;
     DirWord dir;
 } dir_table[] = {
     { ".var", DIR_VAR},
+    { ".macro", DIR_MACRO},
+    { ".endm", DIR_ENDMACRO},
     { "", DIR_UNKNOWN}
 };
 
@@ -40,6 +43,18 @@ Token *preprocess(Token *tokens)
 		    tok = add_variable(tok);
 		    prev_tok->next = tok;
 		}
+		break;
+	    case DIR_MACRO:
+		if (prev_tok == NULL) {
+		    newhead = add_macro(tok);
+		    tok = newhead;
+		} else {
+		    tok = add_macro(tok);
+		    prev_tok->next = tok;
+		}
+		break;
+	    case DIR_ENDMACRO:
+		tokerror(tok, ".endm used without preceding .macro directive\n");
 		break;
 	    default:
 		unreachable("preprocess");
