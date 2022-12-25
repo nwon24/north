@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
 {
     parse_cmdline(argc, argv);
     init();
-    init_variables_hash();
+    init_glob_hash();
     tokens = lex(input_file_name);
     assert(tokens != NULL);
     tokens = preprocess(tokens);
