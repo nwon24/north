@@ -44,7 +44,7 @@ int add_hash_entry(HashTable *table, HashEntry *entry)
 	entry->next = entry->prev = NULL;
 	return 0;
     } else {
-	for (tmp = tab[hashn]; tmp->next != NULL; tmp = tmp->next) {
+	for (tmp = tab[hashn]; tmp != NULL; tmp = tmp->next) {
 	    if (strcmp(tmp->identifier, entry->identifier) == 0) {
 		return -1;
 	    }
