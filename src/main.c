@@ -104,6 +104,10 @@ void parse_cmdline(int argc, char *argv[])
 	}
     }
     input_file_name = argv[optind];
+    if (input_file_name == NULL) {
+	tell_user(stderr, "No input file specified.\n");
+	exit(EXIT_FAILURE);
+    }
 }
 
 void init(void)
