@@ -220,8 +220,12 @@ static Operation *token_to_op(Token *tok, Token **next_token)
  	 * This might seem like magic at first sight.
 	 */
 	tok = expand_macro(entry->ptr, tok);
-	*next_token = tok->next;
-	return token_to_op(tok, NULL);
+	if (tok->next != NULL && tok->next->type == TOKEN_WORD && macro_reference(tok->next) == NULL) {
+	    *next_token = tok->next;
+	    return token_to_op(tok, NULL);
+	} else {
+	    return token_to_op(tok, next_token);
+	}
     }
     tokerror(tok, "Unrecognised word '%s'\n", tok->text);
     return NULL;
