@@ -15,7 +15,7 @@
 Variable *variables = NULL;
 int nr_variables = 0;
 
-static HashTable *var_hash_table = NULL;
+static HashTable *glob_hash_table = NULL;
 
 static struct {
     char *name;
@@ -36,9 +36,9 @@ static struct {
 static VariableType str_to_vartype(char *str, int *bytesize);
 static void malloc_var(Variable *var);
 
-void init_variables_hash(void)
+void init_glob_hash(void)
 {
-    var_hash_table = new_hash_table(string_hashfn, HASH_SIZE);
+    glob_hash_table = new_hash_table(string_hashfn, HASH_SIZE);
 }
 
 static void realloc_variables(void)
@@ -87,7 +87,6 @@ Token *add_variable(Token *start)
     Variable *newvar;
     HashEntry *var_entry;
     Token *tok;
-    int len;
     int bytesize;
 
     if (nr_variables % BSIZE == 0) {
@@ -100,14 +99,9 @@ Token *add_variable(Token *start)
     if (tok == NULL) {
 	tokerror(tok, ".var directive left hanging\n");
     }
-    if ((len = strlen(tok->text)) > MAX_TOKEN_LENGTH) {
-	tokerror(tok, "Identifier '%s' too long\n", tok->text);
-    }
-    if (!isalpha(tok->text[0])) {
-	tokerror(tok, "Invalid identifier name '%s' - must begin with alphabetic character\n", tok->text);
-    }
+    check_identifier(tok, tok->text);
     var_entry = new_hash_entry(tok->text, newvar);
-    if (add_hash_entry(var_hash_table, var_entry) < 0) {
+    if (add_hash_entry(glob_hash_table, var_entry) < 0) {
 	tokerror(tok, "Reuse of identifier '%s'\n");
     }
     strcpy(newvar->identifier, tok->text);
@@ -136,7 +130,17 @@ Token *add_variable(Token *start)
     return tok->next;
 }
 
+void check_identifier(Token *tok, char *identifier)
+{
+    if (strlen(identifier) > MAX_TOKEN_LENGTH) {
+	tokerror(tok, "Identifier '%s' too long\n", identifier);
+    }
+    if (!isalpha(*identifier)) {
+	tokerror(tok, "Invalid identifier name '%s' - must begin with alphabetic character\n", identifier);
+    }
+}
+
 HashEntry *variable_reference(Token *tok)
 {
-    return in_hash(var_hash_table, tok->text);
+    return in_hash(glob_hash_table, tok->text);
 }
