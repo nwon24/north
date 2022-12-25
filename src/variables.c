@@ -102,7 +102,7 @@ Token *add_variable(Token *start)
     check_identifier(tok, tok->text);
     var_entry = new_hash_entry(tok->text, newvar);
     if (add_hash_entry(glob_hash_table, var_entry) < 0) {
-	tokerror(tok, "Reuse of identifier '%s'\n");
+	tokerror(tok, "Reuse of identifier '%s'\n", tok->text);
     }
     strcpy(newvar->identifier, tok->text);
 
