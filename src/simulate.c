@@ -104,6 +104,7 @@ static Operation *simulate_op(Operation *op)
 	break;
     case OP_PRINT:
 	printf("%ld\n", pop());
+	fflush(stdout);
 	break;
     case OP_ABS:
 	push(labs(pop()));
