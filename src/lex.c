@@ -207,6 +207,10 @@ static void lex_init_file(const char *file_path)
     struct stat st;
 
     fd = open(input_file_name, O_RDONLY);
+    if (fd < 0) {
+	tell_user(stderr, "Unable to open file '%s' for reading.\n", file_path);
+	exit(EXIT_FAILURE);
+    }
     fstat(fd, &st);
     if (st.st_size == 0) {
 	/* Empty file, exit quietly */
