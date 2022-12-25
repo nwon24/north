@@ -5,7 +5,7 @@ CC = gcc
 CFLAGS = -std=c11 -Wall -Wextra -O2 -ggdb -MMD -MP
 
 OBJ = main.o lex.o ops.o simulate.o branches.o strings.o hash.o \
-      directives.o variables.o
+      directives.o variables.o macros.o
 
 DEP = ${OBJ:.o=.d}
 LIB = compile/$(ARCH)/$(ARCH).a
