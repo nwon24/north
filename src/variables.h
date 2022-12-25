@@ -29,6 +29,8 @@ typedef struct variable {
 extern Variable *variables;
 extern int nr_variables;
 
+extern HashTable *glob_hash_table;
+
 Token *add_variable(Token *start);
 HashEntry *variable_reference(Token *tok);
 void init_glob_hash(void);
