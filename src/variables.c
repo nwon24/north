@@ -101,6 +101,7 @@ Token *add_variable(Token *start)
     }
     check_identifier(tok, tok->text);
     var_entry = new_hash_entry(tok->text, newvar);
+    var_entry->type = HASH_VAR;
     if (add_hash_entry(glob_hash_table, var_entry) < 0) {
 	tokerror(tok, "Reuse of identifier '%s'\n", tok->text);
     }
@@ -142,5 +143,9 @@ void check_identifier(Token *tok, char *identifier)
 
 HashEntry *variable_reference(Token *tok)
 {
-    return in_hash(glob_hash_table, tok->text);
+    HashEntry *entry;
+
+    if ((entry = in_hash(glob_hash_table, tok->text)) != NULL && entry->type == HASH_VAR)
+	return entry;
+    return NULL;
 }

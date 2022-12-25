@@ -3,9 +3,15 @@
 
 #include <stdbool.h>
 
+typedef enum hash_type {
+    HASH_MACRO,
+    HASH_VAR,
+} HashType;
+
 typedef struct hash_entry {
     void *ptr;
     char *identifier;
+    HashType type;
     struct hash_entry *next;
     struct hash_entry *prev;
 } HashEntry;
