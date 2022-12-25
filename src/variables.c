@@ -15,7 +15,7 @@
 Variable *variables = NULL;
 int nr_variables = 0;
 
-static HashTable *var_hash_table = NULL;;
+static HashTable *var_hash_table = NULL;
 
 static struct {
     char *name;
