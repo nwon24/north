@@ -8,6 +8,7 @@
 #include "main.h"
 #include "hash.h"
 #include "variables.h"
+#include "macros.h"
 
 Operation *operations = NULL;
 
@@ -94,7 +95,7 @@ struct {
 
 static OpWord find_op_in_table(char *opname);
 static Operation *newoperation(void);
-static Operation *token_to_op(Token *tok);
+static Operation *token_to_op(Token *tok, Token **next_token);
 
 static OpWord find_op_in_table(char *opname)
 {
@@ -117,7 +118,7 @@ static Operation *newoperation(void)
     return new_op;
 }
 
-static Operation *token_to_op(Token *tok)
+static Operation *token_to_op(Token *tok, Token **next_token)
 {
     Operation *new_op;
     OpWord op;
@@ -125,6 +126,8 @@ static Operation *token_to_op(Token *tok)
     int str_num;
     HashEntry *entry;
 
+    if (next_token != NULL)
+	*next_token = NULL;
     str_num = 0;
     new_op = newoperation();
     new_op->next = NULL;
@@ -202,6 +205,23 @@ static Operation *token_to_op(Token *tok)
 	new_op->op = OP_PUSH_ADDR;
 	new_op->operand.variable = entry->ptr;
 	return new_op;
+    } else if ((entry = macro_reference(tok)) != NULL) {
+	/*
+	 * 'expand_macro' introduces the macro's tokens into
+	 * the current section of the linked list of tokens,
+	 * returning the first token to be turned into an op
+	 * in the macro definition. Then we recursively call
+	 * token_to_op on this return value to continue the parse.
+	 *
+	 * By settings *next_token, we are alerting 'tokens_to_ops'
+	 * that it should take our word and follow what we've
+	 * given as the next token.
+	 *
+ 	 * This might seem like magic at first sight.
+	 */
+	tok = expand_macro(entry->ptr, tok);
+	*next_token = tok->next;
+	return token_to_op(tok, NULL);
     }
     tokerror(tok, "Unrecognised word '%s'\n", tok->text);
     return NULL;
@@ -209,13 +229,25 @@ static Operation *token_to_op(Token *tok)
 
 Operation *tokens_to_ops(Token *toks)
 {
-    Token *tokptr;
+    Token *tokptr, *next_tok;
     Operation *opptr, *new_op, *head;
 
     opptr = NULL;
     head = NULL;
-    for (tokptr = toks; tokptr != NULL; tokptr = tokptr->next) {
-	new_op = token_to_op(tokptr);
+    next_tok = NULL;
+    for (tokptr = toks; tokptr != NULL;) {
+	/*
+	 * When expanding macros, the token linked list
+	 * may change so that the next token that should
+	 * be processed is not the next one in the list.
+	 * So we pass 'next_tok' to the function, and if
+	 * the next token is not the obvious one, 'next_tok'
+	 * will point to it. Otherwise, 'token_to_op' will
+	 * set it to NULL, and we will know to just
+	 * go to the next one in the list using the pointer
+	 * in the structure.
+	 */
+	new_op = token_to_op(tokptr, &next_tok);
 	if (head == NULL) {
 	    head = new_op;
 	    opptr = head;
@@ -223,6 +255,11 @@ Operation *tokens_to_ops(Token *toks)
 	    opptr->next = new_op;
 	    opptr = opptr->next;
 	}
+	if (next_tok == NULL)
+	    tokptr = tokptr->next;
+	else
+	    tokptr = next_tok;
+
     }
     return head;
 }
