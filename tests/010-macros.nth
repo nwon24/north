@@ -1,0 +1,13 @@
+.macro write
+  1 1 syscall3
+.endm
+
+.macro foo
+  0 begin dup 10 < while
+    dup .
+    1 +
+  repeat
+.endm
+
+"Hello, world!\n" write
+foo
