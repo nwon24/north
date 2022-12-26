@@ -13,7 +13,6 @@ typedef enum {
     DIR_COUNT,
 } DirWord;
 
-DirWord find_dir_in_table(char *dirname);
 Token *preprocess(Token *tokens);
 
 #endif /* DIRECTIVES_H_ */

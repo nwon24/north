@@ -16,7 +16,10 @@ struct {
     { "", DIR_UNKNOWN}
 };
 
-DirWord find_dir_in_table(char *dirname)
+static Token *preprocess_macros(Token *tokens);
+static DirWord find_dir_in_table(char *dirname);
+
+static DirWord find_dir_in_table(char *dirname)
 {
     for (int i = 0; i < DIR_COUNT; i++) {
 	if (strcmp(dirname, dir_table[i].dirname) == 0) {
@@ -26,7 +29,7 @@ DirWord find_dir_in_table(char *dirname)
     return DIR_UNKNOWN;
 }
 
-Token *preprocess(Token *tokens)
+static Token *preprocess_macros(Token *tokens)
 {
     Token *tok, *prev_tok, *newhead;
     DirWord dir;
@@ -35,6 +38,38 @@ Token *preprocess(Token *tokens)
     prev_tok = NULL;
     newhead = tokens;
     for (tok = tokens; tok != NULL;) {
+	if ((dir = find_dir_in_table(tok->text)) == DIR_MACRO) {
+	    if (prev_tok == NULL) {
+		newhead = add_macro(tok);
+		tok = newhead;
+	    } else {
+		tok = add_macro(tok);
+		prev_tok->next = tok;
+	    }
+	} else if (dir == DIR_ENDMACRO) {
+	    tokerror(tok, ".endm used without preceding .macro directive\n");   
+	} else if ((entry = macro_reference(tok)) != NULL) {
+	    ((Macro *)entry->ptr)->macro_token = tok;
+	    tok = expand_macro(entry->ptr, prev_tok, tok);
+	    if (prev_tok == NULL)
+		newhead = tok;
+	} else {
+	    prev_tok = tok;
+	    tok = tok->next;
+	    prev_tok->next = tok;
+	}
+    }
+    return newhead;
+}
+
+Token *preprocess(Token *tokens)
+{
+    Token *tok, *prev_tok, *newhead;
+    DirWord dir;
+
+    prev_tok = NULL;
+    newhead = preprocess_macros(tokens);
+    for (tok = newhead; tok != NULL;) {
 	if ((dir = find_dir_in_table(tok->text)) != DIR_UNKNOWN) {
 	    switch (dir) {
 	    case DIR_VAR:
@@ -46,26 +81,9 @@ Token *preprocess(Token *tokens)
 		    prev_tok->next = tok;
 		}
 		break;
-	    case DIR_MACRO:
-		if (prev_tok == NULL) {
-		    newhead = add_macro(tok);
-		    tok = newhead;
-		} else {
-		    tok = add_macro(tok);
-		    prev_tok->next = tok;
-		}
-		break;
-	    case DIR_ENDMACRO:
-		tokerror(tok, ".endm used without preceding .macro directive\n");
-		break;
 	    default:
 		unreachable("preprocess");
 	    }
-	} else if ((entry = macro_reference(tok)) != NULL) {
-	    ((Macro *)entry->ptr)->macro_token = tok;
-	    tok = expand_macro(entry->ptr, prev_tok, tok);
-	    if (prev_tok == NULL)
-		newhead = tok;
 	} else {
 	    prev_tok = tok;
 	    tok = tok->next;
