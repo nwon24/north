@@ -204,7 +204,12 @@ static Operation *token_to_op(Token *tok)
 	new_op->operand.variable = entry->ptr;
 	return new_op;
     } else if ((entry = macro_reference(tok)) != NULL) {
-	unreachable("token_to_op: Should not have macro reference\n");
+	/*
+	 * This means that a macro has been defined after it has
+	 * been used.
+	 */
+	tokerror(tok, "Macro '%s' defined after it is used.\n"
+		 "Please move the definition to the proper place.\n", tok->text);
     }
     tokerror(tok, "Unrecognised word '%s'\n", tok->text);
     return NULL;
