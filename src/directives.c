@@ -63,6 +63,8 @@ Token *preprocess(Token *tokens)
 	    }
 	} else if ((entry = macro_reference(tok)) != NULL) {
 	    tok = expand_macro(entry->ptr, prev_tok, tok);
+	    if (prev_tok == NULL)
+		newhead = tok;
 	} else {
 	    prev_tok = tok;
 	    tok = tok->next;

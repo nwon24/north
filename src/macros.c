@@ -94,10 +94,11 @@ HashEntry *macro_reference(Token *tok)
 
 Token *expand_macro(Macro *macro, Token *prev_tok, Token *tok)
 {
-    Token *mac_tok, *expanded_start, *expanded_tok;
+    Token *mac_tok, *expanded_start, *expanded_tok, *ret;
 
     assert(strcmp(macro->identifier, tok->text) == 0);
     assert(macro->tokens != NULL);
+    ret = NULL;
     expanded_start = NULL;
     for (mac_tok = macro->tokens; mac_tok != NULL; mac_tok = mac_tok->next) {
 	if (expanded_start == NULL) {
@@ -108,7 +109,12 @@ Token *expand_macro(Macro *macro, Token *prev_tok, Token *tok)
 	    expanded_tok = expanded_tok->next;
 	}
     }
-    prev_tok->next = expanded_start;
+    if (prev_tok != NULL) {
+	prev_tok->next = expanded_start;
+	ret = prev_tok->next;
+    } else {
+	ret = expanded_start;
+    }
     expanded_tok->next = tok->next;
-    return prev_tok->next;
+    return ret;
 }
