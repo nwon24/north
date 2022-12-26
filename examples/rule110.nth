@@ -9,15 +9,17 @@
 \ or a piece of paper to write out what's happening to the
 \ stack with all the operations, since it really isn't obvious.
 
-.var board i8 100
-.var next_board i8 100
-.var print_board i8 100
+.macro ROW_SIZE 100 .endm
 
-1 board 98 + !8
+.var board i8 ROW_SIZE
+.var next_board i8 ROW_SIZE
+.var print_board i8 ROW_SIZE
 
-0 begin dup 98 < while
+1 board ROW_SIZE 2 - + !8
+
+0 begin dup ROW_SIZE 2 - < while
   \ Translate 0s and 1s into '*' and ' '
-  0 begin dup 100 < while
+  0 begin dup ROW_SIZE < while
     dup print_board +
     over board + @8
     0= if
@@ -28,11 +30,11 @@
     swap !8
    1+
   repeat drop
-  100 print_board 1 1 syscall3 drop
+  ROW_SIZE print_board 1 1 syscall3 drop
   "\n" 1 1 syscall3 drop
 
   \ Calculate the next generation
-  1 begin dup 99 < while
+  1 begin dup ROW_SIZE 1 - < while
      dup dup dup
      1 - board + @8
      swap
@@ -47,7 +49,7 @@
   repeat drop
 
   \ Our own memcpy
-  0 begin dup 100 < while
+  0 begin dup ROW_SIZE < while
     dup next_board + @8
     over board + !8
     1 +
