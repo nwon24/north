@@ -63,6 +63,9 @@ Token *add_macro(Token *start)
     tok = tok->next;
     mac_start = NULL;
     for (mac_tok = NULL; tok != NULL && strcmp(tok->text, ".endm") != 0; tok = tok->next) {
+	if (strcmp(tok->text, new_macro->identifier) == 0) {
+	    tokerror(tok, "Recursive macros not supported.\n");
+	}
 	if (mac_tok == NULL) {
 	    mac_tok = duptoken(tok);
 	    mac_start = mac_tok;
