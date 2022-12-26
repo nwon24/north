@@ -5,6 +5,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <fcntl.h>
+#include <libgen.h>
 #include <sys/stat.h>
 #include <sys/mman.h>
 
@@ -208,7 +209,7 @@ static void lex_init_file(const char *file_path)
     int fd;
     struct stat st;
 
-    fd = open(input_file_name, O_RDONLY);
+    fd = open(file_path, O_RDONLY);
     if (fd < 0) {
 	tell_user(stderr, "Unable to open file '%s' for reading.\n", file_path);
 	exit(EXIT_FAILURE);
