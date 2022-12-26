@@ -4,6 +4,7 @@
 #include "directives.h"
 #include "variables.h"
 #include "macros.h"
+#include "hash.h"
 
 struct {
     char *dirname;
@@ -29,6 +30,7 @@ Token *preprocess(Token *tokens)
 {
     Token *tok, *prev_tok, *newhead;
     DirWord dir;
+    HashEntry *entry;
 
     prev_tok = NULL;
     newhead = tokens;
@@ -59,6 +61,8 @@ Token *preprocess(Token *tokens)
 	    default:
 		unreachable("preprocess");
 	    }
+	} else if ((entry = macro_reference(tok)) != NULL) {
+	    tok = expand_macro(entry->ptr, prev_tok, tok);
 	} else {
 	    prev_tok = tok;
 	    tok = tok->next;
