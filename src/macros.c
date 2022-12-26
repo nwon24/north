@@ -72,6 +72,7 @@ Token *add_macro(Token *start)
 	    mac_tok = mac_tok->next;
 	    mac_tok->next = NULL;
 	}
+	mac_tok->macro = new_macro;
 	new_macro->size++;
     }
     if (tok == NULL) {

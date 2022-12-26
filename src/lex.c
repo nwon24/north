@@ -10,6 +10,7 @@
 
 #include "main.h"
 #include "lex.h"
+#include "macros.h"
 
 #define END_OF_FILE(p) ((p) >= lex_file + lex_file_size)
 
@@ -53,6 +54,7 @@ static Token *gettoken(void)
 	return NULL;
     }
     new_token = newtoken();
+    new_token->macro = NULL;
     s = new_token->text;
  again:
     while (!END_OF_FILE(p) && isspace(*p)) {
@@ -257,10 +259,17 @@ Token *lex(const char *file_path)
 void tokerror(Token *tok, const char *msg, ...)
 {
     va_list args;
+    Token *macro_token;
 
     va_start(args, msg);
     fprintf(stderr, "ERROR:%s:%d:%d: ", tok->pos.file, tok->pos.row, tok->pos.col);
     vfprintf(stderr, msg, args);
+    if (tok->macro != NULL) {
+	macro_token = tok->macro->macro_token;
+	fprintf(stderr, "NOTE:%s:%d:%d: In expansion of macro '%s'\n",
+		macro_token->pos.file, macro_token->pos.row, macro_token->pos.col,
+		tok->macro->identifier);
+    }
     va_end(args);
     exit(EXIT_FAILURE);
 }

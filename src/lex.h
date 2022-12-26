@@ -5,6 +5,8 @@
 #define MAX_CHAR_TOKEN_LENGTH 2
 #define MAX_STR_TOKEN_LENGTH 4095
 
+struct macro;
+
 typedef enum token_type {
     TOKEN_WORD,
     TOKEN_STR,
@@ -21,6 +23,7 @@ typedef struct token {
 	int col;
     } pos;
     TokenType type;
+    struct macro *macro;
     struct token *next;
 } Token;
 

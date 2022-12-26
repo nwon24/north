@@ -6,6 +6,7 @@
 
 typedef struct macro {
     Token *tokens;
+    Token *macro_token; /* Token with macro identifier */
     char identifier[MAX_TOKEN_LENGTH + 1];
     int size; /* Number of operations */
 } Macro;

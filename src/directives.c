@@ -62,6 +62,7 @@ Token *preprocess(Token *tokens)
 		unreachable("preprocess");
 	    }
 	} else if ((entry = macro_reference(tok)) != NULL) {
+	    ((Macro *)entry->ptr)->macro_token = tok;
 	    tok = expand_macro(entry->ptr, prev_tok, tok);
 	    if (prev_tok == NULL)
 		newhead = tok;
