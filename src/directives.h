@@ -7,6 +7,7 @@ typedef enum {
     DIR_VAR,
     DIR_MACRO,
     DIR_ENDMACRO,
+    DIR_INCLUDE,
 
     DIR_UNKNOWN,
     /* UNUSED: used to count the number of directives */

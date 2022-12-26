@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <string.h>
 
 #include "main.h"
@@ -13,10 +14,12 @@ struct {
     { ".var", DIR_VAR},
     { ".macro", DIR_MACRO},
     { ".endm", DIR_ENDMACRO},
+    { ".include", DIR_INCLUDE},
     { "", DIR_UNKNOWN}
 };
 
 static Token *preprocess_macros(Token *tokens);
+static Token *include_file(Token *tok);
 static DirWord find_dir_in_table(char *dirname);
 
 static DirWord find_dir_in_table(char *dirname)
@@ -47,7 +50,15 @@ static Token *preprocess_macros(Token *tokens)
 		prev_tok->next = tok;
 	    }
 	} else if (dir == DIR_ENDMACRO) {
-	    tokerror(tok, ".endm used without preceding .macro directive\n");   
+	    tokerror(tok, ".endm used without preceding .macro directive\n");
+	} else if (dir == DIR_INCLUDE) {
+	    if (prev_tok == NULL) {
+		newhead = include_file(tok);
+		tok = newhead;
+	    } else {
+		tok = include_file(tok);
+		prev_tok->next = tok;
+	    }
 	} else if ((entry = macro_reference(tok)) != NULL) {
 	    ((Macro *)entry->ptr)->macro_token = tok;
 	    tok = expand_macro(entry->ptr, prev_tok, tok);
@@ -60,6 +71,25 @@ static Token *preprocess_macros(Token *tokens)
 	}
     }
     return newhead;
+}
+
+static Token *include_file(Token *tok)
+{
+    Token *included_toks, *tmptok;
+
+    assert(strcmp(tok->text, ".include") == 0);
+    tok = tok->next;
+    if (tok == NULL) {
+	tokerror(tok, "Missing file name to .include directive\n");
+    }
+    if (tok->type != TOKEN_STR) {
+	tokerror(tok, "File to include must be string\n");
+    }
+    included_toks = lex(tok->str);
+    assert(included_toks != NULL);
+    for (tmptok = included_toks; tmptok->next != NULL; tmptok = tmptok->next);
+    tmptok->next = tok->next;
+    return included_toks;
 }
 
 Token *preprocess(Token *tokens)
