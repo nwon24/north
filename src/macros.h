@@ -12,6 +12,6 @@ typedef struct macro {
 
 Token *add_macro(Token *start);
 HashEntry *macro_reference(Token *tok);
-Token *expand_macro(Macro *macro, Token *tok);
+Token *expand_macro(Macro *macro, Token *prev_tok, Token *tok);
 
 #endif /* MACROS_H_ */

@@ -92,14 +92,23 @@ HashEntry *macro_reference(Token *tok)
     return NULL;
 }
 
-Token *expand_macro(Macro *macro, Token *tok)
+Token *expand_macro(Macro *macro, Token *prev_tok, Token *tok)
 {
-    Token *mac_tok;
+    Token *mac_tok, *expanded_start, *expanded_tok;
 
     assert(strcmp(macro->identifier, tok->text) == 0);
     assert(macro->tokens != NULL);
-    for (mac_tok = macro->tokens; mac_tok->next != NULL; mac_tok = mac_tok->next);
-    mac_tok->next = tok->next;
-    tok->next = macro->tokens;
-    return tok->next;
+    expanded_start = NULL;
+    for (mac_tok = macro->tokens; mac_tok != NULL; mac_tok = mac_tok->next) {
+	if (expanded_start == NULL) {
+	    expanded_tok = duptoken(mac_tok);
+	    expanded_start = expanded_tok;
+	} else {
+	    expanded_tok->next = duptoken(mac_tok);
+	    expanded_tok = expanded_tok->next;
+	}
+    }
+    prev_tok->next = expanded_start;
+    expanded_tok->next = tok->next;
+    return prev_tok->next;
 }
