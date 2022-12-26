@@ -412,3 +412,18 @@ of three in an array in memory.
   1+
 repeat
 ```
+
+## Macros
+
+North allows macros to be defined using the `.macro` directive.
+The syntax is:
+```
+.macro <identifier> <tokens> .endm
+```
+Any sequence of tokens can be placed in the definition of a macro;
+they will replace the macro identifier whenever the macro is 
+referenced.
+
+Passing arguments to macros is not supported because it is easy
+enough to do that by passing arguments on the stack. Additionally,
+recursive macros are not supported.
