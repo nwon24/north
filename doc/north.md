@@ -427,3 +427,16 @@ referenced.
 Passing arguments to macros is not supported because it is easy
 enough to do that by passing arguments on the stack. Additionally,
 recursive macros are not supported.
+
+### Include files
+
+North code can be included from multiple files via the `.include`
+directive. The name of the file to be included must be a string.
+Currently, the only search path is the current directory (of the
+source file passed to the compiler); in the future, this will
+be expanded to allow standard library macros to be included
+from a system location.
+
+```
+.include <name of file>
+```
