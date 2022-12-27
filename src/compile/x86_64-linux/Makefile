@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -std=c11 -Wall -Wextra -O2 -ggdb -MMD -MP -I../..
+CFLAGS = -std=c11 -Wall -Wextra -O2 -ggdb -MMD -MP -I../.. -D_POSIX_C_SOURCE=200809L
 
 LIB = x86_64-linux.a
 
