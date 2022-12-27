@@ -1,0 +1,3 @@
+.include "./include/write-include.nth"
+
+"Hello, world!\n" write
