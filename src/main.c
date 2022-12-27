@@ -3,9 +3,12 @@
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 #include <getopt.h>
 #include <fcntl.h>
+#include <libgen.h>
+#include <limits.h>
 #include <sys/stat.h>
 #include <sys/mman.h>
 
@@ -128,12 +131,17 @@ bool simulating(void)
 
 int main(int argc, char *argv[])
 {
+    char oldcwd[PATH_MAX];
+
+    getcwd(oldcwd, PATH_MAX);
     parse_cmdline(argc, argv);
     init();
     init_glob_hash();
     tokens = lex(input_file_name);
+    chdir(dirname(strdup(input_file_name)));
     assert(tokens != NULL);
     tokens = preprocess(tokens);
+    chdir(oldcwd);
     operations = tokens_to_ops(tokens);
     cross_reference_branches(operations);
     if (action == SIMULATE) {
