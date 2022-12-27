@@ -613,11 +613,17 @@ static void assemble_and_link(void)
     if (verbose == true) {
         printf("[ASSEMBLER] %s\n", as_command);
     }
-    system(as_command);
+    if (system(as_command) != 0) {
+	tell_user(stderr, "[INFO] Assembler failed.\n");
+	exit(EXIT_FAILURE);
+    }
     if (verbose == true) {
         printf("[LINKER] %s\n", ld_command);
     }
-    system(ld_command);
+    if (system(ld_command) != 0) {
+	tell_user(stderr, "[INFO] Linker failed.\n");
+	exit(EXIT_FAILURE);
+    }
 }
 
 static void emit_tail(void)
