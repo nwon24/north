@@ -100,6 +100,7 @@ static void get_file_names(void)
     if (s == NULL) {
 	s = p;
 	o = obj_file_name + (s - asm_file_name);
+	e = exe_file_name + (s - asm_file_name);
 	*s++ = '.';
 	*o++ = '.';
     } else {
