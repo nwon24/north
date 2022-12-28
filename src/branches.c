@@ -85,7 +85,7 @@ void cross_reference_branches(Operation *ops)
 	case OP_WHILE:
 	    if (while_op_ptr == MAX_NESTED_BRANCHES) {
 		tokerror(opptr->tok, "Too many nested 'while' branches'\n");
-	    } else if (begin_op_ptr == 0) {
+	    } else if (begin_op_ptr == 0 || begin_op_ptr != while_op_ptr + 1) {
 		tokerror(opptr->tok, "'while' word without preceding 'begin'\n");
 	    }
 	    while_ops[while_op_ptr++] = opptr;
