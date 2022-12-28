@@ -204,16 +204,19 @@ static Token *newtoken(void)
     return new_token;
 }
 
-static void lex_init_file(const char *file_path)
+static bool lex_init_file(const char *file_path)
 {
     int fd;
     struct stat st;
 
     fd = open(file_path, O_RDONLY);
-    if (fd < 0) {
+    if (fd < 0 && file_path == input_file_name) {
 	tell_user(stderr, "Unable to open file '%s' for reading.\n", file_path);
 	exit(EXIT_FAILURE);
+    } else if (fd < 0) {
+	return false;
     }
+	
     fstat(fd, &st);
     if (st.st_size == 0) {
 	/* Empty file, exit quietly */
@@ -229,6 +232,7 @@ static void lex_init_file(const char *file_path)
     file_row = 1;
     file_col = 1;
     file_offset = 0;
+    return true;
 }
 
 static void lex_fini_file(void)
@@ -241,7 +245,8 @@ Token *lex(const char *file_path)
 {
     Token *tok, *ptr, *head;
 
-    lex_init_file(file_path);
+    if (lex_init_file(file_path) == false)
+	return NULL;
     ptr = NULL;
     head = NULL;
     while ((tok = gettoken()) != NULL) {
