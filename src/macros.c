@@ -7,37 +7,29 @@
 #include "hash.h"
 #include "variables.h"
 
-#define BSIZE 24
-
 #define HASH_SIZE 100
 
-Macro *macros = NULL;
-int nr_macros = 0;
-
 static HashTable *macros_hash_table = NULL;
+
+static Macro *alloc_macro(void);
 
 void init_macros_hash(void)
 {
     macros_hash_table = new_hash_table(string_hashfn, HASH_SIZE);
 }
 
-static void realloc_macros(void)
+static Macro *alloc_macro(void)
 {
-    int bsize = BSIZE;
+    Macro *new;
 
-    if (macros == NULL) {
-	if ((macros = malloc(bsize * sizeof(*macros))) == NULL) {
-	    fatal("realloc_macros: malloc returned NULL\n");
-	}
-    } else {
-	if ((macros = realloc(macros, (nr_macros + bsize) * sizeof(*macros))) == NULL) {
-	    fatal("realloc_macros: malloc returned NULL\n");
-	}
-    }
+    new = malloc(sizeof(*new));
+    if (new == NULL)
+	fatal("alloc_macro: malloc returned NULL\n");
+    return new;
 }
 
 /*
- * Syntax: .macro <operations> .endm
+ * Syntax: .macro <identifier> <operations> .endm
  */
 Token *add_macro(Token *start)
 {
@@ -47,10 +39,7 @@ Token *add_macro(Token *start)
 
     assert(strcmp(start->text, ".macro") == 0);
     tok = start->next;
-    if (nr_macros % BSIZE == 0) {
-	realloc_macros();
-    }
-    new_macro = &macros[nr_macros++];
+    new_macro = alloc_macro();
     new_macro->size = 0;
     check_identifier(tok, tok->text);
     macro_entry = new_hash_entry(tok->text, new_macro);
