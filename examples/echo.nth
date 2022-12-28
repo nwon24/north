@@ -1,0 +1,8 @@
+.include "stdlib.nth"
+
+0  begin dup argc < while
+  dup 8 * argv + @64 dup strlen swap STDOUT_FILENO write drop
+  "\n" STDOUT_FILENO write drop 
+  1 +
+repeat
+
