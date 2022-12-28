@@ -81,6 +81,9 @@ typedef enum {
     OP_LOAD16,
     OP_LOAD32,
     OP_LOAD64,
+
+    OP_ARGC,
+    OP_ARGV,
     /* Used to denote unknown operation */
     OP_UNKNOWN,
     /* UNUSED: used to count the number of operations */

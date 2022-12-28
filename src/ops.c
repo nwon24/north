@@ -89,7 +89,10 @@ struct {
     { "@16", OP_LOAD16},
     { "@32", OP_LOAD32},
     { "@64", OP_LOAD64},
-    
+
+    { "argc", OP_ARGC},
+    { "argv", OP_ARGV},
+
     { "", OP_UNKNOWN},
 };
 
