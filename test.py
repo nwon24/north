@@ -4,8 +4,8 @@ import os
 import subprocess
 import sys
 
-north = "./src/north"
-north_com = "./src/north -c -v"
+north = "./north"
+north_com = "./north -c -v"
 
 def record(test_file):
     outfile_path = os.path.splitext(test_file)[0] + ".txt"
