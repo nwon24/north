@@ -11,4 +11,4 @@ export ARCH
 [ ! -z "$CC" ] || (echo "CC not set." ; exit 1)
 [ ! -z "$ARCH" ] || (echo "Target architecture not set." ; exit 1)
 
-make
+make "$@"
