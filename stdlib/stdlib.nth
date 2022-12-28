@@ -1,2 +1,3 @@
-.include "./stdlib/unix.nth"
-.include "./stdlib/sysdeps/x86_64-linux/syscall.nth"
+.include "unix.nth"
+.include "sysdeps/x86_64-linux/syscall.nth"
+.include "string.nth"
