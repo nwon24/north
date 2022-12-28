@@ -1,11 +1,16 @@
 #include <assert.h>
 #include <string.h>
+#include <libgen.h>
+#include <limits.h>
 
 #include "main.h"
 #include "directives.h"
 #include "variables.h"
 #include "macros.h"
 #include "hash.h"
+
+extern char *include_paths[];
+extern int nr_include_paths;
 
 struct {
     char *dirname;
@@ -92,6 +97,8 @@ static Token *preprocess_macros(Token *tokens)
 static Token *include_file(Token *tok)
 {
     Token *included_toks, *tmptok;
+    char oldcwd[PATH_MAX];
+    int i;
 
     assert(strcmp(tok->text, ".include") == 0);
     tok = tok->next;
@@ -101,8 +108,16 @@ static Token *include_file(Token *tok)
     if (tok->type != TOKEN_STR) {
 	tokerror(tok, "File to include must be string\n");
     }
-    included_toks = lex(tok->str);
-    assert(included_toks != NULL);
+    i = 0;
+    getcwd(oldcwd, PATH_MAX);
+    chdir(dirname(strdup(tok->pos.file)));
+    while ((included_toks = lex(tok->str)) == NULL && i < nr_include_paths) {
+	chdir(include_paths[i++]);
+    }
+    if (included_toks == NULL)
+	tokerror(tok, "Unable to include '%s'. No such file or directory in search paths.\n", tok->str);
+
+    chdir(oldcwd);
     for (tmptok = included_toks; tmptok->next != NULL; tmptok = tmptok->next);
     tmptok->next = tok->next;
     return included_toks;

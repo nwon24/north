@@ -7,7 +7,6 @@
 #include <unistd.h>
 #include <getopt.h>
 #include <fcntl.h>
-#include <libgen.h>
 #include <limits.h>
 #include <sys/stat.h>
 #include <sys/mman.h>
@@ -21,7 +20,9 @@
 #include "hash.h"
 #include "variables.h"
 
-#define OPTSTRING ":hscv"
+#define OPTSTRING ":hscvI:"
+
+#define MAX_INCLUDE_PATHS 100
 
 enum {
     SIMULATE,
@@ -36,11 +37,24 @@ char *input_file_name;
 
 bool verbose = false;
 
+char *include_paths[MAX_INCLUDE_PATHS];
+int nr_include_paths;
+
 void compile(void);
 
 static void parse_cmdline(int argc, char *argv[]);
 static void init(void);
 static void fini(void);
+static void add_include_path(char *path);
+
+static void add_include_path(char *path)
+{
+    if (nr_include_paths >= MAX_INCLUDE_PATHS) {
+	tell_user(stderr, "Maximum number of include paths exceeded. What are you doing?\n");
+	exit(EXIT_FAILURE);
+    }
+    include_paths[nr_include_paths++] = path;
+}
 
 void tell_user(FILE *stream, const char *msg, ...)
 {
@@ -96,6 +110,9 @@ void parse_cmdline(int argc, char *argv[])
         case 'v':
             verbose = true;
             break;
+	case 'I':
+	    add_include_path(optarg);
+	    break;
 	case ':':
 	    tell_user(stderr, "Missing argument to '-%c'\n", optopt);
 	    exit(EXIT_FAILURE);
@@ -131,17 +148,12 @@ bool simulating(void)
 
 int main(int argc, char *argv[])
 {
-    char oldcwd[PATH_MAX];
-
-    getcwd(oldcwd, PATH_MAX);
     parse_cmdline(argc, argv);
     init();
     init_glob_hash();
     tokens = lex(input_file_name);
-    chdir(dirname(strdup(input_file_name)));
     assert(tokens != NULL);
     tokens = preprocess(tokens);
-    chdir(oldcwd);
     operations = tokens_to_ops(tokens);
     cross_reference_branches(operations);
     if (action == SIMULATE) {
