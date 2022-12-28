@@ -13,6 +13,8 @@
 #define HASH_SIZE 100
 
 Variable *variables = NULL;
+static Variable *variables_tail = NULL;
+
 int nr_variables = 0;
 
 HashTable *glob_hash_table = NULL;
@@ -41,21 +43,6 @@ void init_glob_hash(void)
     glob_hash_table = new_hash_table(string_hashfn, HASH_SIZE);
 }
 
-static void realloc_variables(void)
-{
-    int bsize = BSIZE;
-
-    if (variables == NULL) {
-	if ((variables = malloc(bsize * sizeof(*variables))) == NULL) {
-	    fatal("realloc_variables: malloc returned NULL");
-	}
-    } else {
-	if ((variables = realloc(variables, (nr_variables + bsize) * sizeof(*variables))) == NULL) {
-	    fatal("realloc_variables: realloc returned NULL");
-	}
-    }
-}
-
 static VariableType str_to_vartype(char *str, int *bytesize)
 {
     int i = 0;
@@ -79,6 +66,22 @@ static void malloc_var(Variable *var)
     memset(var->addr, 0, var->bytesize);
 }
 
+static Variable *alloc_var(void)
+{
+    Variable *new;
+
+    if ((new = calloc(1, sizeof(*new))) == NULL)
+	fatal("alloc_var: malloc returned NULL!");
+    if (variables_tail == NULL) {
+	variables = new;
+	variables_tail = variables;
+    } else {
+	variables_tail->next = new;
+	variables_tail = variables_tail->next;
+    }
+    return new;
+}
+
 /*
  * Syntax: .var <identifier> <type> <size>
  */
@@ -89,10 +92,7 @@ Token *add_variable(Token *start)
     Token *tok;
     int bytesize;
 
-    if (nr_variables % BSIZE == 0) {
-	realloc_variables();
-    }
-    newvar = &variables[nr_variables++];
+    newvar = alloc_var();
     assert(strcmp(start->text, ".var") == 0);
     tok = start->next;
     /* Identifier */

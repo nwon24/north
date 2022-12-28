@@ -24,6 +24,7 @@ typedef struct variable {
     int length;
     size_t bytesize;
     void *addr; /* For simulation */
+    struct variable *next;
 } Variable;
 
 extern Variable *variables;
