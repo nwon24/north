@@ -1,5 +1,6 @@
 \ Linux x86_64 system call numbers and wrapper macros
-\ Not all wrapper macros are implemented for now
+\ Not all wrapper macros are implemented for now because
+\ many system calls are rarely used.
 
 .macro SYS_read 0 .endm
 .macro read SYS_read syscall3 .endm
@@ -42,13 +43,19 @@
 .macro SYS_rt_sigaction 13 .endm
 .macro SYS_rt_sigprocmask 14 .endm
 .macro SYS_rt_sigreturn 15 .endm
+
 .macro SYS_ioctl 16 .endm
 .macro SYS_pread64 17 .endm
 .macro SYS_pwrite64 18 .endm
 .macro SYS_readv 19 .endm
 .macro SYS_writev 20 .endm
+
 .macro SYS_access 21 .endm
+.macro access SYS_access syscall2 .endm
+
 .macro SYS_pipe 22 .endm
+.macro pipe SYS_pipe syscall1 .endm
+
 .macro SYS_select 23 .endm
 .macro SYS_sched_yield 24 .endm
 .macro SYS_mremap 25 .endm
@@ -60,12 +67,18 @@
 .macro SYS_shmctl 31 .endm
 .macro SYS_dup 32 .endm
 .macro SYS_dup2 33 .endm
+
 .macro SYS_pause 34 .endm
+.macro pause SYS_pause syscall0 .endm
+
 .macro SYS_nanosleep 35 .endm
 .macro SYS_getitimer 36 .endm
 .macro SYS_alarm 37 .endm
 .macro SYS_setitimer 38 .endm
+
 .macro SYS_getpid 39 .endm
+.macro getpid SYS_getpid syscall0 .endm
+
 .macro SYS_sendfile 40 .endm
 .macro SYS_socket 41 .endm
 .macro SYS_connect 42 .endm
@@ -83,13 +96,27 @@
 .macro SYS_setsockopt 54 .endm
 .macro SYS_getsockopt 55 .endm
 .macro SYS_clone 56 .endm
+
 .macro SYS_fork 57 .endm
+.macro fork SYS_fork syscall0 .endm
+
 .macro SYS_vfork 58 .endm
+.macro vfork SYS_vfork syscall0 .endm
+
 .macro SYS_execve 59 .endm
+.macro execve SYS_execve syscall3 .endm
+
 .macro SYS_exit 60 .endm
+.macro exit SYS_exit syscall1 .endm
+
 .macro SYS_wait4 61 .endm
+
 .macro SYS_kill 62 .endm
+.macro kill SYS_kill syscall2 .endm
+
 .macro SYS_uname 63 .endm
+.macro uname SYS_uname syscall1 .endm
+
 .macro SYS_semget 64 .endm
 .macro SYS_semop 65 .endm
 .macro SYS_semctl 66 .endm
@@ -98,6 +125,7 @@
 .macro SYS_msgsnd 69 .endm
 .macro SYS_msgrcv 70 .endm
 .macro SYS_msgctl 71 .endm
+
 .macro SYS_fcntl 72 .endm
 .macro SYS_flock 73 .endm
 .macro SYS_fsync 74 .endm
@@ -105,23 +133,58 @@
 .macro SYS_truncate 76 .endm
 .macro SYS_ftruncate 77 .endm
 .macro SYS_getdents 78 .endm
+
 .macro SYS_getcwd 79 .endm
+.macro getcwd SYS_getcwd syscall2 .endm
+
 .macro SYS_chdir 80 .endm
+.macro chdir SYS_chdir syscall1 .endm
+
 .macro SYS_fchdir 81 .endm
+.macro fchdir SYS_fchdir syscall1 .endm
+
 .macro SYS_rename 82 .endm
+.macro rename SYS_rename syscall2 .endm
+
 .macro SYS_mkdir 83 .endm
+.macro mkdir SYS_mkdir syscall2 .endm
+
 .macro SYS_rmdir 84 .endm
+.macro rmdir SYS_rmdir syscall1 .endm
+
 .macro SYS_creat 85 .endm
+.macro creat SYS_creat syscall2 .endm
+
 .macro SYS_link 86 .endm
+.macro link SYS_link syscall2 .endm
+
 .macro SYS_unlink 87 .endm
+.macro unlink SYS_unlink syscall1 .endm
+
 .macro SYS_symlink 88 .endm
+.macro symlink SYS_symlink syscall2 .endm
+
 .macro SYS_readlink 89 .endm
+.macro readlink SYS_readlink syscall3 .endm
+
 .macro SYS_chmod 90 .endm
+.macro chmod SYS_chmod syscall2 .endm
+
 .macro SYS_fchmod 91 .endm
+.macro fchmod SYS_fchmod syscall2 .endm
+
 .macro SYS_chown 92 .endm
+.macro chown SYS_chown syscall3 .endm
+
 .macro SYS_fchown 93 .endm
+.macro fchown SYS_fchown syscall3 .endm
+
 .macro SYS_lchown 94 .endm
+.macro lchown SYS_lchown syscall3 .endm
+
 .macro SYS_umask 95 .endm
+.macro umask SYS_umask syscall1 .endm
+
 .macro SYS_gettimeofday 96 .endm
 .macro SYS_getrlimit 97 .endm
 .macro SYS_getrusage 98 .endm
