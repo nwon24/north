@@ -71,6 +71,8 @@ static Token *preprocess_macros(Token *tokens)
 		newhead = tok;
 	    if (((Macro *)entry->ptr)->macro_token != NULL) {
 		macro_level++;
+	    } else {
+		macro_level = 0;
 	    }
 	} else {
 	    prev_tok = tok;
