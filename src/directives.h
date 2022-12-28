@@ -3,6 +3,8 @@
 
 #include "lex.h"
 
+#define MAX_NESTED_INCLUDES 100
+
 typedef enum {
     DIR_VAR,
     DIR_MACRO,

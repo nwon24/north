@@ -37,11 +37,12 @@ static Token *preprocess_macros(Token *tokens)
     Token *tok, *prev_tok, *newhead;
     DirWord dir;
     HashEntry *entry;
-    int macro_level;
+    int macro_level, include_level;
 
     prev_tok = NULL;
     newhead = tokens;
     macro_level = 0;
+    include_level = 0;
     for (tok = tokens; tok != NULL;) {
 	if ((dir = find_dir_in_table(tok->text)) == DIR_MACRO) {
 	    if (prev_tok == NULL) {
@@ -61,8 +62,13 @@ static Token *preprocess_macros(Token *tokens)
 		tok = include_file(tok);
 		prev_tok->next = tok;
 	    }
+	    if (include_level > MAX_NESTED_INCLUDES) {
+		tokerror(tok, "Maximum include files exceeded.\n");
+	    } else {
+		include_level++;
+	    }
 	} else if ((entry = macro_reference(tok)) != NULL) {
-	    if (macro_level >= MAX_NESTED_MACROS) {
+	    if (macro_level > MAX_NESTED_MACROS) {
 		tokerror(tok, "Macro expansion exceeds limit of number of nested macros.\n");
 	    }
 	    ((Macro *)entry->ptr)->macro_token = tok;
