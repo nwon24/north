@@ -63,9 +63,9 @@ static void emit_strings(void)
 static void emit_variables(void)
 {
     fprintf(asm_file, ".section .bss\n");
-    for (int i = 0; i < nr_variables; i++) {
+    for (Variable *var = variables; var != NULL; var = var->next) {
 	fprintf(asm_file, "%s:\n"
-		"\t.skip %lu\n", variables[i].identifier, variables[i].bytesize);
+		"\t.skip %lu\n", var->identifier, var->bytesize);
     }
 }
 
