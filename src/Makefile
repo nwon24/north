@@ -1,7 +1,6 @@
-ARCH = x86_64-linux
+# ARCH = x86_64-linux
 
 NAME = north
-CC = gcc
 CFLAGS = -std=c11 -Wall -Wextra -O2 -ggdb -MMD -MP -D_POSIX_C_SOURCE=200809L
 
 OBJ = main.o lex.o ops.o simulate.o branches.o strings.o hash.o \
