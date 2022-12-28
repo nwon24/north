@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "variables.h"
 
-#define OPTSTRING ":hscvI:"
+#define OPTSTRING "+:hscvI:"
 
 #define MAX_INCLUDE_PATHS 100
 
@@ -90,7 +90,7 @@ void usage(int code)
 
 void parse_cmdline(int argc, char *argv[])
 {
-    int c;
+    int c, i;
    
     if (argc == 1) {
 	tell_user(stderr, "No arguments given.\n");
@@ -128,6 +128,11 @@ void parse_cmdline(int argc, char *argv[])
 	tell_user(stderr, "No input file specified.\n");
 	exit(EXIT_FAILURE);
     }
+    simulated_argv = &argv[optind];
+    i = optind;
+    while (argv[i] != NULL)
+	i++;
+    simulated_argc = i - optind;
 }
 
 void init(void)

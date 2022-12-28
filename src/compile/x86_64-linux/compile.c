@@ -56,7 +56,7 @@ static void emit_strings(void)
     fprintf(asm_file, ".section .rodata\n");
     for (int i = 0; i < string_pool_size; i++) {
 	fprintf(asm_file, "str_%d:\n"
-		"\t.ascii \"%s\"\n", string_pool[i]->num, string_pool[i]->text);
+		"\t.asciz \"%s\"\n", string_pool[i]->num, string_pool[i]->text);
     }
 }
 
@@ -67,6 +67,10 @@ static void emit_variables(void)
 	fprintf(asm_file, "%s:\n"
 		"\t.skip %lu\n", var->identifier, var->bytesize);
     }
+    /*
+     * Might as well emit argc and argv as well.
+     */
+    fprintf(asm_file, "argc:\n\t.skip 8\nargv:\n\t.skip 8\n");
 }
 
 static void get_file_names(void)
@@ -120,7 +124,12 @@ static void emit_header(void)
 {
     fprintf(asm_file, ".section .text\n"
 	              ".global _start\n"
-	    "_start:\n");
+	    "_start:\n"
+	    "\tmovq (%%rsp), %%rax\n"
+	    "\tmovq %%rax, argc\n"
+	    "\tmovq %%rsp, %%rax\n"
+	    "\taddq $8, %%rax\n"
+	    "\tmovq %%rax, argv\n");
 }
 
 static void emit_exit(void)
@@ -598,6 +607,12 @@ static void compile_op(Operation *opptr)
 	break;
     case OP_I:
 	fprintf(asm_file, "\tpushq %%r14\n");
+	break;
+    case OP_ARGC:
+	fprintf(asm_file, "\tpushq argc\n");
+	break;
+    case OP_ARGV:
+	fprintf(asm_file, "\tpushq argv\n");
 	break;
     default:
 	break;

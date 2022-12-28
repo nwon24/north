@@ -12,6 +12,9 @@
 
 #define STACK_CAPACITY 4096
 
+char **simulated_argv = NULL;
+int simulated_argc;
+
 typedef int64_t word;
 
 word stack[STACK_CAPACITY] = {0};
@@ -408,6 +411,12 @@ static Operation *simulate_op(Operation *op)
     case OP_LOAD64:
 	a = pop();
 	push((word)(*(uint64_t *)a));
+	break;
+    case OP_ARGC:
+	push(simulated_argc);
+	break;
+    case OP_ARGV:
+	push((word)simulated_argv);
 	break;
     case OP_UNKNOWN:
     case OP_COUNT:
