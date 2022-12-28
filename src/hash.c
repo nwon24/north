@@ -44,10 +44,15 @@ int add_hash_entry(HashTable *table, HashEntry *entry)
 	entry->next = entry->prev = NULL;
 	return 0;
     } else {
-	for (tmp = tab[hashn]; tmp != NULL; tmp = tmp->next) {
+	tmp = tab[hashn];
+	while (true) {
 	    if (strcmp(tmp->identifier, entry->identifier) == 0) {
 		return -1;
 	    }
+	    if (tmp->next == NULL)
+		break;
+	    else
+		tmp = tmp->next;
 	}
 	tmp->next = entry;
 	entry->prev = tmp;
@@ -87,10 +92,11 @@ HashEntry *in_hash(HashTable *table, char *identifier)
     hashn = table->hashfn(identifier, table->size);
     assert(hashn >= 0 && hashn < table->size);
     if ((entry = table->table[hashn]) == NULL)
-	return entry;
+	return NULL;
     while (entry != NULL) {
-	if (strcmp(entry->identifier, identifier) == 0)
+	if (strcmp(entry->identifier, identifier) == 0) {
 	    return entry;
+	}
 	entry = entry->next;
     }
     return NULL;
