@@ -102,10 +102,11 @@ void usage(int code)
 {
     tell_user(stderr, "USAGE: north [OPTIONS] [INPUT FILE]\n");
     tell_user(stderr, "\tOptions:\n");
-    tell_user(stderr, "\t\t-h\tPrint this help and exit\n");
-    tell_user(stderr, "\t\t-s\tinterpret the input file\n");
-    tell_user(stderr, "\t\t-c\tCompile the input file\n");
-    tell_user(stderr, "\t\t-v\tBe verbose\n");
+    tell_user(stderr, "\t\t-h\t\tPrint this help and exit\n");
+    tell_user(stderr, "\t\t-s\t\tinterpret the input file\n");
+    tell_user(stderr, "\t\t-c\t\tCompile the input file\n");
+    tell_user(stderr, "\t\t-v\t\tBe verbose\n");
+    tell_user(stderr, "\t\t-I <DIR>\tAdd a directory to the search path for including files\n");
     exit(code);
 }
 
