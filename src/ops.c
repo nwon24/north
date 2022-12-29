@@ -12,6 +12,8 @@
 
 Operation *operations = NULL;
 
+static int str_num;
+
 struct {
     char *opname;
     OpWord op;
@@ -126,10 +128,8 @@ static Operation *token_to_op(Token *tok)
     Operation *new_op;
     OpWord op;
     char *p;
-    int str_num;
     HashEntry *entry;
 
-    str_num = 0;
     new_op = newoperation();
     new_op->next = NULL;
     new_op->tok = tok;
