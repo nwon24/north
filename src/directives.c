@@ -97,7 +97,6 @@ static Token *preprocess_macros(Token *tokens)
 static Token *include_file(Token *tok)
 {
     Token *included_toks, *tmptok;
-    char filewd[PATH_MAX];
     int i;
 
     assert(strcmp(tok->text, ".include") == 0);
@@ -111,8 +110,8 @@ static Token *include_file(Token *tok)
     if (verbose == true)
 	tell_user(stderr, "[INFO] Including file '%s'\n", tok->str);
     i = 0;
+    chdir(dirname(strdup(tok->pos.file)));
     while ((included_toks = lex(tok->str)) == NULL && i < nr_include_paths) {
-	chdir(dirname(strdup(filewd)));
 	chdir(include_paths[i++]);
     }
     if (included_toks == NULL)
