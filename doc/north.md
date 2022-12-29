@@ -428,7 +428,7 @@ Passing arguments to macros is not supported because it is easy
 enough to do that by passing arguments on the stack. Additionally,
 recursive macros are not supported.
 
-### Include files
+## Include files
 
 North code can be included from multiple files via the `.include`
 directive. The name of the file to be included must be a string.
@@ -441,7 +441,8 @@ to the compiler via the `-I` flag. These directories are taken
 relative to the source file being compiled/interpreted. Multiple
 search paths need multiple `-I` flags.
 
-### Command line arguments
+## Command line arguments
+
 The `argc` and `argv` words push the argument count and the
 argument vector onto the stack. The `argc` word simply
 pushes the number, while the `argv` word pushes the address
