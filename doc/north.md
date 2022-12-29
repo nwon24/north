@@ -453,5 +453,5 @@ This means `argv @64` leaves the address of the first argument
 string (the path of the executable) on the stack. Then `argv @64 @8`
 is the first character of the first string.
 
-See [echo.nth](../examples/ecno.nth) for an example of how
+See [echo.nth](../examples/echo.nth) for an example of how
 to use `argv`.
