@@ -432,11 +432,25 @@ recursive macros are not supported.
 
 North code can be included from multiple files via the `.include`
 directive. The name of the file to be included must be a string.
-Currently, the only search path is the current directory (of the
-source file passed to the compiler); in the future, this will
-be expanded to allow standard library macros to be included
-from a system location.
-
 ```
 .include <name of file>
 ```
+By default, the file name is taken to be relative to the name
+of the file that includes it. Extra search paths can be added
+to the compiler via the `-I` flag. These directories are taken
+relative to the source file being compiled/interpreted. Multiple
+search paths need multiple `-I` flags.
+
+### Command line arguments
+The `argc` and `argv` words push the argument count and the
+argument vector onto the stack. The `argc` word simply
+pushes the number, while the `argv` word pushes the address
+of first string address. This matches the `argc` and `argv`
+parameters passed to a normal C `main` function.
+
+This means `argv @64` leaves the address of the first argument
+string (the path of the executable) on the stack. Then `argv @64 @8`
+is the first character of the first string.
+
+See [echo.nth](../examples/ecno.nth) for an example of how
+to use `argv`.
