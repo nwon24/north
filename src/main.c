@@ -1,3 +1,4 @@
+#include <errno.h>
 #include <assert.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -8,6 +9,7 @@
 #include <getopt.h>
 #include <fcntl.h>
 #include <limits.h>
+#include <libgen.h>
 #include <sys/stat.h>
 #include <sys/mman.h>
 
@@ -54,6 +56,25 @@ static void add_include_path(char *path)
 	exit(EXIT_FAILURE);
     }
     include_paths[nr_include_paths++] = path;
+}
+
+static void transform_include_paths(void)
+{
+    char wd[PATH_MAX];
+    int i;
+
+    getcwd(wd, PATH_MAX);
+    chdir(dirname(strdup(input_file_name)));
+    for (i = 0; i < nr_include_paths; i++) {
+	char *expanded_path;
+	expanded_path = realpath(include_paths[i], NULL);
+	if (expanded_path == NULL) {
+	    tell_user(stderr, "Include path '%s': %s\n", include_paths[i], expanded_path);
+	    exit(EXIT_FAILURE);
+	}
+	include_paths[i] = expanded_path;
+    }
+    chdir(wd);
 }
 
 void tell_user(FILE *stream, const char *msg, ...)
@@ -154,6 +175,7 @@ bool simulating(void)
 int main(int argc, char *argv[])
 {
     parse_cmdline(argc, argv);
+    transform_include_paths();
     init();
     init_glob_hash();
     tokens = lex(input_file_name);

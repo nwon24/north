@@ -97,7 +97,7 @@ static Token *preprocess_macros(Token *tokens)
 static Token *include_file(Token *tok)
 {
     Token *included_toks, *tmptok;
-    char oldcwd[PATH_MAX];
+    char filewd[PATH_MAX];
     int i;
 
     assert(strcmp(tok->text, ".include") == 0);
@@ -108,16 +108,16 @@ static Token *include_file(Token *tok)
     if (tok->type != TOKEN_STR) {
 	tokerror(tok, "File to include must be string\n");
     }
+    if (verbose == true)
+	tell_user(stderr, "[INFO] Including file '%s'\n", tok->str);
     i = 0;
-    getcwd(oldcwd, PATH_MAX);
-    chdir(dirname(strdup(tok->pos.file)));
     while ((included_toks = lex(tok->str)) == NULL && i < nr_include_paths) {
+	chdir(dirname(strdup(filewd)));
 	chdir(include_paths[i++]);
     }
     if (included_toks == NULL)
 	tokerror(tok, "Unable to include '%s'. No such file or directory in search paths.\n", tok->str);
 
-    chdir(oldcwd);
     for (tmptok = included_toks; tmptok->next != NULL; tmptok = tmptok->next);
     tmptok->next = tok->next;
     return included_toks;
@@ -127,9 +127,12 @@ Token *preprocess(Token *tokens)
 {
     Token *tok, *prev_tok, *newhead;
     DirWord dir;
+    char oldcwd[PATH_MAX];
 
     prev_tok = NULL;
+    getcwd(oldcwd, PATH_MAX);
     newhead = preprocess_macros(tokens);
+    chdir(oldcwd);
     for (tok = newhead; tok != NULL;) {
 	if ((dir = find_dir_in_table(tok->text)) != DIR_UNKNOWN) {
 	    switch (dir) {
