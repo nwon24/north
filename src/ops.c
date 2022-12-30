@@ -244,8 +244,10 @@ void init_keywords_hash(void)
     for (i = 0; i < OP_COUNT; i++) {
 	HashEntry *new;
 
-	new = new_hash_entry(op_table[i].opname, &op_table[i].op);
-	new->type = HASH_KEYWORD;
-	add_hash_entry(glob_hash_table, new);
+	if (strcmp(op_table[i].opname, "") != 0) {
+	    new = new_hash_entry(op_table[i].opname, &op_table[i].op);
+	    new->type = HASH_KEYWORD;
+	    assert(add_hash_entry(glob_hash_table, new) == 0);
+	}
     }
 }
