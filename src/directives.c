@@ -29,11 +29,10 @@ static DirWord find_dir_in_table(char *dirname);
 
 static DirWord find_dir_in_table(char *dirname)
 {
-    for (int i = 0; i < DIR_COUNT; i++) {
-	if (strcmp(dirname, dir_table[i].dirname) == 0) {
-	    return dir_table[i].dir;
-	}
-    }
+    HashEntry *entry;
+
+    if ((entry = in_hash(glob_hash_table, dirname)) != NULL && entry->type == HASH_DIRECTIVE)
+	return *(DirWord *)entry->ptr;
     return DIR_UNKNOWN;
 }
 
@@ -154,4 +153,19 @@ Token *preprocess(Token *tokens)
 	}
     }
     return newhead;
+}
+
+void init_directives_hash(void)
+{
+    int i;
+
+    for (i = 0; i < DIR_COUNT; i++) {
+	HashEntry *new;
+
+	if (strcmp(dir_table[i].dirname, "") != 0) {
+	    new = new_hash_entry(dir_table[i].dirname, &dir_table[i].dir);
+	    new->type = HASH_DIRECTIVE;
+	    assert(add_hash_entry(glob_hash_table, new) == 0);
+	}
+    }
 }

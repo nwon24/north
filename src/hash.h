@@ -5,6 +5,7 @@
 
 typedef enum hash_type {
     HASH_KEYWORD,
+    HASH_DIRECTIVE,
     HASH_MACRO,
     HASH_VAR,
 } HashType;

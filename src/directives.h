@@ -17,5 +17,6 @@ typedef enum {
 } DirWord;
 
 Token *preprocess(Token *tokens);
+void init_directives_hash(void);
 
 #endif /* DIRECTIVES_H_ */
