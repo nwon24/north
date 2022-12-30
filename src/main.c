@@ -22,7 +22,7 @@
 #include "hash.h"
 #include "variables.h"
 
-#define OPTSTRING "+:hscvI:"
+#define OPTSTRING "+:hscvI:r"
 
 #define MAX_INCLUDE_PATHS 100
 
@@ -38,6 +38,7 @@ off_t input_file_size;
 char *input_file_name;
 
 bool verbose = false;
+bool run_after_compilation = false;
 
 char *include_paths[MAX_INCLUDE_PATHS];
 int nr_include_paths;
@@ -134,6 +135,9 @@ void parse_cmdline(int argc, char *argv[])
             break;
 	case 'I':
 	    add_include_path(optarg);
+	    break;
+	case 'r':
+	    run_after_compilation = true;
 	    break;
 	case ':':
 	    tell_user(stderr, "Missing argument to '-%c'\n", optopt);

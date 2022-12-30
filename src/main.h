@@ -21,5 +21,6 @@ extern off_t input_file_size;
 extern char *input_file_name;
 
 extern bool verbose;
+extern bool run_after_compilation;
 
 #endif /* MAIN_H_ */

@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <limits.h>
+#include <libgen.h>
 
 #include "main.h"
 #include "lex.h"
@@ -623,6 +625,7 @@ static void assemble_and_link(void)
 {
     char as_command[256];
     char ld_command[256];
+    /*    char exe_command[PATH_MAX+3]; */
 
     sprintf(as_command, "as %s -g -o %s", asm_file_name, obj_file_name);
     sprintf(ld_command, "ld %s -o %s", obj_file_name, exe_file_name);
@@ -639,6 +642,9 @@ static void assemble_and_link(void)
     if (system(ld_command) != 0) {
 	tell_user(stderr, "[INFO] Linker failed.\n");
 	exit(EXIT_FAILURE);
+    }
+    if (run_after_compilation == true) {
+	system(exe_file_name);
     }
 }
 
