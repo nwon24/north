@@ -1,0 +1,11 @@
+\ copy.nth
+\ Copies standard input to standard output
+
+.include "stdlib.nth"
+
+.macro BUFSIZ 512 .endm
+.var buf i8 BUFSIZ
+
+begin BUFSIZ buf STDIN_FILENO read dup 0 > while
+  buf STDOUT_FILENO write drop
+repeat
