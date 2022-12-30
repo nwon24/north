@@ -104,11 +104,10 @@ static Operation *token_to_op(Token *tok);
 
 static OpWord find_op_in_table(char *opname)
 {
-    for (int i = 0; i < OP_COUNT; i++) {
-        if (strcmp(opname, op_table[i].opname) == 0) {
-	    return op_table[i].op;
-	}
-    }
+    HashEntry *entry;
+
+    if ((entry = in_hash(glob_hash_table, opname)) != NULL && entry->type == HASH_KEYWORD)
+	return *(OpWord *)entry->ptr;
     return OP_UNKNOWN;
 }
 
@@ -236,4 +235,17 @@ Operation *tokens_to_ops(Token *toks)
 	}
     }
     return head;
+}
+
+void init_keywords_hash(void)
+{
+    int i;
+
+    for (i = 0; i < OP_COUNT; i++) {
+	HashEntry *new;
+
+	new = new_hash_entry(op_table[i].opname, &op_table[i].op);
+	new->type = HASH_KEYWORD;
+	add_hash_entry(glob_hash_table, new);
+    }
 }

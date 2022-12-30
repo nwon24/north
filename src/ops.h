@@ -130,6 +130,7 @@ typedef struct operation {
 extern Operation *operations;
 
 Operation *tokens_to_ops(Token *toks);
-    
+void init_keywords_hash(void);
+
 #endif /* OPS_H_ */
 

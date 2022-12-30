@@ -7,6 +7,7 @@
 #include "main.h"
 #include "variables.h"
 #include "hash.h"
+#include "ops.h"
 
 #define BSIZE 24
 
@@ -41,6 +42,8 @@ static void malloc_var(Variable *var);
 void init_glob_hash(void)
 {
     glob_hash_table = new_hash_table(string_hashfn, HASH_SIZE);
+    init_keywords_hash();
+    /*    init_directives_hash(glob_hash_table); */
 }
 
 static VariableType str_to_vartype(char *str, int *bytesize)

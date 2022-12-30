@@ -4,6 +4,7 @@
 #include <stdbool.h>
 
 typedef enum hash_type {
+    HASH_KEYWORD,
     HASH_MACRO,
     HASH_VAR,
 } HashType;
