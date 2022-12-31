@@ -236,6 +236,7 @@ static Operation *token_to_op(Token *tok)
 	}
 	f_op->next = NULL;
 	func->ops = f_head;
+	cross_reference_branches(func->ops);
 	return new_op;
     }
     
