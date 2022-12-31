@@ -24,6 +24,7 @@ typedef struct token {
     } pos;
     TokenType type;
     struct macro *macro;
+    struct function *function;
     struct token *next;
 } Token;
 
