@@ -4,7 +4,7 @@ CFLAGS = -std=c11 -Wall -Wextra -O2 -ggdb -MMD -MP  \
 
 OBJ = src/main.o src/lex.o src/ops.o src/simulate.o src/branches.o \
       src/strings.o src/hash.o src/directives.o src/variables.o src/macros.o \
-      src/compile/$(ARCH)/compile.o
+      src/functions.o src/compile/$(ARCH)/compile.o
 SRC = ${OBJ:.o=.c}
 DEP = ${OBJ:.o=.d}
 
