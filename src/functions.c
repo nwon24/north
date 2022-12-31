@@ -8,6 +8,9 @@
 #include "hash.h"
 #include "variables.h"
 
+Function *functions = NULL;
+static Function *last_function = NULL;
+
 static Function *alloc_function(void);
 
 static Function *alloc_function(void)
@@ -17,6 +20,17 @@ static Function *alloc_function(void)
     if ((new = malloc(sizeof(*new))) == NULL)
 	fatal("alloc_function: malloc returned NULL\n");
     return new;
+}
+
+static void add_function_to_list(Function *func)
+{
+    if (last_function == NULL) {
+	functions = func;
+	last_function = functions;
+    } else {
+	last_function->next = func;
+	last_function = last_function->next;
+    }
 }
 
 /*
@@ -58,6 +72,7 @@ Token *add_function(Token *start)
 	new_func->tokens = NULL;
     else
 	prev->next = NULL;
+    add_function_to_list(new_func);
     return tok->next;
 }
 

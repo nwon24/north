@@ -27,6 +27,7 @@ static void emit_header(void);
 static void add_to_string_pool(String *str);
 static void realloc_string_pool(void);
 static void emit_strings(void);
+static void emit_functions(void);
 
 static void realloc_string_pool(void)
 {
@@ -73,6 +74,25 @@ static void emit_variables(void)
      * Might as well emit argc and argv as well.
      */
     fprintf(asm_file, "argc:\n\t.skip 8\nargv:\n\t.skip 8\n");
+}
+
+static void emit_functions(void)
+{
+    Function *f;
+
+    fprintf(asm_file, ".section .text\n");
+    for (f = functions; f != NULL; f = f->next) {
+	Operation *op;
+
+	fprintf(asm_file, "%s:\n", f->identifier);
+	for (op = f->ops; op != NULL; op = op->next) {
+	    if (op->op == OP_RETURN)
+		fprintf(asm_file, "\tjmp %s_ret\n", f->identifier);
+	    else
+		compile_op(op);
+	}
+	fprintf(asm_file, "\tjmp %s_ret\n", f->identifier);
+    }
 }
 
 static void get_file_names(void)
@@ -617,7 +637,11 @@ static void compile_op(Operation *opptr)
 	fprintf(asm_file, "\tpushq argv\n");
 	break;
     case OP_CALL:
-	not_implemented("compile: OP_CALL");
+	fprintf(asm_file, "\tjmp %s\n"
+		"%s_ret:\n", opptr->operand.call_op.function->identifier, opptr->operand.call_op.function->identifier);
+	break;
+    case OP_RETURN:
+	unreachable("compile: OP_RETURN\n");
 	break;
     default:
 	break;
@@ -671,6 +695,7 @@ void compile(void)
 	compile_op(opptr);
     }
     emit_exit();
+    emit_functions();
     emit_strings();
     emit_variables();
     emit_tail();
