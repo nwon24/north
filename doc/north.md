@@ -438,7 +438,8 @@ directive. The name of the file to be included must be a string.
 By default, the file name is taken to be relative to the name
 of the file that includes it. Extra search paths can be added
 to the compiler via the `-I` flag. These directories are taken
-relative to the source file being compiled/interpreted. Multiple
+relative to the directory in which the compilation/simulation
+command is run. Multiple
 search paths need multiple `-I` flags.
 
 ## Command line arguments
@@ -455,3 +456,24 @@ is the first character of the first string.
 
 See [echo.nth](../examples/echo.nth) for an example of how
 to use `argv`.
+
+## Functions
+
+Functions can be defined with the `.func` and `.endf` directives.
+The syntax is similar to the syntax used for defining macros:
+```
+.func <identifier> <operations> .endf
+```
+Functions differ to macros in that their body is not expanded
+whenever they are called; rather, execution jumps to the start
+of the function's body. Note that since arguments are passed on
+the stack, North functions do not use the same calling convention
+as C functions. This means that for the moment, it is impossible
+to link North code with code from another language. In the future,
+a possible goal is to introduce a way to write functions that
+are indeed compatible with C functions.
+
+In the function body, the `return` operation can be used to
+exit the function before the end of the body. If at the end
+of the function body there is no `return`, the operation
+is implied.
