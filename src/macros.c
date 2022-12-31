@@ -39,6 +39,9 @@ Token *add_macro(Token *start)
 
     assert(strcmp(start->text, ".macro") == 0);
     tok = start->next;
+    if (tok == NULL) {
+	tokerror(start, "Unfinished macro definition\n");
+    }
     new_macro = alloc_macro();
     new_macro->size = 0;
     check_identifier(tok, tok->text);
