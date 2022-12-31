@@ -641,7 +641,7 @@ static void compile_op(Operation *opptr)
 		"%s_ret:\n", opptr->operand.call_op.function->identifier, opptr->operand.call_op.function->identifier);
 	break;
     case OP_RETURN:
-	unreachable("compile: OP_RETURN\n");
+	tokerror(opptr->tok, "'return' operation outside function\n");
 	break;
     default:
 	break;
