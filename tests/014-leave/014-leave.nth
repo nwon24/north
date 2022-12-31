@@ -1,0 +1,7 @@
+0 begin dup 100 < while
+  dup 50 = if
+    leave
+  endif
+  dup .
+  1 +
+repeat
