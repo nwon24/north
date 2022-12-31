@@ -1,0 +1,20 @@
+.include "stdlib.nth"
+
+.func hello
+  .
+  "Hello, world!\n" STDOUT_FILENO write drop
+.endf
+
+.func multiples3
+  0 begin 2dup > while
+    dup 30 = if
+      return
+    endif
+    dup 3 * .
+    1 +
+  repeat
+.endf
+
+35 hello
+
+50 multiples3
