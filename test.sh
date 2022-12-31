@@ -17,10 +17,10 @@ run_cmd_test() {
 
 run_test() {
     printf "Running simulation test on %s\n" "$1"
-    cmd="$NORTH -s $1"
+    cmd="$NORTH -Istdlib -s $1"
     run_cmd_test "$cmd" "$2"
     printf "Running compilation test on %s\n" "$1"
-    cmd="$NORTH -rc $1"
+    cmd="$NORTH -Istdlib -rc $1"
     run_cmd_test "$cmd" "$2"
 }
 
