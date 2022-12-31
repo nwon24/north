@@ -95,6 +95,9 @@ struct {
     { "argc", OP_ARGC},
     { "argv", OP_ARGV},
 
+    { "", OP_CALL},
+    { "return", OP_RETURN},
+    
     { "", OP_UNKNOWN},
 };
 
@@ -212,7 +215,30 @@ static Operation *token_to_op(Token *tok)
 	 */
 	tokerror(tok, "Macro '%s' defined after it is used.\n"
 		 "Please move the definition to the proper place.\n", tok->text);
+    } else if ((entry = function_reference(tok)) != NULL) {
+	Operation *f_op, *f_head;
+	Token *f_tok;
+	Function *func;
+
+	new_op->op = OP_CALL;
+	new_op->operand.call_op.function = entry->ptr;
+	func = entry->ptr;
+	f_head = NULL;
+	f_op = NULL;
+	for (f_tok = func->tokens; f_tok != NULL; f_tok = f_tok->next) {
+	    if (f_head == NULL) {
+		f_head = token_to_op(f_tok);
+		f_op = f_head;
+	    } else {
+		f_op->next = token_to_op(f_tok);
+		f_op = f_op->next;
+	    }
+	}
+	f_op->next = NULL;
+	func->ops = f_head;
+	return new_op;
     }
+    
     tokerror(tok, "Unrecognised word '%s'\n", tok->text);
     return NULL;
 }

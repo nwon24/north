@@ -6,6 +6,7 @@
 #include "lex.h"
 #include "branches.h"
 #include "variables.h"
+#include "functions.h"
 
 typedef enum {
     OP_PUSH,
@@ -84,6 +85,10 @@ typedef enum {
 
     OP_ARGC,
     OP_ARGV,
+
+    OP_CALL,
+    OP_RETURN,
+   
     /* Used to denote unknown operation */
     OP_UNKNOWN,
     /* UNUSED: used to count the number of operations */
@@ -122,6 +127,10 @@ typedef struct operation {
 	} indef_op;
 	String str;
 	Variable *variable;
+	struct {
+	    Function *function;
+	    struct operation *ret_addr;
+	} call_op;
     } operand;
     int block_addr; /* Used for generating assembly labels */
     struct operation *next;

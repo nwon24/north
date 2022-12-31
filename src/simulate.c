@@ -20,6 +20,8 @@ typedef int64_t word;
 word stack[STACK_CAPACITY] = {0};
 int sp = 0;
 
+static void simulate_call(Operation *ops);
+static Operation *simulate_op(Operation *op);
 static void push(word c);
 static word pop(void);
 
@@ -37,6 +39,13 @@ static word pop(void)
 	fatal("simulate: stack underflow!");
     }
     return stack[--sp];
+}
+
+static void simulate_call(Operation *ops)
+{
+    Operation *op;
+
+    for (op = ops; op != NULL && op->op != OP_RETURN; op = simulate_op(op));
 }
 
 static Operation *simulate_op(Operation *op)
@@ -417,6 +426,13 @@ static Operation *simulate_op(Operation *op)
 	break;
     case OP_ARGV:
 	push((word)simulated_argv);
+	break;
+    case OP_CALL:
+	op->operand.call_op.ret_addr = op->next;
+	simulate_call(op->operand.call_op.function->ops);
+	break;
+    case OP_RETURN:
+	tokerror(op->tok, "'return' operation outside function\n");
 	break;
     case OP_UNKNOWN:
     case OP_COUNT:

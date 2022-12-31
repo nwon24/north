@@ -616,6 +616,9 @@ static void compile_op(Operation *opptr)
     case OP_ARGV:
 	fprintf(asm_file, "\tpushq argv\n");
 	break;
+    case OP_CALL:
+	not_implemented("compile: OP_CALL");
+	break;
     default:
 	break;
     }
