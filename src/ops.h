@@ -65,6 +65,7 @@ typedef enum {
     OP_BEGIN,
     OP_REPEAT,
     OP_UNTIL,
+    OP_LEAVE,
 
     OP_SYS0,
     OP_SYS1,
@@ -124,6 +125,7 @@ typedef struct operation {
 	    struct operation *while_op;
 	    struct operation *repeat_op;
 	    struct operation *until_op;
+	    struct operation **leave_jump;
 	} indef_op;
 	String str;
 	Variable *variable;

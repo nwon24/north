@@ -74,6 +74,7 @@ struct {
     { "begin", OP_BEGIN},
     { "repeat", OP_REPEAT},
     { "until", OP_UNTIL},
+    { "leave", OP_LEAVE},
 
     { "syscall0", OP_SYS0},
     { "syscall1", OP_SYS1},
