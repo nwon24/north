@@ -11,6 +11,13 @@ typedef enum {
     DIR_ENDMACRO,
     DIR_INCLUDE,
 
+    /*
+     * The only two directives not prefixed by '.'
+     * They're here because they're not really operations either.
+     */
+    DIR_FUNC,
+    DIR_ENDFUNC,
+    
     DIR_UNKNOWN,
     /* UNUSED: used to count the number of directives */
     DIR_COUNT,

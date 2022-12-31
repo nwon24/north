@@ -8,6 +8,7 @@
 #include "variables.h"
 #include "macros.h"
 #include "hash.h"
+#include "functions.h"
 
 extern char *include_paths[];
 extern int nr_include_paths;
@@ -20,6 +21,8 @@ struct {
     { ".macro", DIR_MACRO},
     { ".endm", DIR_ENDMACRO},
     { ".include", DIR_INCLUDE},
+    { ".func", DIR_FUNC},
+    { ".endf", DIR_ENDFUNC},
     { "", DIR_UNKNOWN}
 };
 
@@ -142,6 +145,18 @@ Token *preprocess(Token *tokens)
 		    tok = add_variable(tok);
 		    prev_tok->next = tok;
 		}
+		break;
+	    case DIR_FUNC:
+		if (prev_tok == NULL) {
+		    newhead = add_function(tok);
+		    tok = newhead;
+		} else {
+		    tok = add_variable(tok);
+		    prev_tok->next = tok;
+		}
+		break;
+	    case DIR_ENDFUNC:
+		tokerror(tok, ".endf directive used without preceding .func directive\n");
 		break;
 	    default:
 		unreachable("preprocess");
