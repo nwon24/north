@@ -56,26 +56,7 @@ static void add_include_path(char *path)
 	tell_user(stderr, "Maximum number of include paths exceeded. What are you doing?\n");
 	exit(EXIT_FAILURE);
     }
-    include_paths[nr_include_paths++] = path;
-}
-
-static void transform_include_paths(void)
-{
-    char wd[PATH_MAX];
-    int i;
-
-    getcwd(wd, PATH_MAX);
-    chdir(dirname(strdup(input_file_name)));
-    for (i = 0; i < nr_include_paths; i++) {
-	char *expanded_path;
-	expanded_path = realpath(include_paths[i], NULL);
-	if (expanded_path == NULL) {
-	    tell_user(stderr, "Include path '%s': %s\n", include_paths[i], expanded_path);
-	    exit(EXIT_FAILURE);
-	}
-	include_paths[i] = expanded_path;
-    }
-    chdir(wd);
+    include_paths[nr_include_paths++] = realpath(path, NULL);
 }
 
 void tell_user(FILE *stream, const char *msg, ...)
@@ -180,7 +161,6 @@ bool simulating(void)
 int main(int argc, char *argv[])
 {
     parse_cmdline(argc, argv);
-    transform_include_paths();
     init();
     init_glob_hash();
     tokens = lex(input_file_name);
