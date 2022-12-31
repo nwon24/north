@@ -113,6 +113,17 @@ void cross_reference_branches(Operation *ops)
 	    opptr->operand.indef_op.begin_op = begin_ops[--begin_op_ptr];
 	    opptr->block_addr = block_addr++;
 	    break;
+	case OP_LEAVE:
+	    if (begin_op_ptr == 0) {
+		tokerror(opptr->tok, "'leave' word used out of a loop\n");
+	    }
+	    if (begin_ops[begin_op_ptr - 1]->operand.indef_op.while_op != NULL) {
+		assert(while_op_ptr > 0);
+		opptr->operand.indef_op.leave_jump = &(while_ops[while_op_ptr - 1]->operand.indef_op.repeat_op);
+	    } else {
+		opptr->operand.indef_op.leave_jump = &(begin_ops[begin_op_ptr - 1]->operand.indef_op.until_op);
+	    }
+	    break;
 	default:
 	    break;
 	}

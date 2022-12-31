@@ -527,6 +527,12 @@ static void compile_op(Operation *opptr)
 		"\tjnz addr_%d\n",
 		opptr->operand.indef_op.begin_op->block_addr);
 	break;
+    case OP_LEAVE:
+	assert(opptr->operand.indef_op.leave_jump != NULL);
+	assert(*opptr->operand.indef_op.leave_jump != NULL);
+	fprintf(asm_file, "\tjmp addr_%d\n",
+		(*opptr->operand.indef_op.leave_jump)->block_addr);
+	break;
     case OP_SYS0:
 	fprintf(asm_file, "\tpopq %%rax\n"
 		"\tsyscall\n"

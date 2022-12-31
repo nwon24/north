@@ -328,6 +328,11 @@ static Operation *simulate_op(Operation *op)
 	} else {
 	    return op->operand.indef_op.begin_op;
 	}
+    case OP_LEAVE:
+	assert(op->operand.indef_op.leave_jump != NULL);
+	assert(*op->operand.indef_op.leave_jump != NULL);
+	return (*op->operand.indef_op.leave_jump)->next;
+	break;
     case OP_SYS0:
 	a = pop();
 	push(syscall(a));
