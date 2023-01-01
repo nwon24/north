@@ -23,6 +23,8 @@
 
 #define BSIZE 24
 
+extern char *readable_op_names[];
+
 char *assembler = "as";
 char *linker = "ld";
 
@@ -179,8 +181,8 @@ static void compile_op(Operation *opptr)
     Operation *tmp_op;
     int endif_addr;
 
-    fprintf(asm_file, "/* OP: %d, LOC: %s:%d:%d: */\n",
-	    opptr->op,
+    fprintf(asm_file, "/* OP: %s, LOC: %s:%d:%d: */\n",
+	    readable_op_names[opptr->op],
 	    opptr->tok->pos.file,
 	    opptr->tok->pos.row,
 	    opptr->tok->pos.col);
