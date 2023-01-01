@@ -3,7 +3,8 @@
 .macro read SYS_read syscall3 .endm
 .macro write SYS_write syscall3 .endm
 .macro close SYS_close syscall1 .endm
-.macro stat SYS_stat syscall2 .endm.macro munmap SYS_munmap syscall2 .endm
+.macro stat SYS_stat syscall2 .endm
+.macro munmap SYS_munmap syscall2 .endm
 .macro brk SYS_brk syscall1 .endm
 .macro access SYS_access syscall2 .endm
 .macro pipe SYS_pipe syscall1 .endm
