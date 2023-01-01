@@ -1,0 +1,34 @@
+\ Common syscall macros
+
+.macro read SYS_read syscall3 .endm
+.macro write SYS_write syscall3 .endm
+.macro close SYS_close syscall1 .endm
+.macro stat SYS_stat syscall2 .endm.macro munmap SYS_munmap syscall2 .endm
+.macro brk SYS_brk syscall1 .endm
+.macro access SYS_access syscall2 .endm
+.macro pipe SYS_pipe syscall1 .endm
+.macro pause SYS_pause syscall0 .endm
+.macro getpid SYS_getpid syscall0 .endm
+.macro fork SYS_fork syscall0 .endm
+.macro vfork SYS_vfork syscall0 .endm
+.macro execve SYS_execve syscall3 .endm
+.macro exit SYS_exit syscall1 .endm
+.macro kill SYS_kill syscall2 .endm
+.macro uname SYS_uname syscall1 .endm
+.macro getcwd SYS_getcwd syscall2 .endm
+.macro chdir SYS_chdir syscall1 .endm
+.macro fchdir SYS_fchdir syscall1 .endm
+.macro rename SYS_rename syscall2 .endm
+.macro mkdir SYS_mkdir syscall2 .endm
+.macro rmdir SYS_rmdir syscall1 .endm
+.macro creat SYS_creat syscall2 .endm
+.macro link SYS_link syscall2 .endm
+.macro unlink SYS_unlink syscall1 .endm
+.macro symlink SYS_symlink syscall2 .endm
+.macro readlink SYS_readlink syscall3 .endm
+.macro chmod SYS_chmod syscall2 .endm
+.macro fchmod SYS_fchmod syscall2 .endm
+.macro chown SYS_chown syscall3 .endm
+.macro fchown SYS_fchown syscall3 .endm
+.macro lchown SYS_lchown syscall3 .endm
+.macro umask SYS_umask syscall1 .endm
