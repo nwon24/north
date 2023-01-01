@@ -1,0 +1,515 @@
+.macro	SYS_syscall	0 .endm
+.macro	SYS_exit	1 .endm
+.macro	SYS_fork	2 .endm
+.macro	SYS_read	3 .endm
+.macro	SYS_write	4 .endm
+.macro	SYS_open	5 .endm
+.macro	SYS_close	6 .endm
+.macro	SYS_wait4	7 .endm
+				\ 8 is old creat 
+.macro	SYS_link	9 .endm
+.macro	SYS_unlink	10 .endm
+				\ 11 is obsolete execv 
+.macro	SYS_chdir	12 .endm
+.macro	SYS_fchdir	13 .endm
+.macro	SYS_freebsd11_mknod	14 .endm
+.macro	SYS_chmod	15 .endm
+.macro	SYS_chown	16 .endm
+.macro	SYS_break	17 .endm
+				\ 18 is freebsd4 getfsstat 
+				\ 19 is old lseek 
+.macro	SYS_getpid	20 .endm
+.macro	SYS_mount	21 .endm
+.macro	SYS_unmount	22 .endm
+.macro	SYS_setuid	23 .endm
+.macro	SYS_getuid	24 .endm
+.macro	SYS_geteuid	25 .endm
+.macro	SYS_ptrace	26 .endm
+.macro	SYS_recvmsg	27 .endm
+.macro	SYS_sendmsg	28 .endm
+.macro	SYS_recvfrom	29 .endm
+.macro	SYS_accept	30 .endm
+.macro	SYS_getpeername	31 .endm
+.macro	SYS_getsockname	32 .endm
+.macro	SYS_access	33 .endm
+.macro	SYS_chflags	34 .endm
+.macro	SYS_fchflags	35 .endm
+.macro	SYS_sync	36 .endm
+.macro	SYS_kill	37 .endm
+				\ 38 is old stat 
+.macro	SYS_getppid	39 .endm
+				\ 40 is old lstat 
+.macro	SYS_dup	41 .endm
+.macro	SYS_freebsd10_pipe	42 .endm
+.macro	SYS_getegid	43 .endm
+.macro	SYS_profil	44 .endm
+.macro	SYS_ktrace	45 .endm
+				\ 46 is old sigaction 
+.macro	SYS_getgid	47 .endm
+				\ 48 is old sigprocmask 
+.macro	SYS_getlogin	49 .endm
+.macro	SYS_setlogin	50 .endm
+.macro	SYS_acct	51 .endm
+				\ 52 is old sigpending 
+.macro	SYS_sigaltstack	53 .endm
+.macro	SYS_ioctl	54 .endm
+.macro	SYS_reboot	55 .endm
+.macro	SYS_revoke	56 .endm
+.macro	SYS_symlink	57 .endm
+.macro	SYS_readlink	58 .endm
+.macro	SYS_execve	59 .endm
+.macro	SYS_umask	60 .endm
+.macro	SYS_chroot	61 .endm
+				\ 62 is old fstat 
+				\ 63 is old getkerninfo 
+				\ 64 is old getpagesize 
+.macro	SYS_msync	65 .endm
+.macro	SYS_vfork	66 .endm
+				\ 67 is obsolete vread 
+				\ 68 is obsolete vwrite 
+.macro	SYS_sbrk	69 .endm
+.macro	SYS_sstk	70 .endm
+				\ 71 is old mmap 
+.macro	SYS_freebsd11_vadvise	72 .endm
+.macro	SYS_munmap	73 .endm
+.macro	SYS_mprotect	74 .endm
+.macro	SYS_madvise	75 .endm
+				\ 76 is obsolete vhangup 
+				\ 77 is obsolete vlimit 
+.macro	SYS_mincore	78 .endm
+.macro	SYS_getgroups	79 .endm
+.macro	SYS_setgroups	80 .endm
+.macro	SYS_getpgrp	81 .endm
+.macro	SYS_setpgid	82 .endm
+.macro	SYS_setitimer	83 .endm
+				\ 84 is old wait 
+.macro	SYS_swapon	85 .endm
+.macro	SYS_getitimer	86 .endm
+				\ 87 is old gethostname 
+				\ 88 is old sethostname 
+.macro	SYS_getdtablesize	89 .endm
+.macro	SYS_dup2	90 .endm
+.macro	SYS_fcntl	92 .endm
+.macro	SYS_select	93 .endm
+.macro	SYS_fsync	95 .endm
+.macro	SYS_setpriority	96 .endm
+.macro	SYS_socket	97 .endm
+.macro	SYS_connect	98 .endm
+				\ 99 is old accept 
+.macro	SYS_getpriority	100 .endm
+				\ 101 is old send 
+				\ 102 is old recv 
+				\ 103 is old sigreturn 
+.macro	SYS_bind	104 .endm
+.macro	SYS_setsockopt	105 .endm
+.macro	SYS_listen	106 .endm
+				\ 107 is obsolete vtimes 
+				\ 108 is old sigvec 
+				\ 109 is old sigblock 
+				\ 110 is old sigsetmask 
+				\ 111 is old sigsuspend 
+				\ 112 is old sigstack 
+				\ 113 is old recvmsg 
+				\ 114 is old sendmsg 
+				\ 115 is obsolete vtrace 
+.macro	SYS_gettimeofday	116 .endm
+.macro	SYS_getrusage	117 .endm
+.macro	SYS_getsockopt	118 .endm
+.macro	SYS_readv	120 .endm
+.macro	SYS_writev	121 .endm
+.macro	SYS_settimeofday	122 .endm
+.macro	SYS_fchown	123 .endm
+.macro	SYS_fchmod	124 .endm
+				\ 125 is old recvfrom 
+.macro	SYS_setreuid	126 .endm
+.macro	SYS_setregid	127 .endm
+.macro	SYS_rename	128 .endm
+				\ 129 is old truncate 
+				\ 130 is old ftruncate 
+.macro	SYS_flock	131 .endm
+.macro	SYS_mkfifo	132 .endm
+.macro	SYS_sendto	133 .endm
+.macro	SYS_shutdown	134 .endm
+.macro	SYS_socketpair	135 .endm
+.macro	SYS_mkdir	136 .endm
+.macro	SYS_rmdir	137 .endm
+.macro	SYS_utimes	138 .endm
+				\ 139 is obsolete 4.2 sigreturn 
+.macro	SYS_adjtime	140 .endm
+				\ 141 is old getpeername 
+				\ 142 is old gethostid 
+				\ 143 is old sethostid 
+				\ 144 is old getrlimit 
+				\ 145 is old setrlimit 
+				\ 146 is old killpg 
+.macro	SYS_setsid	147 .endm
+.macro	SYS_quotactl	148 .endm
+				\ 149 is old quota 
+				\ 150 is old getsockname 
+.macro	SYS_nlm_syscall	154 .endm
+.macro	SYS_nfssvc	155 .endm
+				\ 156 is old getdirentries 
+				\ 157 is freebsd4 statfs 
+				\ 158 is freebsd4 fstatfs 
+.macro	SYS_lgetfh	160 .endm
+.macro	SYS_getfh	161 .endm
+				\ 162 is freebsd4 getdomainname 
+				\ 163 is freebsd4 setdomainname 
+				\ 164 is freebsd4 uname 
+.macro	SYS_sysarch	165 .endm
+.macro	SYS_rtprio	166 .endm
+.macro	SYS_semsys	169 .endm
+.macro	SYS_msgsys	170 .endm
+.macro	SYS_shmsys	171 .endm
+				\ 173 is freebsd6 pread 
+				\ 174 is freebsd6 pwrite 
+.macro	SYS_setfib	175 .endm
+.macro	SYS_ntp_adjtime	176 .endm
+.macro	SYS_setgid	181 .endm
+.macro	SYS_setegid	182 .endm
+.macro	SYS_seteuid	183 .endm
+				\ 184 is obsolete lfs_bmapv 
+				\ 185 is obsolete lfs_markv 
+				\ 186 is obsolete lfs_segclean 
+				\ 187 is obsolete lfs_segwait 
+.macro	SYS_freebsd11_stat	188 .endm
+.macro	SYS_freebsd11_fstat	189 .endm
+.macro	SYS_freebsd11_lstat	190 .endm
+.macro	SYS_pathconf	191 .endm
+.macro	SYS_fpathconf	192 .endm
+.macro	SYS_getrlimit	194 .endm
+.macro	SYS_setrlimit	195 .endm
+.macro	SYS_freebsd11_getdirentries	196 .endm
+				\ 197 is freebsd6 mmap 
+.macro	SYS___syscall	198 .endm
+				\ 199 is freebsd6 lseek 
+				\ 200 is freebsd6 truncate 
+				\ 201 is freebsd6 ftruncate 
+.macro	SYS___sysctl	202 .endm
+.macro	SYS_mlock	203 .endm
+.macro	SYS_munlock	204 .endm
+.macro	SYS_undelete	205 .endm
+.macro	SYS_futimes	206 .endm
+.macro	SYS_getpgid	207 .endm
+.macro	SYS_poll	209 .endm
+.macro	SYS_freebsd7___semctl	220 .endm
+.macro	SYS_semget	221 .endm
+.macro	SYS_semop	222 .endm
+				\ 223 is obsolete semconfig 
+.macro	SYS_freebsd7_msgctl	224 .endm
+.macro	SYS_msgget	225 .endm
+.macro	SYS_msgsnd	226 .endm
+.macro	SYS_msgrcv	227 .endm
+.macro	SYS_shmat	228 .endm
+.macro	SYS_freebsd7_shmctl	229 .endm
+.macro	SYS_shmdt	230 .endm
+.macro	SYS_shmget	231 .endm
+.macro	SYS_clock_gettime	232 .endm
+.macro	SYS_clock_settime	233 .endm
+.macro	SYS_clock_getres	234 .endm
+.macro	SYS_ktimer_create	235 .endm
+.macro	SYS_ktimer_delete	236 .endm
+.macro	SYS_ktimer_settime	237 .endm
+.macro	SYS_ktimer_gettime	238 .endm
+.macro	SYS_ktimer_getoverrun	239 .endm
+.macro	SYS_nanosleep	240 .endm
+.macro	SYS_ffclock_getcounter	241 .endm
+.macro	SYS_ffclock_setestimate	242 .endm
+.macro	SYS_ffclock_getestimate	243 .endm
+.macro	SYS_clock_nanosleep	244 .endm
+.macro	SYS_clock_getcpuclockid2	247 .endm
+.macro	SYS_ntp_gettime	248 .endm
+.macro	SYS_minherit	250 .endm
+.macro	SYS_rfork	251 .endm
+				\ 252 is obsolete openbsd_poll 
+.macro	SYS_issetugid	253 .endm
+.macro	SYS_lchown	254 .endm
+.macro	SYS_aio_read	255 .endm
+.macro	SYS_aio_write	256 .endm
+.macro	SYS_lio_listio	257 .endm
+.macro	SYS_freebsd11_getdents	272 .endm
+.macro	SYS_lchmod	274 .endm
+				\ 275 is obsolete netbsd_lchown 
+.macro	SYS_lutimes	276 .endm
+				\ 277 is obsolete netbsd_msync 
+.macro	SYS_freebsd11_nstat	278 .endm
+.macro	SYS_freebsd11_nfstat	279 .endm
+.macro	SYS_freebsd11_nlstat	280 .endm
+.macro	SYS_preadv	289 .endm
+.macro	SYS_pwritev	290 .endm
+				\ 297 is freebsd4 fhstatfs 
+.macro	SYS_fhopen	298 .endm
+.macro	SYS_freebsd11_fhstat	299 .endm
+.macro	SYS_modnext	300 .endm
+.macro	SYS_modstat	301 .endm
+.macro	SYS_modfnext	302 .endm
+.macro	SYS_modfind	303 .endm
+.macro	SYS_kldload	304 .endm
+.macro	SYS_kldunload	305 .endm
+.macro	SYS_kldfind	306 .endm
+.macro	SYS_kldnext	307 .endm
+.macro	SYS_kldstat	308 .endm
+.macro	SYS_kldfirstmod	309 .endm
+.macro	SYS_getsid	310 .endm
+.macro	SYS_setresuid	311 .endm
+.macro	SYS_setresgid	312 .endm
+				\ 313 is obsolete signanosleep 
+.macro	SYS_aio_return	314 .endm
+.macro	SYS_aio_suspend	315 .endm
+.macro	SYS_aio_cancel	316 .endm
+.macro	SYS_aio_error	317 .endm
+				\ 318 is freebsd6 aio_read 
+				\ 319 is freebsd6 aio_write 
+				\ 320 is freebsd6 lio_listio 
+.macro	SYS_yield	321 .endm
+				\ 322 is obsolete thr_sleep 
+				\ 323 is obsolete thr_wakeup 
+.macro	SYS_mlockall	324 .endm
+.macro	SYS_munlockall	325 .endm
+.macro	SYS___getcwd	326 .endm
+.macro	SYS_sched_setparam	327 .endm
+.macro	SYS_sched_getparam	328 .endm
+.macro	SYS_sched_setscheduler	329 .endm
+.macro	SYS_sched_getscheduler	330 .endm
+.macro	SYS_sched_yield	331 .endm
+.macro	SYS_sched_get_priority_max	332 .endm
+.macro	SYS_sched_get_priority_min	333 .endm
+.macro	SYS_sched_rr_get_interval	334 .endm
+.macro	SYS_utrace	335 .endm
+				\ 336 is freebsd4 sendfile 
+.macro	SYS_kldsym	337 .endm
+.macro	SYS_jail	338 .endm
+.macro	SYS_nnpfs_syscall	339 .endm
+.macro	SYS_sigprocmask	340 .endm
+.macro	SYS_sigsuspend	341 .endm
+				\ 342 is freebsd4 sigaction 
+.macro	SYS_sigpending	343 .endm
+				\ 344 is freebsd4 sigreturn 
+.macro	SYS_sigtimedwait	345 .endm
+.macro	SYS_sigwaitinfo	346 .endm
+.macro	SYS___acl_get_file	347 .endm
+.macro	SYS___acl_set_file	348 .endm
+.macro	SYS___acl_get_fd	349 .endm
+.macro	SYS___acl_set_fd	350 .endm
+.macro	SYS___acl_delete_file	351 .endm
+.macro	SYS___acl_delete_fd	352 .endm
+.macro	SYS___acl_aclcheck_file	353 .endm
+.macro	SYS___acl_aclcheck_fd	354 .endm
+.macro	SYS_extattrctl	355 .endm
+.macro	SYS_extattr_set_file	356 .endm
+.macro	SYS_extattr_get_file	357 .endm
+.macro	SYS_extattr_delete_file	358 .endm
+.macro	SYS_aio_waitcomplete	359 .endm
+.macro	SYS_getresuid	360 .endm
+.macro	SYS_getresgid	361 .endm
+.macro	SYS_kqueue	362 .endm
+.macro	SYS_freebsd11_kevent	363 .endm
+				\ 364 is obsolete __cap_get_proc 
+				\ 365 is obsolete __cap_set_proc 
+				\ 366 is obsolete __cap_get_fd 
+				\ 367 is obsolete __cap_get_file 
+				\ 368 is obsolete __cap_set_fd 
+				\ 369 is obsolete __cap_set_file 
+.macro	SYS_extattr_set_fd	371 .endm
+.macro	SYS_extattr_get_fd	372 .endm
+.macro	SYS_extattr_delete_fd	373 .endm
+.macro	SYS___setugid	374 .endm
+				\ 375 is obsolete nfsclnt 
+.macro	SYS_eaccess	376 .endm
+.macro	SYS_afs3_syscall	377 .endm
+.macro	SYS_nmount	378 .endm
+				\ 379 is obsolete kse_exit 
+				\ 380 is obsolete kse_wakeup 
+				\ 381 is obsolete kse_create 
+				\ 382 is obsolete kse_thr_interrupt 
+				\ 383 is obsolete kse_release 
+.macro	SYS___mac_get_proc	384 .endm
+.macro	SYS___mac_set_proc	385 .endm
+.macro	SYS___mac_get_fd	386 .endm
+.macro	SYS___mac_get_file	387 .endm
+.macro	SYS___mac_set_fd	388 .endm
+.macro	SYS___mac_set_file	389 .endm
+.macro	SYS_kenv	390 .endm
+.macro	SYS_lchflags	391 .endm
+.macro	SYS_uuidgen	392 .endm
+.macro	SYS_sendfile	393 .endm
+.macro	SYS_mac_syscall	394 .endm
+.macro	SYS_freebsd11_getfsstat	395 .endm
+.macro	SYS_freebsd11_statfs	396 .endm
+.macro	SYS_freebsd11_fstatfs	397 .endm
+.macro	SYS_freebsd11_fhstatfs	398 .endm
+.macro	SYS_ksem_close	400 .endm
+.macro	SYS_ksem_post	401 .endm
+.macro	SYS_ksem_wait	402 .endm
+.macro	SYS_ksem_trywait	403 .endm
+.macro	SYS_ksem_init	404 .endm
+.macro	SYS_ksem_open	405 .endm
+.macro	SYS_ksem_unlink	406 .endm
+.macro	SYS_ksem_getvalue	407 .endm
+.macro	SYS_ksem_destroy	408 .endm
+.macro	SYS___mac_get_pid	409 .endm
+.macro	SYS___mac_get_link	410 .endm
+.macro	SYS___mac_set_link	411 .endm
+.macro	SYS_extattr_set_link	412 .endm
+.macro	SYS_extattr_get_link	413 .endm
+.macro	SYS_extattr_delete_link	414 .endm
+.macro	SYS___mac_execve	415 .endm
+.macro	SYS_sigaction	416 .endm
+.macro	SYS_sigreturn	417 .endm
+.macro	SYS_getcontext	421 .endm
+.macro	SYS_setcontext	422 .endm
+.macro	SYS_swapcontext	423 .endm
+.macro	SYS_freebsd13_swapoff	424 .endm
+.macro	SYS___acl_get_link	425 .endm
+.macro	SYS___acl_set_link	426 .endm
+.macro	SYS___acl_delete_link	427 .endm
+.macro	SYS___acl_aclcheck_link	428 .endm
+.macro	SYS_sigwait	429 .endm
+.macro	SYS_thr_create	430 .endm
+.macro	SYS_thr_exit	431 .endm
+.macro	SYS_thr_self	432 .endm
+.macro	SYS_thr_kill	433 .endm
+.macro	SYS_freebsd10__umtx_lock	434 .endm
+.macro	SYS_freebsd10__umtx_unlock	435 .endm
+.macro	SYS_jail_attach	436 .endm
+.macro	SYS_extattr_list_fd	437 .endm
+.macro	SYS_extattr_list_file	438 .endm
+.macro	SYS_extattr_list_link	439 .endm
+				\ 440 is obsolete kse_switchin 
+.macro	SYS_ksem_timedwait	441 .endm
+.macro	SYS_thr_suspend	442 .endm
+.macro	SYS_thr_wake	443 .endm
+.macro	SYS_kldunloadf	444 .endm
+.macro	SYS_audit	445 .endm
+.macro	SYS_auditon	446 .endm
+.macro	SYS_getauid	447 .endm
+.macro	SYS_setauid	448 .endm
+.macro	SYS_getaudit	449 .endm
+.macro	SYS_setaudit	450 .endm
+.macro	SYS_getaudit_addr	451 .endm
+.macro	SYS_setaudit_addr	452 .endm
+.macro	SYS_auditctl	453 .endm
+.macro	SYS__umtx_op	454 .endm
+.macro	SYS_thr_new	455 .endm
+.macro	SYS_sigqueue	456 .endm
+.macro	SYS_kmq_open	457 .endm
+.macro	SYS_kmq_setattr	458 .endm
+.macro	SYS_kmq_timedreceive	459 .endm
+.macro	SYS_kmq_timedsend	460 .endm
+.macro	SYS_kmq_notify	461 .endm
+.macro	SYS_kmq_unlink	462 .endm
+.macro	SYS_abort2	463 .endm
+.macro	SYS_thr_set_name	464 .endm
+.macro	SYS_aio_fsync	465 .endm
+.macro	SYS_rtprio_thread	466 .endm
+.macro	SYS_sctp_peeloff	471 .endm
+.macro	SYS_sctp_generic_sendmsg	472 .endm
+.macro	SYS_sctp_generic_sendmsg_iov	473 .endm
+.macro	SYS_sctp_generic_recvmsg	474 .endm
+.macro	SYS_pread	475 .endm
+.macro	SYS_pwrite	476 .endm
+.macro	SYS_mmap	477 .endm
+.macro	SYS_lseek	478 .endm
+.macro	SYS_truncate	479 .endm
+.macro	SYS_ftruncate	480 .endm
+.macro	SYS_thr_kill2	481 .endm
+.macro	SYS_freebsd12_shm_open	482 .endm
+.macro	SYS_shm_unlink	483 .endm
+.macro	SYS_cpuset	484 .endm
+.macro	SYS_cpuset_setid	485 .endm
+.macro	SYS_cpuset_getid	486 .endm
+.macro	SYS_cpuset_getaffinity	487 .endm
+.macro	SYS_cpuset_setaffinity	488 .endm
+.macro	SYS_faccessat	489 .endm
+.macro	SYS_fchmodat	490 .endm
+.macro	SYS_fchownat	491 .endm
+.macro	SYS_fexecve	492 .endm
+.macro	SYS_freebsd11_fstatat	493 .endm
+.macro	SYS_futimesat	494 .endm
+.macro	SYS_linkat	495 .endm
+.macro	SYS_mkdirat	496 .endm
+.macro	SYS_mkfifoat	497 .endm
+.macro	SYS_freebsd11_mknodat	498 .endm
+.macro	SYS_openat	499 .endm
+.macro	SYS_readlinkat	500 .endm
+.macro	SYS_renameat	501 .endm
+.macro	SYS_symlinkat	502 .endm
+.macro	SYS_unlinkat	503 .endm
+.macro	SYS_posix_openpt	504 .endm
+.macro	SYS_gssd_syscall	505 .endm
+.macro	SYS_jail_get	506 .endm
+.macro	SYS_jail_set	507 .endm
+.macro	SYS_jail_remove	508 .endm
+.macro	SYS_freebsd12_closefrom	509 .endm
+.macro	SYS___semctl	510 .endm
+.macro	SYS_msgctl	511 .endm
+.macro	SYS_shmctl	512 .endm
+.macro	SYS_lpathconf	513 .endm
+				\ 514 is obsolete cap_new 
+.macro	SYS___cap_rights_get	515 .endm
+.macro	SYS_cap_enter	516 .endm
+.macro	SYS_cap_getmode	517 .endm
+.macro	SYS_pdfork	518 .endm
+.macro	SYS_pdkill	519 .endm
+.macro	SYS_pdgetpid	520 .endm
+.macro	SYS_pselect	522 .endm
+.macro	SYS_getloginclass	523 .endm
+.macro	SYS_setloginclass	524 .endm
+.macro	SYS_rctl_get_racct	525 .endm
+.macro	SYS_rctl_get_rules	526 .endm
+.macro	SYS_rctl_get_limits	527 .endm
+.macro	SYS_rctl_add_rule	528 .endm
+.macro	SYS_rctl_remove_rule	529 .endm
+.macro	SYS_posix_fallocate	530 .endm
+.macro	SYS_posix_fadvise	531 .endm
+.macro	SYS_wait6	532 .endm
+.macro	SYS_cap_rights_limit	533 .endm
+.macro	SYS_cap_ioctls_limit	534 .endm
+.macro	SYS_cap_ioctls_get	535 .endm
+.macro	SYS_cap_fcntls_limit	536 .endm
+.macro	SYS_cap_fcntls_get	537 .endm
+.macro	SYS_bindat	538 .endm
+.macro	SYS_connectat	539 .endm
+.macro	SYS_chflagsat	540 .endm
+.macro	SYS_accept4	541 .endm
+.macro	SYS_pipe2	542 .endm
+.macro	SYS_aio_mlock	543 .endm
+.macro	SYS_procctl	544 .endm
+.macro	SYS_ppoll	545 .endm
+.macro	SYS_futimens	546 .endm
+.macro	SYS_utimensat	547 .endm
+				\ 548 is obsolete numa_getaffinity 
+				\ 549 is obsolete numa_setaffinity 
+.macro	SYS_fdatasync	550 .endm
+.macro	SYS_fstat	551 .endm
+.macro	SYS_fstatat	552 .endm
+.macro	SYS_fhstat	553 .endm
+.macro	SYS_getdirentries	554 .endm
+.macro	SYS_statfs	555 .endm
+.macro	SYS_fstatfs	556 .endm
+.macro	SYS_getfsstat	557 .endm
+.macro	SYS_fhstatfs	558 .endm
+.macro	SYS_mknodat	559 .endm
+.macro	SYS_kevent	560 .endm
+.macro	SYS_cpuset_getdomain	561 .endm
+.macro	SYS_cpuset_setdomain	562 .endm
+.macro	SYS_getrandom	563 .endm
+.macro	SYS_getfhat	564 .endm
+.macro	SYS_fhlink	565 .endm
+.macro	SYS_fhlinkat	566 .endm
+.macro	SYS_fhreadlink	567 .endm
+.macro	SYS_funlinkat	568 .endm
+.macro	SYS_copy_file_range	569 .endm
+.macro	SYS___sysctlbyname	570 .endm
+.macro	SYS_shm_open2	571 .endm
+.macro	SYS_shm_rename	572 .endm
+.macro	SYS_sigfastblock	573 .endm
+.macro	SYS___realpathat	574 .endm
+.macro	SYS_close_range	575 .endm
+.macro	SYS_rpctls_syscall	576 .endm
+.macro	SYS___specialfd	577 .endm
+.macro	SYS_aio_writev	578 .endm
+.macro	SYS_aio_readv	579 .endm
+.macro	SYS_sched_getcpu	581 .endm
+.macro	SYS_swapoff	582 .endm
+.macro	SYS_MAXSYSCALL	583 .endm
