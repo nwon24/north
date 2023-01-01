@@ -1,5 +1,8 @@
+.include "sysdeps/syscall.nth"
+.include "unix.nth"
+
 .macro write
-  1 1 syscall3
+  STDOUT_FILENO SYS_write syscall3
 .endm
 
 .macro foo

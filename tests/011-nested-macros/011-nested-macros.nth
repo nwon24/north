@@ -1,6 +1,9 @@
+.include "sysdeps/syscall.nth"
+.include "unix.nth"
+
 .macro foo 5 . .endm
 .macro bar 6 . .endm
 .macro baz bar 100 . .endm
-.macro write 1 1 foo bar baz syscall3 .endm
+.macro write STDOUT_FILENO SYS_write foo bar baz syscall3 .endm
 
 "Hello, world\n" write

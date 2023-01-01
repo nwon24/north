@@ -1,1 +1,3 @@
-"hello\tworld\n" 1 1 syscall3
+.include "stdlib.nth"
+
+"hello\tworld\n" STDOUT_FILENO write

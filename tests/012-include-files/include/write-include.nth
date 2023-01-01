@@ -1,1 +1,3 @@
-.macro write 1 1 syscall3 .endm
+.include "sysdeps/syscall.nth"
+
+.macro write 1 SYS_write syscall3 .endm
