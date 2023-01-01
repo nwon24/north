@@ -35,6 +35,12 @@ the assembler and then the linker to generate a statically linked
 executable simply named `test`. You can run this executable like
 you would run any other executable.
 
+You can also add the `-r` flag to run the executable
+automatically (if the assembler and linker exited successfully).
+This avoids having to run the executable yourself, but at the
+moment no command line arguments can be given to the program
+when it is run with this flag.
+
 Note that the assembler is invoked as `as`, and is expected to
 know AT&T assembler syntax.
 
