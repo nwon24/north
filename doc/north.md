@@ -50,6 +50,12 @@ Use the option `-h` to generate a basic help message and exit.
 Use the option `-v` to enable verbose output; this means the
 assembler and linker commands will be echoed to the terminal.
 
+To run a different assembler and linker, use the `-a` and `-l`
+flags. For example, to use `llvm-mc` and `ld.lld` on `test.nth`, run
+`north -c -a "llvm-mc -filetype=obj" -l "ld.lld" test.nth`.
+Remember that the assembler must be able to take assembly
+code in AT&T syntax.
+
 # The Language
 
 The basics of the language (such as stack operations and arithmetic
