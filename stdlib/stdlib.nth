@@ -1,4 +1,16 @@
+.include "sysdeps/arch.nth"
 .include "unix.nth"
 .include "sysdeps/syscall.nth"
 .include "sysdeps/syscall_common.nth"
+.include "base.nth"
 .include "string.nth"
+.include "io.nth"
+
+.macro _exit
+  _stdlib_fini
+  exit
+.endm
+
+.macro _stdlib_fini
+  _io_exit
+.endm
