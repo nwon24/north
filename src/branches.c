@@ -132,4 +132,7 @@ void cross_reference_branches(Operation *ops)
     if (cond_op_ptr != 0) {
 	tokerror(conditional_ops[0]->tok, "Conditional beginning here not balanced\n");
     }
+    if (begin_op_ptr != 0) {
+	tokerror(begin_ops[0]->tok, "Indefinite loop beginning here not closed by 'repeat' or 'until'\n");
+    }
 }
