@@ -22,9 +22,12 @@
 #include "hash.h"
 #include "variables.h"
 
-#define OPTSTRING "+:hscvI:r"
+#define OPTSTRING "+:hscvI:ra:l:"
 
 #define MAX_INCLUDE_PATHS 100
+
+extern char *assembler;
+extern char *linker;
 
 enum {
     SIMULATE,
@@ -89,6 +92,8 @@ void usage(int code)
     tell_user(stderr, "\t\t-c\t\tCompile the input file\n");
     tell_user(stderr, "\t\t-v\t\tBe verbose\n");
     tell_user(stderr, "\t\t-I <DIR>\tAdd a directory to the search path for including files\n");
+    tell_user(stderr, "\t\t-a <CMD>\t\tUse <CMD> as the assembler\n");
+    tell_user(stderr, "\t\t-l <CMD>\t\tUse <CMD> as the linker\n");
     exit(code);
 }
 
@@ -119,6 +124,12 @@ void parse_cmdline(int argc, char *argv[])
 	    break;
 	case 'r':
 	    run_after_compilation = true;
+	    break;
+	case 'a':
+	    assembler = optarg;
+	    break;
+	case 'l':
+	    linker = optarg;
 	    break;
 	case ':':
 	    tell_user(stderr, "Missing argument to '-%c'\n", optopt);

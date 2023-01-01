@@ -13,6 +13,9 @@
 
 #define BSIZE 24
 
+char *assembler = "as";
+char *linker = "ld";
+
 static char *asm_file_name;
 static char *obj_file_name;
 static char *exe_file_name;
@@ -660,8 +663,8 @@ static void assemble_and_link(void)
     char ld_command[256];
     /*    char exe_command[PATH_MAX+3]; */
 
-    sprintf(as_command, "as %s -g -o %s", asm_file_name, obj_file_name);
-    sprintf(ld_command, "ld %s -o %s", obj_file_name, exe_file_name);
+    sprintf(as_command, "%s %s -g -o %s", assembler, asm_file_name, obj_file_name);
+    sprintf(ld_command, "%s %s -o %s", linker, obj_file_name, exe_file_name);
     if (verbose == true) {
         printf("[ASSEMBLER] %s\n", as_command);
     }
