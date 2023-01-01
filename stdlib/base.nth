@@ -1,0 +1,7 @@
+.macro _incword
+  dup @word 1+ swap !word
+.endm
+
+.macro _decword
+  dup @word 1- swap !word
+.endm
