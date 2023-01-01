@@ -34,6 +34,7 @@ static Token *newtoken(void);
 static void update_file_position(int c);
 static void parse_string(Token **tok, char **p);
 static void parse_character(Token **tok, char **p);
+static void recurse_error_macros(Token *tok);
 
 static void update_file_position(int c)
 {
@@ -265,19 +266,26 @@ Token *lex(const char *file_path)
 void tokerror(Token *tok, const char *msg, ...)
 {
     va_list args;
-    Token *macro_token;
 
     va_start(args, msg);
     fprintf(stderr, "ERROR:%s:%d:%d: ", tok->pos.file, tok->pos.row, tok->pos.col);
     vfprintf(stderr, msg, args);
+    recurse_error_macros(tok);
+    va_end(args);
+    exit(EXIT_FAILURE);
+}
+
+static void recurse_error_macros(Token *tok)
+{
+    Token *macro_token;
+
     if (tok->macro != NULL) {
 	macro_token = tok->macro->macro_token;
 	fprintf(stderr, "NOTE:%s:%d:%d: In expansion of macro '%s'\n",
 		macro_token->pos.file, macro_token->pos.row, macro_token->pos.col,
 		tok->macro->identifier);
+	recurse_error_macros(macro_token);
     }
-    va_end(args);
-    exit(EXIT_FAILURE);
 }
 
 Token *duptoken(Token *tok)
