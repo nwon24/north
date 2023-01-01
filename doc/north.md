@@ -327,6 +327,12 @@ can lead to catastrophic and often baffling behaviour by the
 resulting program, especially if the stack has been heavily used
 and contains many different values.
 
+### The `leave` operation
+
+To exit a loop prematurely, use the `leave` operation. This exits
+the loop currently running. It is equivalent to the `break` keyword
+in C.
+
 ## System calls
 
 North has a convenient interface to the system calls, insomuch
