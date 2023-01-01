@@ -1,0 +1,46 @@
+.macro BUFSIZ 512 .endm
+
+.macro MAX_FILES 20 .endm
+.macro _FILE.fd 0 + .endm
+.macro _FILE.buf _sizeof(word) + .endm
+.macro _FILE.count _FILE.buf BUFSIZ + .endm
+.macro _FILE.mode _FILE.count _sizeof(word) + .endm
+.macro _sizeof(FILE) _FILE.mode _sizeof(word) + .endm
+
+.var stdin i8 1024
+.var stdout i8 1024
+.var stderr i8 1024
+
+\ FILE --
+.macro fflush
+  dup dup _FILE.count @word
+  over _FILE.buf
+  rot _FILE.fd @word
+  write
+  drop 
+  0 swap _FILE.count !word
+.endm
+  
+\ FILE c --
+.macro fputc
+  swap dup _FILE.count @word BUFSIZ = if
+    dup fflush
+  endif
+  dup _FILE.buf over _FILE.count @word + rot swap !8
+  _FILE.count _incword
+.endm
+
+\ FILE buf 
+.macro fputs
+  begin dup @8 0 <> while
+    2dup @8 fputc
+    1+
+  repeat
+   0
+.endm
+
+.macro _io_exit
+  stdout fflush
+.endm
+
+.macro puts stdout swap fputs .endm
