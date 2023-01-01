@@ -20,6 +20,8 @@ typedef int64_t word;
 word stack[STACK_CAPACITY] = {0};
 int sp = 0;
 
+static Operation *current_op;
+
 static void simulate_call(Operation *ops);
 static Operation *simulate_op(Operation *op);
 static void push(word c);
@@ -28,6 +30,7 @@ static word pop(void);
 static void push(word c)
 {
     if (sp == STACK_CAPACITY) {
+	tokerror(current_op->tok, "simulation stack overflow\n");
 	fatal("simulate: stack overflow!");
     }
     stack[sp++] = c;
@@ -36,6 +39,7 @@ static void push(word c)
 static word pop(void)
 {
     if (sp == 0) {
+	tokerror(current_op->tok, "simulation stack underflow\n");
 	fatal("simulate: stack underflow!");
     }
     return stack[--sp];
@@ -54,6 +58,7 @@ static Operation *simulate_op(Operation *op)
     Operation *next_op, *tmp_op;
 
     next_op = op->next;
+    current_op = op;
     switch (op->op) {
     case OP_PUSH:
 	push(op->operand.intr);
