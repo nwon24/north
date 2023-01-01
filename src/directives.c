@@ -17,13 +17,13 @@ struct {
     char *dirname;
     DirWord dir;
 } dir_table[] = {
-    { ".var", DIR_VAR},
-    { ".macro", DIR_MACRO},
-    { ".endm", DIR_ENDMACRO},
-    { ".include", DIR_INCLUDE},
-    { ".func", DIR_FUNC},
-    { ".endf", DIR_ENDFUNC},
-    { "", DIR_UNKNOWN}
+    { ".var"		, DIR_VAR	},
+    { ".macro"		, DIR_MACRO	},
+    { ".endm"		, DIR_ENDMACRO	},
+    { ".include"	, DIR_INCLUDE	},
+    { ".func"		, DIR_FUNC	},
+    { ".endf"		, DIR_ENDFUNC	},
+    { ""		, DIR_UNKNOWN	},
 };
 
 static Token *preprocess_macros(Token *tokens);

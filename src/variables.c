@@ -26,15 +26,15 @@ static struct {
     VariableType type;
     int bytesize;
 } vartypes[] = {
-    { "i8", V_I8, 1 },
-    { "i16", V_I16, 2 },
-    { "i32", V_I32, 4 },
-    { "i64", V_I64, 8},
-    { "u8", V_U8, 1 },
-    { "u16", V_U16, 2 },
-    { "u32", V_U32, 4 },
-    { "u64", V_U64, 8 },
-    { "", V_UNKNOWN, 0 }
+    { "i8"	, V_I8, 1	},
+    { "i16"	, V_I16, 2	},
+    { "i32"	, V_I32, 4	},
+    { "i64"	, V_I64, 8	},
+    { "u8"	, V_U8, 1	},
+    { "u16"	, V_U16, 2	},
+    { "u32"	, V_U32, 4	},
+    { "u64"	, V_U64, 8	},
+    { ""	, V_UNKNOWN, 0  },
 };
 
 static VariableType str_to_vartype(char *str, int *bytesize);
