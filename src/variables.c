@@ -140,9 +140,9 @@ void check_identifier(Token *tok, char *identifier)
     if (strlen(identifier) > MAX_TOKEN_LENGTH) {
 	tokerror(tok, "Identifier '%s' too long\n", identifier);
     }
-    if (!isalpha(*identifier)) {
-	tokerror(tok, "Invalid identifier name '%s' - must begin with alphabetic character\n", identifier);
-    }
+    /* if (!(*identifier) && *identifier != '_') { */
+    /* 	tokerror(tok, "Invalid identifier name '%s' - must begin with alphabetic character or underscore\n", identifier); */
+    /* } */
 }
 
 HashEntry *variable_reference(Token *tok)
