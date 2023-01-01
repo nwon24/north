@@ -49,7 +49,7 @@
 "\tincq %%rax               # Increment left-hand offset\n" \
 "\tdecq %%rdx               # Increment right-hand offset\n" \
 "\tjmp 2b                  # Loop\n" \
-"2:movq $1, %%rax           # Set up 'write' system call\n" \
+"2:movq $%d, %%rax           # Set up 'write' system call\n" \
 "\tmovq $1, %%rdi           # STDOUT_FILENo\n" \
 "\tmovq $printbuf, %%rsi         # buffer\n" \
 "\tmovq %%rcx, %%rdx         # count\n" \

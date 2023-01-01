@@ -1,3 +1,13 @@
+#ifdef __FreeBSD__
+#include <sys/syscall.h>
+#else
+#ifdef __linux__
+#include <syscall.h>
+#else
+#error "Unreachable"
+#endif
+#endif
+
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
@@ -159,9 +169,9 @@ static void emit_header(void)
 
 static void emit_exit(void)
 {
-    fprintf(asm_file, "\tmovq $60, %%rax\n"
+    fprintf(asm_file, "\tmovq $%d, %%rax\n"
 	    "\tmovq $0, %%rdi\n"
-	    "\tsyscall\n");
+	    "\tsyscall\n", SYS_exit);
 }
 
 static void compile_op(Operation *opptr)
@@ -686,7 +696,7 @@ static void assemble_and_link(void)
 
 static void emit_tail(void)
 {
-    fprintf(asm_file, PRINT_ASM);
+    fprintf(asm_file, PRINT_ASM, SYS_write);
 }
 
 void compile(void)
