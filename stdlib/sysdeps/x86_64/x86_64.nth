@@ -1,0 +1,6 @@
+.macro _sizeof(ptr) 8 .endm
+.macro _sizeof(word) 8 .endm
+.macro @word @64 .endm
+.macro !word !64 .endm
+.macro @ptr @64 .endm
+.macro !ptr !64 .endm
