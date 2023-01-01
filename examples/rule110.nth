@@ -9,6 +9,8 @@
 \ or a piece of paper to write out what's happening to the
 \ stack with all the operations, since it really isn't obvious.
 
+.include "stdlib.nth"
+
 .macro ROW_SIZE 100 .endm
 
 .var board i8 ROW_SIZE
@@ -30,8 +32,8 @@
     swap !8
    1+
   repeat drop
-  ROW_SIZE print_board 1 1 syscall3 drop
-  "\n" 1 1 syscall3 drop
+  ROW_SIZE print_board 1 write drop
+  "\n" 1 write drop
 
   \ Calculate the next generation
   1 begin dup ROW_SIZE 1 - < while
