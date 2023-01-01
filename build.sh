@@ -4,6 +4,9 @@ CC=${CC-cc}
 ARCH=${ARCH-x86_64-linux}
 
 case $ARCH in
+    x86_64-*)
+	ln -svf x86_64/x86_64.nth stdlib/sysdeps/arch.nth
+	;;
     x86_64-linux)
 	ln -svf x86_64/linux/syscall.nth stdlib/sysdeps/syscall.nth
 	;;
