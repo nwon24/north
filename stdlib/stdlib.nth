@@ -11,6 +11,10 @@
   exit
 .endm
 
+.macro _stdlib_init
+  _io_init
+.endm
+
 .macro _stdlib_fini
   _io_exit
 .endm

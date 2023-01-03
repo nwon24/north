@@ -11,6 +11,12 @@
 .var stdout i8 1024
 .var stderr i8 1024
 
+.macro _io_init
+  STDIN_FILENO stdin _FILE.fd  !word
+  STDOUT_FILENO stdout _FILE.fd  !word
+  STDERR_FILENO stderr _FILE.fd  !word
+.endm
+
 \ FILE --
 .macro fflush
   dup dup _FILE.count @word
