@@ -181,6 +181,7 @@ static void compile_op(Operation *opptr)
     Operation *tmp_op;
     int endif_addr;
 
+    static_assert(OP_COUNT == 73);
     fprintf(asm_file, "/* OP: %s, LOC: %s:%d:%d: */\n",
 	    readable_op_names[opptr->op],
 	    opptr->tok->pos.file,

@@ -130,6 +130,7 @@ Token *preprocess(Token *tokens)
     DirWord dir;
     char oldcwd[PATH_MAX];
 
+    assert(DIR_COUNT == 7);
     prev_tok = NULL;
     getcwd(oldcwd, PATH_MAX);
     newhead = preprocess_macros(tokens);
