@@ -57,7 +57,7 @@ static Operation *simulate_op(Operation *op)
     word a, b, c, d, e, f, g;
     Operation *next_op, *tmp_op;
 
-    static_assert(OP_COUNT == 73);
+    static_assert(OP_COUNT == 73, "simulate_op: exhausetive op handling");
     next_op = op->next;
     current_op = op;
     switch (op->op) {

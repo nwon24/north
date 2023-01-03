@@ -326,7 +326,7 @@ Operation *tokens_to_ops(Token *toks)
     Token *tokptr;
     Operation *opptr, *new_op, *head;
 
-    static_assert(OP_COUNT == 73);
+    static_assert(OP_COUNT == 73, "tokens_to_ops: exhausetive op handling");
     opptr = NULL;
     head = NULL;
     for (tokptr = toks; tokptr != NULL; tokptr = tokptr->next) {

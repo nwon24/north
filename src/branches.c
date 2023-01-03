@@ -23,7 +23,7 @@ void cross_reference_branches(Operation *ops)
     while_op_ptr = 0;
     begin_op_ptr = 0;
     block_addr = 0;
-    static_assert(OP_COUNT == 73);
+    static_assert(OP_COUNT == 73, "cross_reference_branches: exhausetive op handling");
     while (opptr != NULL) {
 	switch (opptr->op) {
 	case  OP_IF:
