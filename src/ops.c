@@ -147,7 +147,8 @@ char *readable_op_names[] = {
     [OP_LE] = "OP_LE",         
     [OP_IF] = "OP_IF",         
     [OP_ELSE] = "OP_ELSE",       
-    [OP_ENDIF] = "OP_ENDIF",      
+    [OP_ENDIF] = "OP_ENDIF",
+    [OP_ENDIFS] = "OP_ENDIFS",
     [OP_DO] = "OP_DO",         
     [OP_LOOP] = "OP_LOOP",       
     [OP_LOOP_PLUS] = "OP_LOOP_PLUS",
@@ -328,6 +329,8 @@ Operation *tokens_to_ops(Token *toks)
     Operation *opptr, *new_op, *head;
 
     static_assert(OP_COUNT == 74, "tokens_to_ops: exhausetive op handling");
+    static_assert(sizeof(op_table) == OP_COUNT * sizeof(op_table[0]));
+    static_assert(sizeof(readable_op_names) == OP_COUNT * sizeof(readable_op_names[0]));
     opptr = NULL;
     head = NULL;
     for (tokptr = toks; tokptr != NULL; tokptr = tokptr->next) {
