@@ -181,7 +181,7 @@ static void compile_op(Operation *opptr)
     Operation *tmp_op;
     int endif_addr;
 
-    static_assert(OP_COUNT == 73, "compile_op: exahustive ops handling");
+    static_assert(OP_COUNT == 74, "compile_op: exahustive ops handling");
     fprintf(asm_file, "/* OP: %s, LOC: %s:%d:%d: */\n",
 	    readable_op_names[opptr->op],
 	    opptr->tok->pos.file,
@@ -485,7 +485,8 @@ static void compile_op(Operation *opptr)
 	fprintf(asm_file, "\tjmp addr_%d\n"
 			  "addr_%d:\n", endif_addr, opptr->block_addr);
 	break;
-    case OP_ENDIF:
+    case OP_ENDIF: /* FALLTHROUGH */
+    case OP_ENDIFS:
 	fprintf(asm_file, "addr_%d:\n", opptr->block_addr);
 	break;
 	/*

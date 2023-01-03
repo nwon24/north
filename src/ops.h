@@ -55,6 +55,7 @@ typedef enum {
     OP_IF,
     OP_ELSE,
     OP_ENDIF,
+    OP_ENDIFS,
 
     OP_DO,
     OP_LOOP,

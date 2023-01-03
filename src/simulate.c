@@ -57,7 +57,7 @@ static Operation *simulate_op(Operation *op)
     word a, b, c, d, e, f, g;
     Operation *next_op, *tmp_op;
 
-    static_assert(OP_COUNT == 73, "simulate_op: exhausetive op handling");
+    static_assert(OP_COUNT == 74, "simulate_op: exhausetive op handling");
     next_op = op->next;
     current_op = op;
     switch (op->op) {
@@ -277,6 +277,9 @@ static Operation *simulate_op(Operation *op)
     case OP_ENDIF:
 	return op->next;
 	//	next_op = simulate_conditional(op);
+	break;
+    case OP_ENDIFS:
+	return op->next;
 	break;
     case OP_DO:
 	a = pop();

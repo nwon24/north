@@ -6,7 +6,7 @@
 
 void cross_reference_branches(Operation *ops)
 {
-    int block_addr = 0;
+    int block_addr = 0, i;
     Operation *opptr;
     Operation *conditional_ops[MAX_NESTED_BRANCHES];
     Operation *do_ops[MAX_NESTED_BRANCHES];
@@ -23,7 +23,7 @@ void cross_reference_branches(Operation *ops)
     while_op_ptr = 0;
     begin_op_ptr = 0;
     block_addr = 0;
-    static_assert(OP_COUNT == 73, "cross_reference_branches: exhausetive op handling");
+    static_assert(OP_COUNT == 74, "cross_reference_branches: exhausetive op handling");
     while (opptr != NULL) {
 	switch (opptr->op) {
 	case  OP_IF:
@@ -52,7 +52,16 @@ void cross_reference_branches(Operation *ops)
 	    conditional_ops[--cond_op_ptr]->operand.if_op.endif_op = opptr;
             opptr->block_addr = block_addr++;
 	    break;
-
+	case OP_ENDIFS:
+	    if (cond_op_ptr == 0) {
+		tokerror(opptr->tok, "'endifs' operation with no preceding 'if'\n");
+	    }
+	    for (i = 0; i < cond_op_ptr; ++i) {
+		conditional_ops[i]->operand.if_op.endif_op = opptr;
+	    }
+	    opptr->block_addr = block_addr++;
+	    cond_op_ptr = 0;
+	    break;
 	case OP_DO:
 	    if (do_op_ptr >= MAX_NESTED_BRANCHES) {
 		tokerror(opptr->tok, "Too many nested do branches\n");
