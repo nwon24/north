@@ -89,6 +89,7 @@ HashEntry *in_hash(HashTable *table, char *identifier)
     int hashn;
     HashEntry *entry;
 
+    assert(table != NULL);
     hashn = table->hashfn(identifier, table->size);
     assert(hashn >= 0 && hashn < table->size);
     if ((entry = table->table[hashn]) == NULL)
