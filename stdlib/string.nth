@@ -4,3 +4,15 @@
   repeat
   drop
 .endm
+
+.func strcmp
+  begin 2dup @8 swap @8 0 <> swap 0 <> and while
+    2dup @8 swap @8 < if
+      2drop 1 return
+    else 2dup @8 swap @8 > if
+      2drop -1 return
+    endifs
+    1+ swap 1+ swap
+  repeat
+  0
+.endf
