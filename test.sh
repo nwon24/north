@@ -4,7 +4,7 @@ NORTH=./north
 
 run_cmd_test() {
     expected=$(cat "$2")
-    actual=$($1)
+    actual=$(($1) 2>&1)
     if [ "$expected" = "$actual" ]; then
 	return 0
     else
@@ -29,7 +29,7 @@ run_test() {
 
 success=0
 
-for dir in tests/*; do
+for dir in ./tests/*; do
     run_test "$dir/"*.nth "$dir/"*.txt
     if [ "$?" -eq 0 ]; then
 	success=$(($success+1))
