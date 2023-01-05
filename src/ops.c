@@ -10,6 +10,12 @@
 #include "variables.h"
 #include "macros.h"
 
+enum {
+    CONST_DECIMAL = 10, /* [1-9][0-9]* */
+    CONST_HEX = 16,     /* 0x[0-9a-zA-Z]* */
+    CONST_OCTAL = 8,   /* 0[0-7]* */
+};
+
 Operation *operations = NULL;
 
 static int str_num;
@@ -267,20 +273,35 @@ static Operation *token_to_op(Token *tok)
 	new_op->op = op;
 	return new_op;
     } else if (*p == '+' || *p == '-' || isdigit(*p)) {
+	int base;
+
 	/* Parse number */
 	if (*p == '+' || *p == '-') {
 	    p++;
 	}
+	base = CONST_DECIMAL;
+	if (*p == '0')
+	    base = CONST_OCTAL;
 	while (p - tok->text < tok->length) {
 	    if (*p == '.') {
 		not_implemented("Floating point constants");
 	    }
-	    if (!isdigit(*p)) {
+	    if (*p == 'x') {
+		if ((tok->text[0] == '-' || tok->text[0] == '+') &&
+		    p - tok->text == 2)
+		    base = CONST_HEX;
+		else if (p - tok->text == 1) {
+		    base = CONST_HEX;
+		} else
+		    tokerror(tok, "Invalid numerical constant '%s'\n", tok->text);
+	    } else if (!isdigit(*p) && (base != CONST_HEX)) {
+		tokerror(tok, "Invalid numerical constant '%s'\n", tok->text);
+	    } else if (!isxdigit(*p) && base == CONST_HEX) {
 		tokerror(tok, "Invalid numerical constant '%s'\n", tok->text);
 	    }
 	    p++;
 	}
-	new_op->operand.intr = atoi(tok->text);
+	new_op->operand.intr = strtol(tok->text, NULL, base);
 	new_op->op = OP_PUSH;
 	return new_op;
     } else if ((entry = variable_reference(tok)) != NULL) {
