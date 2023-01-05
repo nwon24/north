@@ -1,0 +1,8 @@
+.func foo
+100 200 300 2 *
+
+{ a b c }
+a . b . c .
+.endf
+
+foo
