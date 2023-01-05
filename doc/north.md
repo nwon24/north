@@ -516,3 +516,44 @@ In the function body, the `return` operation can be used to
 exit the function before the end of the body. If at the end
 of the function body there is no `return`, the operation
 is implied.
+
+## Local variables
+
+Local variables can be used to give names to elements on the
+stack. They can only be used inside of functions. Once
+declared, they exist for the entire duration of the function.
+They are useful for storing a value on the stack that will
+be needed later, but will be cumbersome to get using stack
+operations because it won't be near the top.
+
+Here is the syntax to declare local variables:
+```
+{ <identifiers> }
+```
+Each identifier between the braces is local to the function
+in which this construction is placed. Each local variable
+takes on the value currently on top of the stack and this
+value is popped off the stack. This way, local variables
+written left to right take on elements from the top
+of the stack going downward.
+
+Here is an example.
+```
+.func foo
+100 200 300
+
+{ a b c }
+a b + c + .
+.endf
+
+\ Should print 600
+foo 
+```
+
+Note that since assigning local variables to the elements
+on the stack removes them from the stack, the operations
+following the local variables should not assume the
+previous values are still on the stack. In the above
+example, if we simply used the `+` operations without
+referring to the local variables, we would get a stack
+underflow.
