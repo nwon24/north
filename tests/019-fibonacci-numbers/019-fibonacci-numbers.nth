@@ -1,0 +1,11 @@
+\ fib - print all the Fibonacci numbers less than n
+.func fib
+  { n }
+  1 1 begin over n < while
+    { a b }
+    b .
+    a a b +
+  repeat
+.endf
+
+1000 fib
