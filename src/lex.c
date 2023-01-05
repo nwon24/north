@@ -57,6 +57,7 @@ static Token *gettoken(void)
     }
     new_token = newtoken();
     new_token->macro = NULL;
+    new_token->function = NULL;
     s = new_token->text;
  again:
     while (!END_OF_FILE(p) && isspace(*p)) {
@@ -111,7 +112,13 @@ static Token *gettoken(void)
     *s = '\0';
     new_token->length = s - new_token->text;
     new_token->next = NULL;
-    new_token->type = TOKEN_WORD;
+    if (new_token->length == 1 && new_token->text[0] == BEGIN_LVARS_CHAR) {
+	new_token->type = TOKEN_BEGIN_LVARS;
+    } else if (new_token->length == 1 && new_token->text[0] == END_LVARS_CHAR) {
+	new_token->type = TOKEN_END_LVARS;
+    } else {
+	new_token->type = TOKEN_WORD;
+    }
  out:
     file_offset = p - lex_file;
     return new_token;

@@ -1,6 +1,9 @@
 #ifndef LEX_H_
 #define LEX_H_
 
+#define BEGIN_LVARS_CHAR	'{'
+#define END_LVARS_CHAR		'}'
+
 #define MAX_TOKEN_LENGTH 31
 #define MAX_CHAR_TOKEN_LENGTH 2
 #define MAX_STR_TOKEN_LENGTH 4095
@@ -11,6 +14,8 @@ typedef enum token_type {
     TOKEN_WORD,
     TOKEN_STR,
     TOKEN_CHAR,
+    TOKEN_BEGIN_LVARS,
+    TOKEN_END_LVARS,
 } TokenType;
     
 typedef struct token {
