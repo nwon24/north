@@ -43,6 +43,7 @@ static void add_to_string_pool(String *str);
 static void realloc_string_pool(void);
 static void emit_strings(void);
 static void emit_functions(void);
+static void emit_lvars(Function *f);
 static void emit_return(void);
 
 static void realloc_string_pool(void)
@@ -103,14 +104,21 @@ static void emit_return(void)
 	    "\tret\n");
 }
 
+static void emit_lvars(Function *f)
+{
+    fprintf(asm_file, ".section .bss\n"
+	    "%s_lvars:\n"
+	    "\t.skip %d\n", f->identifier, f->lvars_count << 3);
+}
+
 static void emit_functions(void)
 {
     Function *f;
 
-    fprintf(asm_file, ".section .text\n");
     for (f = functions; f != NULL; f = f->next) {
 	Operation *op;
 
+	fprintf(asm_file, ".section .text\n");
 	fprintf(asm_file, "%s:\n", f->identifier);
 	fprintf(asm_file, "\tpopq %%rcx\n"
 		"\tmovq %%rsp, %%rax\n"
@@ -126,6 +134,9 @@ static void emit_functions(void)
 	    }
 	}
 	emit_return();
+	if (f->lvars_count > 0) {
+	    emit_lvars(f);
+	}
     }
 }
 
@@ -200,7 +211,7 @@ static void compile_op(Operation *opptr)
     Operation *tmp_op;
     int endif_addr;
 
-    static_assert(OP_COUNT == 74, "compile_op: exahustive ops handling");
+    static_assert(OP_COUNT == 76, "compile_op: exahustive ops handling");
     fprintf(asm_file, "/* OP: %s, LOC: %s:%d:%d: */\n",
 	    readable_op_names[opptr->op],
 	    opptr->tok->pos.file,
@@ -212,6 +223,15 @@ static void compile_op(Operation *opptr)
 	break;
     case OP_PUSH_ADDR:
 	fprintf(asm_file, "\tpushq $%s\n", opptr->operand.variable->identifier);
+	break;
+    case OP_PUSH_LVAR:
+	assert(opptr->function != NULL);
+	fprintf(asm_file, "\tmovq $%s_lvars, %%rdi\n"
+		"\taddq $%d, %%rdi\n"
+		"\tmovq (%%rdi), %%rax\n"
+		"\tpushq %%rax\n",
+		opptr->function->identifier,
+		opptr->operand.lvar->lc_num << 3);
 	break;
     case OP_PUSH_STR:
 	fprintf(asm_file, "\tpushq $%zu\n"
@@ -683,6 +703,15 @@ static void compile_op(Operation *opptr)
 	break;
     case OP_RETURN:
 	tokerror(opptr->tok, "'return' operation outside function\n");
+	break;
+    case OP_DEF_LVAR:
+	assert(opptr->function != NULL);
+	fprintf(asm_file, "\tmovq $%s_lvars, %%rdi\n"
+		"\taddq $%d, %%rdi\n"
+		"\tpopq %%rax\n"
+		"\tmovq %%rax, (%%rdi)\n",
+		opptr->function->identifier,
+		opptr->operand.lvar->lc_num << 3);
 	break;
     default:
 	break;

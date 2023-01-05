@@ -15,8 +15,6 @@
 char **simulated_argv = NULL;
 int simulated_argc;
 
-typedef int64_t word;
-
 word stack[STACK_CAPACITY] = {0};
 int sp = 0;
 
@@ -57,7 +55,7 @@ static Operation *simulate_op(Operation *op)
     word a, b, c, d, e, f, g;
     Operation *next_op, *tmp_op;
 
-    static_assert(OP_COUNT == 74, "simulate_op: exhausetive op handling");
+    static_assert(OP_COUNT == 76, "simulate_op: exhausetive op handling");
     next_op = op->next;
     current_op = op;
     switch (op->op) {
@@ -66,6 +64,9 @@ static Operation *simulate_op(Operation *op)
 	break;
     case OP_PUSH_ADDR:
 	push((word)op->operand.variable->addr);
+	break;
+    case OP_PUSH_LVAR:
+	push(op->operand.lvar->val);
 	break;
     case OP_PUSH_STR:
 	push(op->operand.str.len - escape_chars(op));
@@ -447,6 +448,10 @@ static Operation *simulate_op(Operation *op)
 	break;
     case OP_RETURN:
 	tokerror(op->tok, "'return' operation outside function\n");
+	break;
+    case OP_DEF_LVAR:
+	a = pop();
+	op->operand.lvar->val = a;
 	break;
     case OP_UNKNOWN:
     case OP_COUNT:
