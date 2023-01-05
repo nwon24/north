@@ -1,0 +1,1 @@
+ERROR:./tests/0022-else-without-if/0022-else-without-if.nth:1:7: 'else' operation with no preceding 'if'
