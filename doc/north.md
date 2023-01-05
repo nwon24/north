@@ -75,9 +75,13 @@ using parentheses is better.
 ## Integers
 
 An integer constant has the effect of pushing its value onto
-the stack. They must be made up of a series of decimal digits, with
-an optional sign (`+` or `-`) preceding them. Currently integers
-into other bases are not recognised.
+the stack. They must be made up of a series of decimal, octal, or hexadecimal digits, with
+an optional sign (`+` or `-`) preceding them. 
+
+Hexadecimal constants are preceded by `0x`; octal constants are
+preceded by `0`. An integer constant beginning with any of
+the digits `0-9` is taken to be a decimal constant. This is the
+same notation as is used in C.
 
 ## Floats
 
