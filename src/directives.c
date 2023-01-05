@@ -152,7 +152,7 @@ Token *preprocess(Token *tokens)
 		    newhead = add_function(tok);
 		    tok = newhead;
 		} else {
-		    tok = add_variable(tok);
+		    tok = add_function(tok);
 		    prev_tok->next = tok;
 		}
 		break;
