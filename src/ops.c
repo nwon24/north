@@ -26,6 +26,7 @@ struct {
 } op_table[] = {
     { ""		, OP_PUSH	},
     { ""		, OP_PUSH_STR	},
+    { ""		, OP_PUSH_LVAR	},
     { ""		, OP_PUSH_ADDR	},
     { "+"		, OP_ADD	},
     { "-"		, OP_MINUS	},
@@ -106,12 +107,15 @@ struct {
     { ""		, OP_CALL	},
     { "return"		, OP_RETURN	},
     
+    { ""		, OP_DEF_LVAR	},
+
     { ""		, OP_UNKNOWN	},
 };
 
 char *readable_op_names[] = {
     [OP_PUSH] = "OP_PUSH",       
     [OP_PUSH_STR] = "OP_PUSH_STR",   
+    [OP_PUSH_LVAR] = "OP_PUSH_LVAR",   
     [OP_PUSH_ADDR] = "OP_PUSH_ADDR",
     [OP_ADD] = "OP_ADD",        
     [OP_MINUS] = "OP_MINUS",      
@@ -183,6 +187,7 @@ char *readable_op_names[] = {
     [OP_ARGV] = "OP_ARGV",       
     [OP_CALL] = "OP_CALL",       
     [OP_RETURN] = "OP_RETURN",
+    [OP_DEF_LVAR] = "OP_DEF_LVAR",
     [OP_UNKNOWN] = "OP_UNKNOWN",
 };
 
@@ -216,12 +221,35 @@ static Operation *token_to_op(Token *tok)
     OpWord op;
     char *p;
     HashEntry *entry;
+    static bool defining_lvars = false;
 
     new_op = newoperation();
+    new_op->function = tok->function;
     new_op->next = NULL;
     new_op->tok = tok;
     p = tok->text;
-    if (tok->type == TOKEN_STR) {
+    if (defining_lvars == true) {
+	Token *begin_tok;
+	Lvariable *lvar;
+	begin_tok = tok;
+	if (tok->function == NULL)
+	    tokerror(tok, "Local variables allowed only in function definitions\n");
+	if (tok == NULL)
+	    tokerror(begin_tok, "Local variable declarations beginning here not closed\n");
+	if (tok->type == TOKEN_BEGIN_LVARS) {
+	    tokerror(tok, "Nesting local variable definitions not allowed\n");
+	} else if (tok->type == TOKEN_END_LVARS) {
+	    defining_lvars = false;
+	    return NULL;
+	}
+	if (tok->type != TOKEN_WORD)
+	    tokerror(tok, "Invalid identifier name for local variable\n");
+	check_identifier(tok, tok->text);
+	lvar = add_lvar(tok, tok->function);
+	new_op->op = OP_DEF_LVAR;
+	new_op->operand.lvar = lvar;
+	return new_op;
+    } else if (tok->type == TOKEN_STR) {
 	if ((new_op->operand.str.text = malloc(tok->length + 1)) == NULL) {
 	    fatal("token_to_op: parsing string and malloc returned NULL!\n");
 	}
@@ -268,6 +296,16 @@ static Operation *token_to_op(Token *tok)
 	} else {
 	    new_op->operand.intr = tok->text[0];
 	}
+	return new_op;
+    } else if (tok->type == TOKEN_BEGIN_LVARS) {
+	defining_lvars = true;
+	return NULL;
+    } else if ((entry = lvar_reference(tok)) != NULL) {
+	Lvariable *lvar;
+
+	lvar = entry->ptr;
+	new_op->op = OP_PUSH_LVAR;
+	new_op->operand.lvar = lvar;
 	return new_op;
     } else if ((op = find_op_in_table(tok->text)) != OP_UNKNOWN) {
 	new_op->op = op;
@@ -328,11 +366,15 @@ static Operation *token_to_op(Token *tok)
 	f_head = NULL;
 	f_op = NULL;
 	for (f_tok = func->tokens; f_tok != NULL; f_tok = f_tok->next) {
+	    Operation *new_op;
+	    new_op = token_to_op(f_tok);
+	    if (new_op == NULL)
+		continue;
 	    if (f_head == NULL) {
-		f_head = token_to_op(f_tok);
+		f_head = new_op;
 		f_op = f_head;
 	    } else {
-		f_op->next = token_to_op(f_tok);
+		f_op->next = new_op;
 		f_op = f_op->next;
 	    }
 	}
@@ -351,13 +393,15 @@ Operation *tokens_to_ops(Token *toks)
     Token *tokptr;
     Operation *opptr, *new_op, *head;
 
-    static_assert(OP_COUNT == 74, "tokens_to_ops: exhausetive op handling");
+    static_assert(OP_COUNT == 76, "tokens_to_ops: exhausetive op handling");
     static_assert(sizeof(op_table) == OP_COUNT * sizeof(op_table[0]));
     static_assert(sizeof(readable_op_names) == OP_COUNT * sizeof(readable_op_names[0]));
     opptr = NULL;
     head = NULL;
     for (tokptr = toks; tokptr != NULL; tokptr = tokptr->next) {
 	new_op = token_to_op(tokptr);
+	if (new_op == NULL)
+	    continue;
 	if (head == NULL) {
 	    head = new_op;
 	    opptr = head;

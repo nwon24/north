@@ -7,11 +7,13 @@
 #include "branches.h"
 #include "variables.h"
 #include "functions.h"
+#include "lvariables.h"
 
 typedef enum {
     OP_PUSH,
     OP_PUSH_STR,
     OP_PUSH_ADDR,
+    OP_PUSH_LVAR,
     OP_ADD,
     OP_MINUS,
     OP_MULTIPLY,
@@ -90,7 +92,9 @@ typedef enum {
 
     OP_CALL,
     OP_RETURN,
-   
+
+    OP_DEF_LVAR,
+
     /* Used to denote unknown operation */
     OP_UNKNOWN,
     /* UNUSED: used to count the number of operations */
@@ -134,7 +138,9 @@ typedef struct operation {
 	    Function *function;
 	    struct operation *ret_addr;
 	} call_op;
+	Lvariable *lvar;
     } operand;
+    Function *function;
     int block_addr; /* Used for generating assembly labels */
     struct operation *next;
 } Operation;
