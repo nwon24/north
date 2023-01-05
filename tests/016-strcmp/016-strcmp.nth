@@ -1,0 +1,7 @@
+.include "stdlib.nth"
+
+"hello" "hello" swap drop strcmp .
+
+"hello" "blah" swap drop strcmp .
+
+"apple" "banana" swap drop strcmp .
