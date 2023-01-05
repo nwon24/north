@@ -43,6 +43,7 @@ static void add_to_string_pool(String *str);
 static void realloc_string_pool(void);
 static void emit_strings(void);
 static void emit_functions(void);
+static void emit_return(void);
 
 static void realloc_string_pool(void)
 {
@@ -91,6 +92,17 @@ static void emit_variables(void)
     fprintf(asm_file, "argc:\n\t.skip 8\nargv:\n\t.skip 8\n");
 }
 
+static void emit_return(void)
+{
+    fprintf(asm_file, "\tmovq %%rsp, %%rax\n"
+	    "\tmovq _ret_rsp, %%rsp\n"
+	    "\tpopq %%rbx\n"
+	    "\tmovq %%rsp, _ret_rsp\n"
+	    "\tmovq %%rax, %%rsp\n"
+	    "\tpushq %%rbx\n"
+	    "\tret\n");
+}
+
 static void emit_functions(void)
 {
     Function *f;
@@ -100,13 +112,20 @@ static void emit_functions(void)
 	Operation *op;
 
 	fprintf(asm_file, "%s:\n", f->identifier);
+	fprintf(asm_file, "\tpopq %%rcx\n"
+		"\tmovq %%rsp, %%rax\n"
+		"\tmovq _ret_rsp, %%rsp\n"
+		"\tpushq %%rcx\n"
+		"\tmovq %%rsp, _ret_rsp\n"
+		"\tmovq %%rax, %%rsp\n");
 	for (op = f->ops; op != NULL; op = op->next) {
-	    if (op->op == OP_RETURN)
-		fprintf(asm_file, "\tjmp %s_ret\n", f->identifier);
-	    else
+	    if (op->op == OP_RETURN) {
+		emit_return();
+	    } else {
 		compile_op(op);
+	    }
 	}
-	fprintf(asm_file, "\tjmp %s_ret\n", f->identifier);
+	emit_return();
     }
 }
 
@@ -660,8 +679,7 @@ static void compile_op(Operation *opptr)
 	fprintf(asm_file, "\tpushq argv\n");
 	break;
     case OP_CALL:
-	fprintf(asm_file, "\tjmp %s\n"
-		"%s_ret:\n", opptr->operand.call_op.function->identifier, opptr->operand.call_op.function->identifier);
+	fprintf(asm_file, "\tcall %s\n", opptr->operand.call_op.function->identifier);
 	break;
     case OP_RETURN:
 	tokerror(opptr->tok, "'return' operation outside function\n");
@@ -701,6 +719,12 @@ static void assemble_and_link(void)
 static void emit_tail(void)
 {
     fprintf(asm_file, PRINT_ASM, SYS_write);
+    fprintf(asm_file, "\t.section .data\n"
+	    "_ret_stack:\n"
+	    "\t.skip 8000\n"
+	    "_ret_stack_end:\n"
+	    "_ret_rsp:"
+	    "\t.quad _ret_stack\n");
 }
 
 void compile(void)
