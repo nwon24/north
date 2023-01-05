@@ -235,6 +235,23 @@ The `else` is optional; if this is omitted and the condition before
 the `if` word evaluates to `0`, execution jumps straight to after
 the `endif` word.
 
+There is also the `endifs` word, which closes every open conditional
+preceding it.
+Multiple `if` and `else` operations can be used like this:
+```
+<conditiion> if
+  <body>
+else <condition> if
+  <body>
+else <condition> if
+  <body>
+endifs
+```
+Note how the `endifs` operation is used to close all the nested
+`if` operations. This avoids the need for multiple `endif`s,,  which
+can becoome very messy when there are mutliple `else .. if` sections
+of code.
+
 ## Loops
 
 There are three kinds of loops supported by North: `do` loops, `while` loops,

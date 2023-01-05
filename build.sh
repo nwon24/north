@@ -7,6 +7,8 @@ case $ARCH in
     x86_64-*)
 	ln -sf x86_64/x86_64.nth stdlib/sysdeps/arch.nth
 	;;
+esac
+case $ARCH in
     x86_64-linux)
 	ln -sf x86_64/linux/syscall.nth stdlib/sysdeps/syscall.nth
 	;;
