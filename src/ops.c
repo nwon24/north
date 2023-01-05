@@ -298,6 +298,8 @@ static Operation *token_to_op(Token *tok)
 		tokerror(tok, "Invalid numerical constant '%s'\n", tok->text);
 	    } else if (!isxdigit(*p) && base == CONST_HEX) {
 		tokerror(tok, "Invalid numerical constant '%s'\n", tok->text);
+	    } else if ((*p < '0' || *p > '7') && base == CONST_OCTAL) {
+		tokerror(tok, "Invalid octal constant '%s'\n", tok->text);
 	    }
 	    p++;
 	}
