@@ -48,6 +48,8 @@ Token *add_function(Token *start)
 	tokerror(start, "Unfinished function definition\n");
     }
     new_func = alloc_function();
+    new_func->lvars_count = 0;
+    new_func->hash_table = NULL;
     check_identifier(tok, tok->text);
     func_entry = new_hash_entry(tok->text, new_func);
     func_entry->type = HASH_FUNCTION;

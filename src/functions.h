@@ -3,8 +3,10 @@
 
 #include "lex.h"
 #include "hash.h"
+#include "lvariables.h"
 
 struct operation;
+struct lvar;
 
 typedef struct function {
     Token *tokens;
@@ -12,6 +14,10 @@ typedef struct function {
     struct operation *ops;
     char identifier[MAX_TOKEN_LENGTH + 1];
     struct function *next;
+
+    /* Local variables stuff */
+    int lvars_count;
+    HashTable *hash_table;
 } Function;
 
 Token *add_function(Token *start);
