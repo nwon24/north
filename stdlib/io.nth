@@ -36,17 +36,30 @@
   _FILE.count _incword
 .endm
 
-\ FILE buf 
-.macro fputs
-  begin dup @8 0 <> while
-    2dup @8 fputc
-    1+
+\ FILE buf fputs
+.func fputs
+  { buf file }
+  begin
+  buf @8
+  { *buf }
+  *buf 0 <>
+  while
+    file *buf fputc
+    buf 1+
+    [ buf ]
   repeat
-   0
-.endm
+  0
+.endf
 
 .macro _io_exit
   stdout fflush
+  stderr fflush
 .endm
 
 .macro puts stdout swap fputs .endm
+.macro eputs stderr swap fputs .endm
+
+\ Unbuffered output - use for now because
+\ buffered IO library is not that great.
+.macro ufputs STDOUT_FILENO write .endm
+.macro uefputs STDERR_FILENO write .endm
