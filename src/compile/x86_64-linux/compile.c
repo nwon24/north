@@ -211,7 +211,7 @@ static void compile_op(Operation *opptr)
     Operation *tmp_op;
     int endif_addr;
 
-    static_assert(OP_COUNT == 76, "compile_op: exahustive ops handling");
+    static_assert(OP_COUNT == 77, "compile_op: exahustive ops handling");
     fprintf(asm_file, "/* OP: %s, LOC: %s:%d:%d: */\n",
 	    readable_op_names[opptr->op],
 	    opptr->tok->pos.file,
@@ -704,6 +704,7 @@ static void compile_op(Operation *opptr)
     case OP_RETURN:
 	tokerror(opptr->tok, "'return' operation outside function\n");
 	break;
+    case OP_WRITE_LVAR:
     case OP_DEF_LVAR:
 	assert(opptr->function != NULL);
 	fprintf(asm_file, "\tmovq $%s_lvars, %%rdi\n"
