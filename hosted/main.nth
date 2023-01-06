@@ -1,0 +1,23 @@
+.include "stdlib.nth"
+
+\ Uncomment when we use standard library.
+\ _stdlib_init
+
+.func usage
+    "USAGE: north [OPTINS] [INPUT FILE]\n" ueputs drop
+    "\tOptions:\n" ueputs drop
+    "\t\t-h\t\tPrint this help and exit\n" ueputs drop
+    "\t\t-s\t\tInterpret the input file\n" ueputs drop
+    "\t\t-c\t\tCompile the input file\n" ueputs drop
+    "\t\t-v\t\tBe verbose\n" ueputs drop
+    EXIT_FAILURE _exit
+.endf
+
+argc 1 = if
+  "No arguments given.\n" ueputs
+  usage
+  EXIT_FAILURE exit
+endif
+
+\ NOTE: _exit, not exit
+EXIT_SUCCESS _exit
