@@ -108,6 +108,7 @@ struct {
     { "return"		, OP_RETURN	},
     
     { ""		, OP_DEF_LVAR	},
+    { ""		, OP_WRITE_LVAR	},
 
     { ""		, OP_UNKNOWN	},
 };
@@ -188,6 +189,7 @@ char *readable_op_names[] = {
     [OP_CALL] = "OP_CALL",       
     [OP_RETURN] = "OP_RETURN",
     [OP_DEF_LVAR] = "OP_DEF_LVAR",
+    [OP_WRITE_LVAR] = "OP_WRITE_LVAR",
     [OP_UNKNOWN] = "OP_UNKNOWN",
 };
 
@@ -222,6 +224,7 @@ static Operation *token_to_op(Token *tok)
     char *p;
     HashEntry *entry;
     static bool defining_lvars = false;
+    static bool writing_lvars = false;
 
     new_op = newoperation();
     new_op->function = tok->function;
@@ -231,6 +234,7 @@ static Operation *token_to_op(Token *tok)
     if (defining_lvars == true) {
 	Token *begin_tok;
 	Lvariable *lvar;
+
 	begin_tok = tok;
 	if (tok->function == NULL)
 	    tokerror(tok, "Local variables allowed only in function definitions\n");
@@ -248,6 +252,20 @@ static Operation *token_to_op(Token *tok)
 	lvar = add_lvar(tok, tok->function);
 	new_op->op = OP_DEF_LVAR;
 	new_op->operand.lvar = lvar;
+	return new_op;
+    } else if (writing_lvars == true) {
+	if (tok->type == TOKEN_END_WRITE_LVARS) {
+	    writing_lvars = false;
+	    return NULL;
+	}
+	if (tok->function == NULL)
+	    tokerror(tok, "Local variables allowed only in function definitions\n");
+	if (tok->function->hash_table == NULL)
+	    tokerror(tok, "Writing to undefined local variables\n");
+	if ((entry = in_hash(tok->function->hash_table, tok->text)) == NULL)
+	    tokerror(tok, "Unknown local variables '%s'\n", tok->text);
+	new_op->op = OP_WRITE_LVAR;
+	new_op->operand.lvar = entry->ptr;
 	return new_op;
     } else if (tok->type == TOKEN_STR) {
 	if ((new_op->operand.str.text = malloc(tok->length + 1)) == NULL) {
@@ -299,6 +317,9 @@ static Operation *token_to_op(Token *tok)
 	return new_op;
     } else if (tok->type == TOKEN_BEGIN_LVARS) {
 	defining_lvars = true;
+	return NULL;
+    } else if (tok->type == TOKEN_BEGIN_WRITE_LVARS) {
+	writing_lvars = true;
 	return NULL;
     } else if ((entry = lvar_reference(tok)) != NULL) {
 	Lvariable *lvar;
@@ -393,7 +414,7 @@ Operation *tokens_to_ops(Token *toks)
     Token *tokptr;
     Operation *opptr, *new_op, *head;
 
-    static_assert(OP_COUNT == 76, "tokens_to_ops: exhausetive op handling");
+    static_assert(OP_COUNT == 77, "tokens_to_ops: exhausetive op handling");
     static_assert(sizeof(op_table) == OP_COUNT * sizeof(op_table[0]));
     static_assert(sizeof(readable_op_names) == OP_COUNT * sizeof(readable_op_names[0]));
     opptr = NULL;

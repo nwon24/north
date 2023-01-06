@@ -94,6 +94,7 @@ typedef enum {
     OP_RETURN,
 
     OP_DEF_LVAR,
+    OP_WRITE_LVAR,
 
     /* Used to denote unknown operation */
     OP_UNKNOWN,

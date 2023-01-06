@@ -3,6 +3,8 @@
 
 #define BEGIN_LVARS_CHAR	'{'
 #define END_LVARS_CHAR		'}'
+#define BEGIN_WRITE_LVARS_CHAR	'['
+#define END_WRITE_LVARS_CHAR		']'
 
 #define MAX_TOKEN_LENGTH 31
 #define MAX_CHAR_TOKEN_LENGTH 2
@@ -16,6 +18,8 @@ typedef enum token_type {
     TOKEN_CHAR,
     TOKEN_BEGIN_LVARS,
     TOKEN_END_LVARS,
+    TOKEN_BEGIN_WRITE_LVARS,
+    TOKEN_END_WRITE_LVARS,
 } TokenType;
     
 typedef struct token {

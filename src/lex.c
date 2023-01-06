@@ -116,6 +116,10 @@ static Token *gettoken(void)
 	new_token->type = TOKEN_BEGIN_LVARS;
     } else if (new_token->length == 1 && new_token->text[0] == END_LVARS_CHAR) {
 	new_token->type = TOKEN_END_LVARS;
+    } else if (new_token->length == 1 && new_token->text[0] == BEGIN_WRITE_LVARS_CHAR) {
+	new_token->type = TOKEN_BEGIN_WRITE_LVARS;
+    } else if (new_token->length == 1 && new_token->text[0] == END_WRITE_LVARS_CHAR) {
+	new_token->type = TOKEN_END_WRITE_LVARS;
     } else {
 	new_token->type = TOKEN_WORD;
     }
