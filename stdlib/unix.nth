@@ -1,3 +1,6 @@
 .macro STDIN_FILENO 0 .endm
 .macro STDOUT_FILENO 1 .endm
 .macro STDERR_FILENO 2 .endm
+
+.macro EXIT_SUCCESS 0 .endm
+.macro EXIT_FAILURE 1 .endm
