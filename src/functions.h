@@ -18,6 +18,7 @@ typedef struct function {
     /* Local variables stuff */
     int lvars_count;
     HashTable *hash_table;
+    bool lvars_defined; /* Only needs to be done once */
 } Function;
 
 Token *add_function(Token *start);
