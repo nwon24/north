@@ -8,6 +8,7 @@
 #endif
 #endif
 
+#include <sys/wait.h>
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
@@ -742,7 +743,7 @@ static void assemble_and_link(void)
 	exit(EXIT_FAILURE);
     }
     if (run_after_compilation == true) {
-	system(exe_file_name);
+	exit(WEXITSTATUS(system(exe_file_name)));
     }
 }
 
