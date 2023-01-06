@@ -5,14 +5,36 @@
   drop
 .endm
 
+\.func strcmp
+\  begin 2dup @8 swap @8 0 <> swap 0 <> and while
+\    2dup @8 swap @8 < if
+\      2drop 1 return
+\    else 2dup @8 swap @8 > if
+\      2drop -1 return
+\    endifs
+\    1+ swap 1+ swap
+\  repeat
+\  0
+\.endf
+
 .func strcmp
-  begin 2dup @8 swap @8 0 <> swap 0 <> and while
-    2dup @8 swap @8 < if
-      2drop 1 return
-    else 2dup @8 swap @8 > if
-      2drop -1 return
-    endifs
-    1+ swap 1+ swap
+  { str2 str1 }
+  begin
+    str1 @8 str2 @8
+    { *str2 *str1 }
+    *str1 0 <>
+    *str2 0 <>
+    and
+  while
+    *str1 *str2 < if
+      -1 return
+    endif
+    *str1 *str2 > if
+      1 return
+    endif
+    str1 1+
+    str2 1+
+    [ str2 str1 ]
   repeat
   0
 .endf
