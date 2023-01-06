@@ -44,13 +44,17 @@ Lvariable *add_lvar(Token *tok, Function *f)
     }
     lvar = new_lvar(tok->text);
     lvar->lc_num = f->lvars_count++;
-    if ((lvar_entry = in_hash(f->hash_table, tok->text)) != NULL) {
-	tokerror(tok, "Reuse of local identifier\n");
+    if ((lvar_entry = in_hash(f->hash_table, tok->text)) != NULL && f->lvars_defined == false) {
+	tokerror(tok, "Reuse of local identifier '%s'\n", tok->text);
+    } else if (lvar_entry != NULL) {
+	free(lvar);
+	return lvar_entry->ptr;
     } else if ((lvar_entry = in_hash(glob_hash_table, tok->text)) != NULL) {
-	tokerror(tok, "Reuse of global identifier in local variable\n");
+	tokerror(tok, "Reuse of global identifier '%s' in local variable\n", tok->text);
     }
     lvar_entry = new_hash_entry(tok->text, lvar);
     lvar_entry->type = HASH_VAR;
     add_hash_entry(f->hash_table, lvar_entry);
+    f->lvars_defined = true;
     return lvar;
 }
