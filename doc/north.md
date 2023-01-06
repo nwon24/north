@@ -557,3 +557,22 @@ previous values are still on the stack. In the above
 example, if we simply used the `+` operations without
 referring to the local variables, we would get a stack
 underflow.
+
+Once local variables have been defined, their values
+can be changed using the same syntax, except with
+square brackets except of curly ones. As before,
+the elements on top of the stack are popped
+and written to the local variables specified between
+the square brackets. Here is an example.
+```
+.func foo
+   10 20 30
+   { a b c }
+   \ Should print 60
+   a b + c + .
+   
+   40 50 60
+   [ a b c]
+   \ Should print 150
+   a b + c + .
+```
