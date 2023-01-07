@@ -4,9 +4,11 @@
 #include "branches.h"
 #include "ops.h"
 
+static int block_addr = 0;
+
 void cross_reference_branches(Operation *ops)
 {
-    int block_addr = 0, i;
+    int i;
     Operation *opptr;
     Operation *conditional_ops[MAX_NESTED_BRANCHES];
     Operation *do_ops[MAX_NESTED_BRANCHES];
@@ -22,7 +24,6 @@ void cross_reference_branches(Operation *ops)
     do_op_ptr = 0;
     while_op_ptr = 0;
     begin_op_ptr = 0;
-    block_addr = 0;
     static_assert(OP_COUNT == 77, "cross_reference_branches: exhausetive op handling");
     while (opptr != NULL) {
 	switch (opptr->op) {
