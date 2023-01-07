@@ -4,3 +4,14 @@
 .macro !word !64 .endm
 .macro @ptr @64 .endm
 .macro !ptr !64 .endm
+
+.macro _sizeof(ino_t) 8 .endm
+.macro _sizeof(mode_t) 4 .endm
+.macro _sizeof(nlink_t) 8 .endm
+.macro _sizeof(uid_t) 4 .endm
+.macro _sizeof(gid_t) 4 .endm
+.macro _sizeof(dev_t) 8 .endm
+.macro _sizeof(off_t) 8 .endm
+.macro _sizeof(blksize_t) 8 .endm
+.macro _sizeof(blkcnt_t) 8 .endm
+
