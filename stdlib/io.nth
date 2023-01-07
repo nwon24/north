@@ -61,5 +61,5 @@
 
 \ Unbuffered output - use for now because
 \ buffered IO library is not that great.
-.macro ufputs STDOUT_FILENO write .endm
+.macro uputs STDOUT_FILENO write .endm
 .macro ueputs STDERR_FILENO write .endm
