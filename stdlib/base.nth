@@ -5,3 +5,7 @@
 .macro _decword
   dup @word 1- swap !word
 .endm
+
+.macro nth_argv
+  _sizeof(word) * argv + @word
+.endm
