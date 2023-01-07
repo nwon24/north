@@ -1,0 +1,48 @@
+\ Fourth problem on projecteuler.net
+\ Since it solved in a brute force way, it
+\ is really just a test to see how fast
+\ the language is.
+
+.include "stdlib.nth"
+
+.func palindrome
+  { n }
+  n 0
+  { reversed tmp }
+  \ tmp%10 (tmp%10+ 0*10)
+  begin tmp 0 > while
+    tmp 10 mod
+    reversed 10 * +
+    [ reversed ]
+    tmp 10 /
+    [ tmp ]
+  repeat
+  reversed n = if
+    1 
+  else
+    0 
+  endif
+.endf
+
+.var ans u64 1
+
+.func calc
+
+100 begin dup 1000 < while
+  \ 100 100  prod ans 
+  100 begin dup 1000 < while
+    2dup * dup palindrome
+    { is_palindrome prod }
+    is_palindrome prod ans @word > and if
+      prod ans !word
+    endif
+    1+
+  repeat drop
+  1+
+repeat
+
+ans @word .
+
+.endf
+
+calc
