@@ -9,3 +9,5 @@
 .macro nth_argv
   _sizeof(word) * argv + @word
 .endm
+
+.macro NULL 0 .endm
