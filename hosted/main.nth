@@ -37,12 +37,15 @@
 	EXIT_FAILURE exit
       endif endif
     else
-      input_file_name @ptr
+      input_file_name !ptr
       leave
     endif
     a 1+ [ a ]
   repeat
 .endf
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\ PROGRAM BEGINS HERE
 
 argc 1 = if
   "No arguments given.\n" ueputs
@@ -51,7 +54,7 @@ endif
 
 parse_cmd
 
-input_file_name !ptr
+input_file_name @ptr
 dup NULL = if
   "No file specified.\n" ueputs
   usage
