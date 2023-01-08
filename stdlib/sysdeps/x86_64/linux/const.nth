@@ -17,3 +17,11 @@
 .macro S_IWOTH 0002 .endm
 .macro S_IXOTH 0001 .endm
 .macro S_IRWXO 0007 .endm
+
+.macro PROT_READ  0x1 .endm
+.macro PROT_WRITE 0x2 .endm
+.macro PROT_EXEC  0x4 .endm
+.macro PROT_NONE  0x0 .endm
+
+.macro MAP_SHARED  0x01 .endm
+.macro MAP_PRIVATE 0x02 .endm
