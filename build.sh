@@ -11,9 +11,11 @@ esac
 case $ARCH in
     x86_64-linux)
 	ln -sf x86_64/linux/syscall.nth stdlib/sysdeps/syscall.nth
+	ln -sf x86_64/linux/const.nth stdlib/sysdeps/const.nth
 	;;
     x86_64-freebsd)
 	ln -sf x86_64/freebsd/syscall.nth stdlib/sysdeps/syscall.nth
+	ln -sf x86_64/freebsd/const.nth stdlib/sysdeps/const.nth
 	;;
 esac
 
