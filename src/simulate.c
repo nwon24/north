@@ -28,7 +28,7 @@ static word pop(void);
 static void push(word c)
 {
     if (sp == STACK_CAPACITY) {
-	tokerror(current_op->tok, "simulation stack overflow\n");
+	tokerror(current_op->tok, "'%s' simulation stack overflow\n", current_op->tok->type == TOKEN_STR ? current_op->tok->str : current_op->tok->text);
 	fatal("simulate: stack overflow!");
     }
     stack[sp++] = c;
@@ -37,7 +37,7 @@ static void push(word c)
 static word pop(void)
 {
     if (sp == 0) {
-	tokerror(current_op->tok, "simulation stack underflow\n");
+	tokerror(current_op->tok, "'%s' simulation stack underflow\n", current_op->tok->type == TOKEN_STR ? current_op->tok->str : current_op->tok->text);
 	fatal("simulate: stack underflow!");
     }
     return stack[--sp];
