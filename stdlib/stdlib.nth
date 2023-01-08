@@ -2,6 +2,7 @@
 .include "unix.nth"
 .include "sysdeps/syscall.nth"
 .include "sysdeps/syscall_common.nth"
+.include "sysdeps/const.nth"
 .include "base.nth"
 .include "string.nth"
 .include "io.nth"
