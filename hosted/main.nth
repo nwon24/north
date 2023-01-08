@@ -1,5 +1,12 @@
 .include "stdlib.nth"
 
+.macro SIMULATE 1 .endm
+.macro COMPILE 2 .endm
+
+.var input_file_name _typeof(ptr) 1
+
+.var command i8 1
+
 \ Uncomment when we use standard library.
 \ _stdlib_init
 
@@ -10,14 +17,46 @@
     "\t\t-s\t\tInterpret the input file\n" ueputs drop
     "\t\t-c\t\tCompile the input file\n" ueputs drop
     "\t\t-v\t\tBe verbose\n" ueputs drop
-    EXIT_FAILURE _exit
+    EXIT_FAILURE exit
+.endf
+
+.func parse_cmd
+  1 { a }
+  \ argv[a]  ueputs
+  begin a argc < while
+    a nth_argv dup @8 '-' = if
+      dup 1+ @8
+      { c }
+      c 'r' = if
+        COMPILE command !8
+      else c 's' = if
+        SIMULATE command !8
+      else
+        "Unrecognised option " ueputs drop dup strlen swap ueputs drop
+	"\n" ueputs
+	EXIT_FAILURE exit
+      endif endif
+    else
+      input_file_name @ptr
+      leave
+    endif
+    a 1+ [ a ]
+  repeat
 .endf
 
 argc 1 = if
   "No arguments given.\n" ueputs
   usage
-  EXIT_FAILURE exit
 endif
 
-\ NOTE: _exit, not exit
-EXIT_SUCCESS _exit
+parse_cmd
+
+input_file_name !ptr
+dup NULL = if
+  "No file specified.\n" ueputs
+  usage
+endif
+
+dup strlen swap ueputs drop
+
+EXIT_SUCCESS exit
