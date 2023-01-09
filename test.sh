@@ -4,7 +4,7 @@ NORTH=./north
 
 run_cmd_test() {
     expected=$(cat "$2")
-    actual=$(($1) 2>&1)
+    actual=$($1 2>&1)
     if [ "$expected" = "$actual" ]; then
 	return 0
     else
