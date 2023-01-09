@@ -60,6 +60,21 @@ dup NULL = if
   usage
 endif
 
-dup strlen swap ueputs drop
+\ Print file name
+\ dup strlen swap ueputs drop
+
+O_RDONLY swap SYS_open syscall2
+dup 0 < if
+  "Unable to open " ueputs drop
+  input_file_name @ptr dup strlen swap ueputs drop
+  " for reading\n" ueputs drop
+  EXIT_FAILURE exit
+endif
+
+.var buf i8 512
+\ fd on top of stack
+begin dup 512 buf rot read dup 0 > while
+  buf 1 write drop
+repeat
 
 EXIT_SUCCESS exit
