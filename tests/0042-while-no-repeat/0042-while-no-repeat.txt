@@ -1,0 +1,1 @@
+ERROR:./tests/0042-while-no-repeat/0042-while-no-repeat.nth:3:1: Indefinite loop beginning here not closed by 'repeat' or 'until'
