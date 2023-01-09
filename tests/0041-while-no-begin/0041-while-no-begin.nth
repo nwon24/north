@@ -1,0 +1,5 @@
+50 
+
+dup 10 < while
+  dup .
+repeat

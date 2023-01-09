@@ -1,0 +1,1 @@
+ERROR:./tests/0041-while-no-begin/0041-while-no-begin.nth:3:10: 'while' word without preceding 'begin'
