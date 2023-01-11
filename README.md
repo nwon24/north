@@ -8,17 +8,33 @@ in the language see the [Gforth manual](https://gforth.org/manual/).
 
 For documentation on North visit the [doc](./doc) subdirectory.
 
-# How will this be different to Forth?
+# How is this different to Forth?
 
 For now all the basic operations of North are the same as Forth. However,
 this North is not intended to be a new implementation of Forth; rather, it
-is meant to be a *Forth-like* language. As the language develops, it
-might (and probably will) deviate from Forth.
+is meant to be a *Forth-like* language. At this stage of development,
+North has already deviated heavily from Forth. For examples of this,
+visit the [doc](./doc) directory and read the reference manual for
+the North language.
 
-Note that there are already slight differences between this language and
-Forth. For one, North code must be written in a file and then compiled
-or simulated; there is no interactive mode. Furthermore, loops and conditionals
-can be written outside of colon definitions.
+# Development goals
+
+Currently, many early development goals have been achieved. For example,
+North has macros, include files, and functions on top of the its
+intrinsic operations.
+
+Development goals, in no particular order, include:
+
+- Going self-hosted (rewriting North in itself). This is a hard one and may not be realised
+for the foreseeable future. A start has been made, but progress is slow.
+
+- A full-featured standard library. For now, North is a basic language
+that requires some sort of standard library to be useful for many kinds
+of programming tasks. A minimal standard library with basic definitions
+has been started, but many essential things, such as buffered IO, are missing.
+
+- Supporting assemblers other than the GNU assembler. This is not quite so important,
+but it would be nice to generate code that assemblers like NASM and FASM can assemble.
 
 # How to build
 
