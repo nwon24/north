@@ -1,0 +1,51 @@
+.include "stdlib.nth"
+
+.macro DEFN 100 .endm
+
+.var N u64 1
+
+.func isprime
+  { p }
+  p 2 = if
+    1 return
+  else p 2 < if
+    0 return
+  endifs
+  2 begin dup p < while
+    dup p swap mod 0 = if
+      0 return
+    endif
+    1+
+  repeat
+  1 return 
+.endf
+
+.func atoi
+  { s }
+  0 { res }
+  s @b { *s }
+  begin *s 0 <> while
+    *s '0' - res 10 * + [ res ] 
+    s 1+ [ s ]
+    s @b { *s }
+  repeat
+  res return
+.endf
+
+.func main
+  \ "Hello, world!\n" uputs
+  argc 1 = if
+    DEFN N !64
+  else
+    argv _sizeof(ptr) + @64 atoi N !64  
+  endif
+  1 { t }
+  begin t N @64 <= while
+    t isprime if
+      t .
+    endif
+    t 1+ [ t ]
+  repeat
+.endf
+
+main
