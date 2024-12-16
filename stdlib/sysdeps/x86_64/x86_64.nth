@@ -6,6 +6,12 @@
 .macro !ptr !64 .endm
 .macro @b @8 .endm
 .macro !b !8 .endm
+.macro @w @16 .endm
+.macro !w !16 .endm
+.macro @d @32 .endm
+.macro !d !32 .endm
+.macro @q @64 .endm
+.macro !q !64 .endm
 
 .macro _typeof(ptr) u64 .endm
 .macro _typeof(word) u64 .endm
