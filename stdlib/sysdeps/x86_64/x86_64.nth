@@ -8,6 +8,7 @@
 .macro !b !8 .endm
 
 .macro _typeof(ptr) u64 .endm
+.macro _typeof(word) u64 .endm
 
 .macro _sizeof(ino_t) 8 .endm
 .macro _sizeof(mode_t) 4 .endm

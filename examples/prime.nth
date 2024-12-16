@@ -2,7 +2,7 @@
 
 .macro DEFN 100 .endm
 
-.var N u64 1
+.var N _typeof(word) 1
 
 .func isprime
   { p }
@@ -37,7 +37,7 @@
   argc 1 = if
     DEFN N !64
   else
-    argv _sizeof(ptr) + @64 atoi N !64  
+    argv _sizeof(ptr) + @word atoi N !word  
   endif
   1 { t }
   begin t N @64 <= while
